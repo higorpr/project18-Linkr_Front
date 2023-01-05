@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { ReactTagify } from "react-tagify";
 
 export function OnePost(props) {
-	const [loading, setLoading] = useState(true);
 	const { item } = props;
 
 	const tagStyle = {
@@ -11,18 +9,22 @@ export function OnePost(props) {
 		fontWeight: 700,
 		cursor: "pointer",
 	};
+
+	function openLink() {
+		window.open(item.link);
+	}
 	return (
 		<>
 			<Container>
 				<PerfilLikes>
-					<img src={item.image} alt="image" />
+					<img src={item.image} alt="perfil" />
 				</PerfilLikes>
 				<LinkPostBox>
 					<UserName>{item.username}</UserName>
 					<ReactTagify tagStyle={tagStyle}>
 						<Text>{item.text}</Text>
 					</ReactTagify>
-					<LinkPreview>
+					<LinkPreview onClick={openLink}>
 						<LinkInfo>
 							{item?.linkTitle === undefined ? null : (
 								<Title>{item?.linkTitle}</Title>
@@ -33,7 +35,7 @@ export function OnePost(props) {
 							<Link>{item?.link}</Link>
 						</LinkInfo>
 						{item?.linkImage === undefined ? null : (
-							<img src={item.linkImage} alt="image" />
+							<img src={item.linkImage} alt="" />
 						)}
 					</LinkPreview>
 				</LinkPostBox>
@@ -41,8 +43,6 @@ export function OnePost(props) {
 		</>
 	);
 }
-
-const Loading = styled.div``;
 
 const Container = styled.div`
 	background-color: #222222;
