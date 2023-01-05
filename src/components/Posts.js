@@ -1,7 +1,9 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { OnePost } from "./OnePost";
 
 export function Posts() {
+	const [post, setPost] = useState([]);
 	useEffect(() => {
 		const Url = "http://localhost:4000/posts";
 		const config = {
@@ -13,12 +15,18 @@ export function Posts() {
 		axios
 			.get(Url, config)
 			.then((answer) => {
-				console.log(answer.data);
+				setPost(answer.data);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	}, []);
 
-	return <></>;
+	return (
+		<>
+			{post.map((item) => (
+				<OnePost item={item} />
+			))}
+		</>
+	);
 }
