@@ -6,7 +6,6 @@ export default function App() {
 	return (
 		<>
 			<GlobalStyle />
-			<Post />
 			<Posts />
 		</>
 	);
