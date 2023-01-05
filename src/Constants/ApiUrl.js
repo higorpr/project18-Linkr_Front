@@ -1,0 +1,1 @@
+export const API_URL = "https://api-linkr-sql-9ai1.onrender.com";
