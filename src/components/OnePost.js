@@ -46,11 +46,16 @@ export function OnePost(props) {
 
 const Container = styled.div`
 	background-color: #222222;
-	width: 611px;
+	width: 100vw;
+	max-width: 611px;
 	height: 100%;
 	border-radius: 16px;
 	margin-top: 16px;
 	display: flex;
+	padding-right: 18px;
+	@media (max-width: 610px) {
+		border-radius: 0px;
+	}
 `;
 
 const PerfilLikes = styled.div`
@@ -64,6 +69,14 @@ const PerfilLikes = styled.div`
 		height: 50px;
 		border-radius: 25px;
 		margin-top: 17px;
+	}
+	@media (max-width: 610px) {
+		img {
+			width: 40px;
+			height: 40px;
+			margin-left: 15px;
+			margin-right: 15px;
+		}
 	}
 `;
 
@@ -81,7 +94,11 @@ const UserName = styled.p`
 	font-family: "Lato";
 	font-weight: 400;
 	color: white;
-	margin-bottom: 12px;
+	margin-bottom: 10px;
+	@media (max-width: 610px) {
+		font-size: 17px;
+		margin-bottom: 8px;
+	}
 `;
 
 const Text = styled.p`
@@ -89,7 +106,11 @@ const Text = styled.p`
 	font-family: "Lato";
 	font-weight: 400;
 	color: #b7b7b7;
-	margin-bottom: 10px;
+	margin-bottom: 12px;
+	@media (max-width: 610px) {
+		font-size: 15px;
+		margin-bottom: 12px;
+	}
 `;
 
 const LinkPreview = styled.div`
@@ -98,6 +119,7 @@ const LinkPreview = styled.div`
 	border-radius: 11px;
 	height: 100%;
 	display: flex;
+	justify-content: space-between;
 	cursor: pointer;
 	img {
 		width: 155px;
@@ -105,14 +127,25 @@ const LinkPreview = styled.div`
 		border-bottom-right-radius: 12px;
 		border-top-right-radius: 12px;
 	}
+	@media (max-width: 610px) {
+		width: 100%;
+		img {
+			width: 95px;
+			height: 100%;
+		}
+	}
 `;
 
 const LinkInfo = styled.div`
-	width: 350px;
+	max-width: 350px;
+	width: 100%;
 	padding: 24px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	@media (max-width: 610px) {
+		padding: 15px;
+	}
 `;
 
 const Title = styled.p`
@@ -121,6 +154,10 @@ const Title = styled.p`
 	font-weight: 400;
 	color: #cecece;
 	margin-bottom: 8px;
+	@media (max-width: 610px) {
+		font-size: 11px;
+		margin-bottom: 6px;
+	}
 `;
 
 const Description = styled.p`
@@ -129,6 +166,10 @@ const Description = styled.p`
 	font-weight: 400;
 	color: #9b9595;
 	margin-bottom: 8px;
+	@media (max-width: 610px) {
+		font-size: 9px;
+		margin-bottom: 6px;
+	}
 `;
 
 const Link = styled.p`
@@ -136,4 +177,7 @@ const Link = styled.p`
 	font-family: "Lato";
 	font-weight: 400;
 	color: #cecece;
+	@media (max-width: 610px) {
+		font-size: 9px;
+	}
 `;
