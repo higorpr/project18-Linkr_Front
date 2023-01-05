@@ -4,6 +4,7 @@ import ProjectContext from "./constants/Context";
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import Main from "./components/Main";
 
 function App() {
 	const [user, setUser] = useState({ name: "", token: "", photo: "" });
@@ -15,6 +16,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<LoginPage />} />
 					<Route path="/sign-up" element={<SignupPage />} />
+					<Route path="/main" element={<Main/>}/>
 				</Routes>
 			</BrowserRouter>
 		</ProjectContext.Provider>

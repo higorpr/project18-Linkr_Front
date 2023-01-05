@@ -1,25 +1,62 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
+
 export default function Post(){
+    
+    const [post, setPost] = useState({text:"", link:""});
+
+    function formHandler(e){
+        const {name, value} = e.target;
+        setPost({...post, [name]:value})
+    }
+
+    function sendPostToBd(e){
+        e.preventDefault();
+
+        const obj = {...post};
+
+        const URL = `http://localhost:4000/publish`;
+
+        const config = {
+            headers: {
+                Authorization: `Bearer 37802355-cf79-4fb1-8a35-f64445d23408` //${token}
+            }
+        }
+
+        axios.post(URL, obj, config)
+        .then((ans)=>{
+            alert("Post realizado com sucesso!");
+        })
+        .catch((err)=>{
+            console.log(err);         
+        })
+    }
+
     return (<StyledPost>
         <div>
             <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/9802/production/_93741983_3cd04e7a-f975-4ccc-ad63-1e805136120b.jpg" alt=""/>
             <h1>What are you going to share today?</h1>
         </div>
-            <FormStyle>
+            <FormStyle onSubmit={sendPostToBd}>
                 <input 
                     name="link"
                     type="url"
+                    value={post.link}
                     placeholder="http://..."
+                    onChange={formHandler}
                     required
                 />
                 <input 
                     style={{height:'66px'}}
-                    name="message"
+                    name="text"
                     type="text"
+                    value={post.text}
                     placeholder="Awesome article about #javascript"
+                    onChange={formHandler}
                 />
-                <button>Publish</button>
+                <button type="submit">Publish</button>
             </FormStyle>
     </StyledPost>);
 }
