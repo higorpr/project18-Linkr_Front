@@ -2,15 +2,43 @@ import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
 import { useContext, useState } from "react";
 import ProjectContext from "../constants/Context";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { loginUrl } from "../constants/urls";
 
 export default function LoginPage() {
-	const { user, setUser } = useContext(ProjectContext);
+	const { setUser } = useContext(ProjectContext);
 	const [loading, setLoading] = useState(false);
 	const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
+	const nav = useNavigate();
 
-	function login() {
+	function login(event) {
+		event.preventDefault();
 		setLoading(true);
+		const body = loginInfo;
+		axios
+			.post(loginUrl, body)
+			.then((res) => {
+				const response = res.data;
+				const user = {
+					name: response.username,
+					token: response.token,
+					photo: response.image,
+				};
+				setUser(user);
+				setLoading(false);
+				nav("/sign-up");
+				// nav('/timeline')
+			})
+			.catch((err) => {
+				const errorStatus = err.response.status;
+				if (errorStatus === 404) {
+					alert(err.response.data);
+				}
+
+				// alert('test')
+				setLoading(false);
+			});
 	}
 
 	return (
@@ -27,7 +55,10 @@ export default function LoginPage() {
 						placeholder="e-mail"
 						value={loginInfo.email}
 						onChange={(e) => {
-							setUser({ ...loginInfo, email: e.target.value });
+							setLoginInfo({
+								...loginInfo,
+								email: e.target.value,
+							});
 						}}
 						required
 						disabled={loading}
@@ -38,16 +69,15 @@ export default function LoginPage() {
 						placeholder="password"
 						value={loginInfo.password}
 						onChange={(e) => {
-							setUser({ ...loginInfo, password: e.target.value });
+							setLoginInfo({
+								...loginInfo,
+								password: e.target.value,
+							});
 						}}
 						required
 						disabled={loading}
 					/>
-					<StyledButton
-						type="submit"
-						disabled={loading}
-						onClick={login}
-					>
+					<StyledButton type="submit" disabled={loading}>
 						{loading === true ? (
 							<ThreeDots width="50" height="13" color="#ffffff" />
 						) : (
@@ -55,7 +85,7 @@ export default function LoginPage() {
 						)}
 					</StyledButton>
 				</StyledForm>
-				<StyledLink to="/signup">
+				<StyledLink to="/sign-up">
 					<p>First time? Create an account!</p>
 				</StyledLink>
 			</StyledRight>
@@ -139,9 +169,9 @@ const StyledButton = styled.button`
 	border: none;
 	margin-bottom: 22px;
 	font-family: "Oswald", cursive;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 	&:disabled {
 		opacity: 0.7;

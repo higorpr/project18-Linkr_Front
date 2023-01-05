@@ -14,7 +14,7 @@ function App() {
 				<GlobalStyle />
 				<Routes>
 					<Route path="/" element={<LoginPage />} />
-					<Route path="/signup" element={<SignupPage />} />
+					<Route path="/sign-up" element={<SignupPage />} />
 				</Routes>
 			</BrowserRouter>
 		</ProjectContext.Provider>
