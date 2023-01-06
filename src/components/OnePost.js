@@ -45,7 +45,7 @@ export function OnePost(props) {
 }
 
 const Container = styled.div`
-	background-color: #222222;
+	background-color: black;
 	width: 100vw;
 	max-width: 611px;
 	height: 100%;

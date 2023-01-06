@@ -56,11 +56,12 @@ export default function Main() {
 				</StyledTopMenu>
 			</StyledTop>
 			<StyledBody>
-				<div>
+				<PostsBox>
+					<TitlePage>timeline</TitlePage>
 					<Post></Post>
 					<Posts></Posts>
-				</div>
-				{/* Insert here the code for the body of the main page */}
+				</PostsBox>
+				<TrendingBox>{/* Insert here the code for the trending */}</TrendingBox>
 			</StyledBody>
 		</StyledPage>
 	);
@@ -129,4 +130,37 @@ const StyledDropDown = styled.div`
 	}
 `;
 
-const StyledBody = styled.div``;
+const StyledBody = styled.div`
+	display: flex;
+	justify-content: center;
+	margin-top: 72px;
+`;
+
+const TrendingBox = styled.div`
+	display: flex;
+	justify-content: center;
+	margin-top: 125px;
+	@media (max-width: 937px) {
+		display: none;
+	}
+`;
+
+const PostsBox = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+
+const TitlePage = styled.p`
+	color: white;
+	font-family: "Oswald";
+	font-size: 43px;
+	font-weight: 700;
+	margin-top: 53px;
+	margin-bottom: 43px;
+	@media (max-width: 610px) {
+		margin: 17px;
+		margin-top: 17px;
+		margin-bottom: 17px;
+		font-size: 33px;
+	}
+`;
