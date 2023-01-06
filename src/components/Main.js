@@ -56,7 +56,23 @@ export default function Main() {
 			</StyledTop>
 			<StyledBody>
 				{/* Insert here the code for the body of the main page */}
-			</StyledBody>
+                
+                <StyledTitle>
+                    <h1>timeline</h1>
+                </StyledTitle>
+                <StyledMainContent>
+                    <StyledPosts>
+                        <Post/>
+
+                        {/*Erase the component below and insert here the posts from database */}
+                        <Post/>
+                    </StyledPosts>
+                    
+                    <StyledTrends>
+                        <h1>My trends</h1>
+                    </StyledTrends>
+                </StyledMainContent>
+            </StyledBody>
 		</StyledPage>
 	);
 }
@@ -64,6 +80,8 @@ export default function Main() {
 const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 const StyledTop = styled.div`
@@ -124,4 +142,48 @@ const StyledDropDown = styled.div`
 	}
 `;
 
-const StyledBody = styled.div``;
+const StyledBody = styled.div`
+    width: 75%;
+    display: flex;
+    
+    flex-direction: column;
+    margin-top: 150px;
+    
+`;
+const StyledTitle = styled.div`
+       h1{
+        font-family: 'Oswald', sans-serif;
+        font-weight: 700;
+        font-size: 43px;
+        color: #fff;
+
+        margin-bottom: 43px;
+    }
+`
+const StyledMainContent = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
+const StyledPosts = styled.div`  
+    width: 70%;
+
+    //background-color: yellow;
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+`
+
+const StyledTrends = styled.div`
+    width: 30%;
+    //background-color: green;
+    h1{
+        font-family: 'Oswald', sans-serif;
+        font-weight: 700;
+        font-size: 27px;
+        color: #fff;
+
+    }
+`

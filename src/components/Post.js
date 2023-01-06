@@ -1,11 +1,16 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import ProjectContext from "../constants/Context";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Post(){
     
     const [post, setPost] = useState({text:"", link:""});
+    const [click, setClick] = useState(false);
+    const { user, setUser } = useContext(ProjectContext);
+    const navigate = useNavigate();
 
     function formHandler(e){
         const {name, value} = e.target;
@@ -14,6 +19,7 @@ export default function Post(){
 
     function sendPostToBd(e){
         e.preventDefault();
+        setClick(true);
 
         const obj = {...post};
 
@@ -28,16 +34,20 @@ export default function Post(){
         axios.post(URL, obj, config)
         .then((ans)=>{
             alert("Post realizado com sucesso!");
+            setPost({text:"", link:""})
+            setClick(false);
+            navigate('/timeline');
         })
         .catch((err)=>{
-            console.log(err);         
+            console.log(err); 
+            setClick(false);       
         })
     }
 
     return (<StyledPost>
         <div>
-            <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/9802/production/_93741983_3cd04e7a-f975-4ccc-ad63-1e805136120b.jpg" alt=""/>
-            <h1>What are you going to share today?</h1>
+            <img src={user.photo} alt=""/>
+            <p>What are you going to share today?</p>
         </div>
             <FormStyle onSubmit={sendPostToBd}>
                 <input 
@@ -56,7 +66,12 @@ export default function Post(){
                     placeholder="Awesome article about #javascript"
                     onChange={formHandler}
                 />
-                <button type="submit">Publish</button>
+                {
+                    click? 
+                        <button type="submit" disabled={true} style={{backgroundColor:'#777'}}>Publishing</button>
+                        :
+                        <button type="submit" disabled={false}>Publish</button>
+                }
             </FormStyle>
     </StyledPost>);
 }
@@ -76,8 +91,11 @@ const StyledPost = styled.div `
         display: flex;
         flex-direction: row;
     }
-    h1{
-        margin-top: 21px; 
+    p{
+        margin-top: 21px;
+        font-size: 20px;
+        font-weight: 300;
+        color: #707070;
     }
     img{
         width: 50px;
@@ -104,6 +122,8 @@ const FormStyle = styled.form `
     input{
         width: 85%;
         background-color: #EFEFEF;
+        font-size: 15px;
+        font-weight: 300;
     }
     button{
         width: 150px;
