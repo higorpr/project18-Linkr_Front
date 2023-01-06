@@ -14,7 +14,7 @@ export default function Post(){
 
     function formHandler(e){
         const {name, value} = e.target;
-        setPost({...post, [name]:value})
+        setPost({...post, [name]:value});
     }
 
     function sendPostToBd(e){
@@ -27,7 +27,7 @@ export default function Post(){
 
         const config = {
             headers: {
-                Authorization: `Bearer 37802355-cf79-4fb1-8a35-f64445d23408` //${token}
+                Authorization: `Bearer ${user.token}`
             }
         }
 
