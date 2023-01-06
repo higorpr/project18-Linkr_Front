@@ -9,6 +9,8 @@ import ProjectContext from "../constants/Context";
 import { logoutUrl } from "../constants/urls";
 import { useNavigate } from "react-router";
 import { defaultUser } from "../constants/resetStates";
+import { DebounceInput } from "react-debounce-input";
+import Search from "./Search";
 
 export default function Main() {
 	const [openedMenu, setOpenedMenu] = useState(false);
@@ -40,6 +42,7 @@ export default function Main() {
 		<StyledPage>
 			<StyledTop>
 				<p>linkr</p>
+				<Search></Search>
 				<StyledTopMenu onClick={() => setOpenedMenu(!openedMenu)}>
 					<IconContext.Provider
 						value={{
@@ -76,6 +79,7 @@ const StyledTop = styled.div`
 	background-color: #151515;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	position: fixed;
 	z-index: 1;
 	left: 0;
@@ -89,7 +93,7 @@ const StyledTop = styled.div`
 		font-size: 49px;
 		line-height: 54px;
 		font-family: "Passion One", cursive;
-		margin: 10px 0 0 28px;
+		margin: 0px 0 0 28px;
 	}
 `;
 
