@@ -16,7 +16,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<LoginPage />} />
 					<Route path="/sign-up" element={<SignupPage />} />
-					<Route path="/main" element={<Main/>}/>
+					<Route path="/timeline" element={<Main/>}/>
 				</Routes>
 			</BrowserRouter>
 		</ProjectContext.Provider>

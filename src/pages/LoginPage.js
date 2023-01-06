@@ -26,17 +26,14 @@ export default function LoginPage() {
 					photo: response.image,
 				};
 				setUser(user);
-				setLoading(false);
-				nav("/sign-up");
-				// nav('/timeline')
+				setLoading(false);				
+				nav('/timeline')
 			})
 			.catch((err) => {
 				const errorStatus = err.response.status;
 				if (errorStatus === 404) {
 					alert(err.response.data);
 				}
-
-				// alert('test')
 				setLoading(false);
 			});
 	}
