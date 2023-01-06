@@ -27,8 +27,9 @@ export default function LoginPage() {
 				};
 				setUser(user);
 				setLoading(false);
-				nav("/sign-up");
-				// nav('/timeline')
+				localStorage.setItem("user", JSON.stringify(user));
+				nav("/timeline");
+				
 			})
 			.catch((err) => {
 				const errorStatus = err.response.status;
