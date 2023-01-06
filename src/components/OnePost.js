@@ -17,9 +17,7 @@ export function OnePost(props) {
 		<>
 			<Container>
 				<PerfilLikes>
-					<PerfilDiv>
-						<img src={item.image} alt="perfil" />
-					</PerfilDiv>
+					<img src={item.image} alt="perfil" />
 				</PerfilLikes>
 				<LinkPostBox>
 					<UserName>{item.username}</UserName>
@@ -46,22 +44,8 @@ export function OnePost(props) {
 	);
 }
 
-const PerfilDiv = styled.div`
-	margin-top: 17px;
-	border-radius: 25px;
-	width: 50px;
-	height: 50px;
-	overflow: hidden;
-	@media (max-width: 610px) {
-		width: 40px;
-		height: 40px;
-		margin-left: 15px;
-		margin-right: 15px;
-	}
-`;
-
 const Container = styled.div`
-	background-color: black;
+	background-color: #222222;
 	width: 100vw;
 	max-width: 611px;
 	height: 100%;
@@ -81,13 +65,17 @@ const PerfilLikes = styled.div`
 	flex-direction: column;
 	align-items: center;
 	img {
+		width: 50px;
 		height: 50px;
-		margin-left: 50%;
-		transform: translateX(-50%);
+		border-radius: 25px;
+		margin-top: 17px;
 	}
 	@media (max-width: 610px) {
 		img {
+			width: 40px;
 			height: 40px;
+			margin-left: 15px;
+			margin-right: 15px;
 		}
 	}
 `;
@@ -143,7 +131,7 @@ const LinkPreview = styled.div`
 		width: 100%;
 		img {
 			width: 95px;
-			height: 115px;
+			height: 100%;
 		}
 	}
 `;
