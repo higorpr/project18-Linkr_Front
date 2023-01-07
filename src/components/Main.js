@@ -5,20 +5,22 @@ import Header from "./Header";
 
 export default function Main() {
 	return (
-		<StyledPage>
+		<>
 			<Header />
-			<StyledBody>
-				<PostsBox>
-					<TitlePage>timeline</TitlePage>
-					<Post></Post>
-					<Posts></Posts>
-				</PostsBox>
-				<TrendingBox>
-					<div></div>
-					{/* Insert here the code for the trending */}
-				</TrendingBox>
-			</StyledBody>
-		</StyledPage>
+			<StyledPage>
+				<StyledBody>
+					<PostsBox>
+						<TitlePage>timeline</TitlePage>
+						{/*<Post></Post>*/}
+						<Posts></Posts>
+					</PostsBox>
+					<TrendingBox>
+						<div></div>
+						{/* Insert here the code for the trending */}
+					</TrendingBox>
+				</StyledBody>
+			</StyledPage>
+		</>
 	);
 }
 
@@ -33,6 +35,9 @@ const StyledBody = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 72px;
+	@media (max-width: 610px) {
+		margin-top: 0px;
+	}
 `;
 
 const TrendingBox = styled.div`

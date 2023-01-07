@@ -1,30 +1,65 @@
 import styled from "styled-components";
 import { IoSearchSharp } from "react-icons/io5";
 import { IconContext } from "react-icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import ProjectContext from "../constants/Context";
+import axios from "axios";
+import SearchResult from "./SearchResult";
 
-export default function Search() {
-	const [result, setResult] = useState(false);
+export default function Search(props) {
+	const { value, setValue, result, setResult, showResult, setShowResult } =
+		props;
+	const { user } = useContext(ProjectContext);
 
 	let timeSearch = 0;
 	function inputSearch(event) {
 		const minLength = 3;
 		clearTimeout(timeSearch);
+		setValue(event.target.value);
 		if (event.target.value.length >= minLength) {
 			timeSearch = setTimeout(() => search(event), 300);
+		} else {
+			setResult([]);
 		}
 	}
 
 	function search(event) {
-		console.log(event.target.value);
+		const Url = `http://localhost:4000/search?text=${event.target.value}`;
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+		axios
+			.get(Url, config)
+			.then((answer) => {
+				setResult(answer.data);
+				console.log(answer.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}
 
 	return (
 		<>
-			<InputBox>
-				<Input placeholder="Search for people" onChange={inputSearch} />
-				<IoSearchSharp />
-			</InputBox>
+			<SearchBox>
+				<InputBox
+					onClick={() => setShowResult(true)}
+					onBlur={() => setShowResult(false)}
+				>
+					<Input
+						placeholder="Search for people"
+						onChange={inputSearch}
+						onChangeCapture={inputSearch}
+						value={value}
+					/>
+					<IoSearchSharp />
+				</InputBox>
+				{showResult
+					? result.map((item) => <SearchResult key={item.id} item={item} />)
+					: null}
+			</SearchBox>
 		</>
 	);
 }
@@ -61,4 +96,12 @@ const InputBox = styled.div`
 		margin-right: 5px;
 		color: #c6c6c6;
 	}
+`;
+
+const SearchBox = styled.div`
+	width: 100%;
+	max-width: 563px;
+	height: fit-content;
+	background-color: #e7e7e7;
+	border-radius: 8px;
 `;
