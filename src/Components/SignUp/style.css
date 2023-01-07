@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Oswald:wght@200;300;400;500;600;700&family=Passion+One:wght@400;700;900&display=swap');
+
+.SingUp{
+    background: #151515;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.SingUp .leftSide{
+    width: 50vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.SingUp .leftSide h1{
+    width: 30vw;
+
+    font-family: 'Passion One';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 106px;
+    line-height: 117px;
+    letter-spacing: 0.05em;
+    
+    color: #FFFFFF;
+}
+
+.SingUp .leftSide p{
+    width: 30vw;
+
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 43px;
+    line-height: 64px;
+    
+    color: #FFFFFF;
+}
+
+.SingUp .rightSide{
+    background-color: #292929;
+
+    width: 50vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+}
+
+.SingUp .rightSide form{
+    width: 45vw;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5vh;
+}
+
+.SingUp .rightSide form input{
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    border: none;
+
+    width: 40vw;
+    height: 7vh;
+    text-indent: 1.5vw;
+
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5vw;
+}
+
+.SingUp .rightSide form input::placeholder{
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5vw;
+    color: #9F9F9F;
+}
+
+.SingUp .rightSide form input:focus{
+    outline: none;
+
+    border: 2px solid #1877F2;
+    border-radius: 6px;
+
+    font-size: 1.5vw;
+}
+
+.SingUp .rightSide form input::after,
+.SingUp .rightSide form input::before,
+.SingUp .rightSide form input:focus::after,
+.SingUp .rightSide form input:focus::before,
+.SingUp .rightSide form input:focus::placeholder{
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5vw;
+    color: #1877F2;
+}
+
+.SingUp .rightSide form button{
+    width: 40vw;
+    height: 7vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    background: #3282eb;
+    border-radius: 6px;
+    border: none;
+
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5vw;
+    
+    color: #FFFFFF;
+
+    cursor: pointer;
+}
+
+.SingUp .rightSide form button:hover{
+    background: #1877F2;
+    color: #FFFFFF;
+}
+
+.SingUp .rightSide a{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1vw;
+    text-decoration-line: underline;
+    
+    color: #FFFFFF;
+    
+    cursor: pointer;
+}
+
+.SingUp .rightSide a:hover{
+    color: #3282eb;
+}

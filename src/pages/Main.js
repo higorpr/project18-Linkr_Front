@@ -1,22 +1,20 @@
 import styled from "styled-components";
-import Post from "./Post";
-import { Posts } from "./Posts";
-import Header from "./Header";
+import Post from "../components/Post";
+import { Posts } from "../components/Posts";
+import Header from "../components/Header";
 
 export default function Main() {
+
 	return (
 		<StyledPage>
-			<Header />
+			<Header/>
 			<StyledBody>
 				<PostsBox>
 					<TitlePage>timeline</TitlePage>
 					<Post></Post>
 					<Posts></Posts>
 				</PostsBox>
-				<TrendingBox>
-					<div></div>
-					{/* Insert here the code for the trending */}
-				</TrendingBox>
+				<TrendingBox>{/* Insert here the code for the trending */}</TrendingBox>
 			</StyledBody>
 		</StyledPage>
 	);
@@ -25,9 +23,9 @@ export default function Main() {
 const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
-	display: flex;
-	justify-content: center;
 `;
+
+
 
 const StyledBody = styled.div`
 	display: flex;
@@ -39,12 +37,6 @@ const TrendingBox = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 125px;
-	margin-left: 30px;
-	div {
-		height: 100px;
-		width: 200px;
-		background-color: blueviolet;
-	}
 	@media (max-width: 937px) {
 		display: none;
 	}
