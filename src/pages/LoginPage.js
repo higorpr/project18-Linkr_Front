@@ -26,8 +26,10 @@ export default function LoginPage() {
 					photo: response.image,
 				};
 				setUser(user);
-				setLoading(false);				
-				nav('/timeline')
+				setLoading(false);
+				localStorage.setItem("user", JSON.stringify(user));
+				nav("/timeline");
+				
 			})
 			.catch((err) => {
 				const errorStatus = err.response.status;
