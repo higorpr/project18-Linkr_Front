@@ -1,17 +1,26 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import React, { useState } from "react"
-
-// Components
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import GlobalStyle from "./theme/globalStyles";
+import ProjectContext from "./constants/Context";
+import { useState } from "react";
+import LoginPage from "./pages/LoginPage";
+import Main from "./components/Main";
 import SignUp from './Components/SignUp';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/sign-up" element={<SignUp />} />
-      </Routes>
-    </BrowserRouter>
-  );
+	const [user, setUser] = useState({ name: "", token: "", photo: "" });
+
+	return (
+		<ProjectContext.Provider value={{ user, setUser }}>
+			<BrowserRouter>
+				<GlobalStyle />
+				<Routes>
+					<Route path="/" element={<LoginPage />} />
+					<Route path="/sign-up" element={<SignUp />} />
+					<Route path="/timeline" element={<Main />} />
+				</Routes>
+			</BrowserRouter>
+		</ProjectContext.Provider>
+	);
 }
 
 export default App;
