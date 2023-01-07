@@ -1,0 +1,9 @@
+{
+    "workbench.preferredHighContrastColorTheme": "Visual Studio Dark",
+
+	"emmet.preferences": {},
+
+	"emmet.includeLanguages": {
+		"javascript": "javascriptreact"
+	}
+}
