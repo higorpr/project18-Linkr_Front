@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
 import { useNavigate } from "react-router-dom";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 
 export function OnePost(props) {
 	const { item } = props;
 	const navigate = useNavigate();
+	console.log(item.selfLike);
 
 	const tagStyle = {
 		color: "white",
@@ -24,6 +26,14 @@ export function OnePost(props) {
 			<Container>
 				<PerfilLikes>
 					<img src={item.image} alt="perfil" />
+					<Likes>
+						{item.selfLike ? (
+							<IoHeartSharp color="#AC0000" />
+						) : (
+							<IoHeartOutline color="white" />
+						)}
+						<h1>{item.likes} likes</h1>
+					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
 					<UserName onClick={goToProfile}>{item.username}</UserName>
@@ -82,6 +92,31 @@ const PerfilLikes = styled.div`
 			height: 40px;
 			margin-left: 15px;
 			margin-right: 15px;
+		}
+	}
+`;
+
+const Likes = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 19px;
+	svg {
+		color: ${(props) => props.color};
+		font-size: 20px;
+	}
+	h1 {
+		margin-top: 4px;
+		color: white;
+		font-size: 11px;
+	}
+	@media (max-width: 610px) {
+		margin-top: 15px;
+		svg {
+			font-size: 17px;
+		}
+		h1 {
+			font-size: 9px;
 		}
 	}
 `;

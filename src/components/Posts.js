@@ -18,29 +18,30 @@ export function Posts() {
 				authorization: `Bearer ${user.token}`,
 			},
 		};
-
-		axios
-			.get(Url, config)
-			.then((answer) => {
-				setPost(answer.data);
-				setLoading(false);
-				if (!answer.data.length) {
-					setError("There are no posts yet!");
-					alert("There are no posts yet");
-				} else {
-					setError("");
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-				setLoading(false);
-				setError(
-					"An error occured while trying to fetch the posts, please refresh the page"
-				);
-				alert(
-					"An error occured while trying to fetch the posts, please refresh the page"
-				);
-			});
+		if (user.token !== "") {
+			axios
+				.get(Url, config)
+				.then((answer) => {
+					setPost(answer.data);
+					setLoading(false);
+					if (!answer.data.length) {
+						setError("There are no posts yet!");
+						alert("There are no posts yet");
+					} else {
+						setError("");
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+					setLoading(false);
+					setError(
+						"An error occured while trying to fetch the posts, please refresh the page"
+					);
+					alert(
+						"An error occured while trying to fetch the posts, please refresh the page"
+					);
+				});
+		}
 	}, []);
 
 	return (

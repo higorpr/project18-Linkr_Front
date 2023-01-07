@@ -11,7 +11,7 @@ export default function Main() {
 				<StyledBody>
 					<PostsBox>
 						<TitlePage>timeline</TitlePage>
-						{/*<Post></Post>*/}
+						<Post></Post>
 						<Posts></Posts>
 					</PostsBox>
 					<TrendingBox>
