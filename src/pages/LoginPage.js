@@ -36,8 +36,6 @@ export default function LoginPage() {
 				if (errorStatus === 404) {
 					alert(err.response.data);
 				}
-
-				// alert('test')
 				setLoading(false);
 			});
 	}

@@ -1,8 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 
-
-
 const GlobalStyle = createGlobalStyle`
+    
 	@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,700&display=swap');
     
 	html, body, div, span, applet, object, iframe,
@@ -32,8 +31,6 @@ const GlobalStyle = createGlobalStyle`
     }
     body {
         line-height: 1;
-        width: 375px;
-        height: 670px;
         background-color: #001;
 
 
@@ -57,6 +54,9 @@ const GlobalStyle = createGlobalStyle`
     a{
         text-decoration: none;
     }
-`
+    *{
+	box-sizing: border-box;
+    }
+`;
 
 export default GlobalStyle;
