@@ -42,7 +42,9 @@ export default function Main() {
 		<StyledPage>
 			<StyledTop>
 				<p>linkr</p>
-				<Search></Search>
+				<SearchDiv>
+					<Search></Search>
+				</SearchDiv>
 				<StyledTopMenu onClick={() => setOpenedMenu(!openedMenu)}>
 					<IconContext.Provider
 						value={{
@@ -64,7 +66,10 @@ export default function Main() {
 					<Post></Post>
 					<Posts></Posts>
 				</PostsBox>
-				<TrendingBox>{/* Insert here the code for the trending */}</TrendingBox>
+				<TrendingBox>
+					<div></div>
+					{/* Insert here the code for the trending */}
+				</TrendingBox>
 			</StyledBody>
 		</StyledPage>
 	);
@@ -73,6 +78,8 @@ export default function Main() {
 const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
+	display: flex;
+	justify-content: center;
 `;
 
 const StyledTop = styled.div`
@@ -144,6 +151,12 @@ const TrendingBox = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 125px;
+	margin-left: 30px;
+	div {
+		height: 100px;
+		width: 200px;
+		background-color: blueviolet;
+	}
 	@media (max-width: 937px) {
 		display: none;
 	}
@@ -166,5 +179,16 @@ const TitlePage = styled.p`
 		margin-top: 17px;
 		margin-bottom: 17px;
 		font-size: 33px;
+	}
+`;
+
+const SearchDiv = styled.div`
+	margin-left: 35px;
+	margin-right: 35px;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	@media (max-width: 610px) {
+		display: none;
 	}
 `;
