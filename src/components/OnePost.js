@@ -1,14 +1,20 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
+import { useNavigate } from "react-router-dom";
 
 export function OnePost(props) {
 	const { item } = props;
+	const navigate = useNavigate();
 
 	const tagStyle = {
 		color: "white",
 		fontWeight: 700,
 		cursor: "pointer",
 	};
+
+	function goToProfile() {
+		navigate(`/user/${item.id}`);
+	}
 
 	function openLink() {
 		window.open(item.link);
@@ -20,7 +26,7 @@ export function OnePost(props) {
 					<img src={item.image} alt="perfil" />
 				</PerfilLikes>
 				<LinkPostBox>
-					<UserName>{item.username}</UserName>
+					<UserName onClick={goToProfile}>{item.username}</UserName>
 					<ReactTagify tagStyle={tagStyle}>
 						<Text>{item.text}</Text>
 					</ReactTagify>
@@ -95,6 +101,7 @@ const UserName = styled.p`
 	font-weight: 400;
 	color: white;
 	margin-bottom: 10px;
+	cursor: pointer;
 	@media (max-width: 610px) {
 		font-size: 17px;
 		margin-bottom: 8px;

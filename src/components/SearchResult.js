@@ -1,9 +1,24 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-export default function SearchResult({ item }) {
+export default function SearchResult(props) {
+	const { item, setValue, setResult } = props;
+	const navigate = useNavigate();
+
+	function goToProfile() {
+		setValue("");
+		setResult([]);
+		navigate(`/user/${item.id}`);
+	}
+
+	function click(event) {
+		event.preventDefault();
+		event.stopPropagation();
+	}
+
 	return (
 		<>
-			<Result>
+			<Result onClick={goToProfile} onMouseDown={click}>
 				<Image>
 					<img src={item.image} alt="perfil" />
 				</Image>

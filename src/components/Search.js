@@ -43,11 +43,11 @@ export default function Search(props) {
 
 	return (
 		<>
-			<SearchBox>
-				<InputBox
-					onClick={() => setShowResult(true)}
-					onBlur={() => setShowResult(false)}
-				>
+			<SearchBox
+				onClick={() => setShowResult(true)}
+				onBlur={() => setShowResult(false)}
+			>
+				<InputBox>
 					<Input
 						placeholder="Search for people"
 						onChange={inputSearch}
@@ -57,7 +57,15 @@ export default function Search(props) {
 					<IoSearchSharp />
 				</InputBox>
 				{showResult
-					? result.map((item) => <SearchResult key={item.id} item={item} />)
+					? result.map((item) => (
+							<SearchResult
+								key={item.id}
+								item={item}
+								setResult={setResult}
+								setShowResult={setShowResult}
+								setValue={setValue}
+							/>
+					  ))
 					: null}
 			</SearchBox>
 		</>
