@@ -4,11 +4,7 @@ import ProjectContext from "../constants/Context";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-export default function Post() {
-	const { user } = useContext(ProjectContext);
-
-export default function Post(){
-    
+export default function Post() {    
     const [post, setPost] = useState({text:"", link:""});
     const [click, setClick] = useState(false);
     const { user, setUser } = useContext(ProjectContext);

@@ -8,14 +8,10 @@ import axios from "axios";
 import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
-import { useState, useContext } from "react";
-import ProjectContext from "../constants/Context";
-import axios from "axios";
 
 export function OnePost(props) {
 	const [disabled, setDisabled] = useState(false);
 	const { item } = props;
-	const { user } = useContext(ProjectContext);
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
