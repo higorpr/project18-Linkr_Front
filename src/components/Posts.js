@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { OnePost } from "./OnePost";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
+import ProjectContext from "../constants/Context";
 
 export function Posts() {
+	const { user } = useContext(ProjectContext);
 	const [loading, setLoading] = useState(true);
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
@@ -13,7 +15,7 @@ export function Posts() {
 		const Url = "http://localhost:4000/posts";
 		const config = {
 			headers: {
-				authorization: `Bearer 37802355-cf79-4fb1-8a35-f64445d23408`,
+				authorization: `Bearer ${user.token}`,
 			},
 		};
 
@@ -32,12 +34,10 @@ export function Posts() {
 			.catch((err) => {
 				console.log(err);
 				setLoading(false);
-				setError(
-					"An error occured while trying to fetch the posts, please refresh the page"
-				);
-				alert(
-					"An error occured while trying to fetch the posts, please refresh the page"
-				);
+				const temp_err =
+					"An error occured while trying to fetch the posts, please refresh the page";
+				setError(temp_err);
+				alert(temp_err);
 			});
 	}, []);
 
