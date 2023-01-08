@@ -8,14 +8,20 @@ import axios from "axios";
 import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import { useState, useContext } from "react";
+import ProjectContext from "../constants/Context";
+import axios from "axios";
 
 export function OnePost(props) {
+	const [disabled, setDisabled] = useState(false);
 	const { item } = props;
 	const { user } = useContext(ProjectContext);
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
-	console.log(item.selfLike);
+	const { user } = useContext(ProjectContext);
+	const [selfLike, setSelfLike] = useState(item.selfLike);
+	const [likes, setLikes] = useState(item.likes);
 
 	useEffect(() => {
 		const url = `${usersLikedUrl}/${postId}`;
@@ -73,7 +79,61 @@ export function OnePost(props) {
 	};
 
 	function goToProfile() {
-		navigate(`/user/${item.id}`);
+		navigate(`/user/${item.user_id}`);
+	}
+
+	function postLike() {
+		if (!disabled) {
+			setDisabled(true);
+			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const config = {
+				headers: {
+					authorization: `Bearer ${user.token}`,
+				},
+			};
+			axios
+				.post(Url, {}, config)
+				.then((answer) => {
+					console.log(answer);
+					item.likes = answer.data.likes;
+					item.selfLike = answer.data.selfLike;
+
+					setLikes(item.likes);
+					setSelfLike(item.selfLike);
+					setDisabled(false);
+				})
+				.catch((err) => {
+					console.log(err);
+					setDisabled(false);
+				});
+		}
+	}
+
+	function removeLike() {
+		if (!disabled) {
+			setDisabled(true);
+			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const config = {
+				headers: {
+					authorization: `Bearer ${user.token}`,
+				},
+			};
+			axios
+				.delete(Url, config)
+				.then((answer) => {
+					console.log(answer);
+					item.likes = answer.data.likes;
+					item.selfLike = answer.data.selfLike;
+
+					setLikes(item.likes);
+					setSelfLike(item.selfLike);
+					setDisabled(false);
+				})
+				.catch((err) => {
+					console.log(err);
+					setDisabled(false);
+				});
+		}
 	}
 
 	function openLink() {
@@ -85,10 +145,10 @@ export function OnePost(props) {
 				<PerfilLikes>
 					<img src={item.image} alt="perfil" />
 					<Likes>
-						{item.selfLike ? (
-							<IoHeartSharp color="#AC0000" />
+						{selfLike ? (
+							<IoHeartSharp color="#AC0000" onClick={removeLike} />
 						) : (
-							<IoHeartOutline color="white" />
+							<IoHeartOutline color="white" onClick={postLike} />
 						)}
 						<h1 id={`tooltip-anchor-${postId}`}>
 							{item.likes} likes
@@ -176,6 +236,7 @@ const Likes = styled.div`
 	svg {
 		color: ${(props) => props.color};
 		font-size: 20px;
+		cursor: pointer;
 	}
 	h1 {
 		margin-top: 4px;
