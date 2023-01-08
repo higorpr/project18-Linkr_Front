@@ -25,31 +25,58 @@ export function OnePost(props) {
 	}
 
 	function postLike() {
-		const Url = `http://localhost:4000/posts/${item.id}/like`;
-		const config = {
-			headers: {
-				authorization: `Bearer ${user.token}`,
-			},
-		};
-		setDisabled(true);
-		axios
-			.post(Url, {}, config)
-			.then((answer) => {
-				console.log(answer);
-				item.likes = answer.data.likes;
-				item.selfLike = answer.data.selfLike;
+		if (!disabled) {
+			setDisabled(true);
+			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const config = {
+				headers: {
+					authorization: `Bearer ${user.token}`,
+				},
+			};
+			axios
+				.post(Url, {}, config)
+				.then((answer) => {
+					console.log(answer);
+					item.likes = answer.data.likes;
+					item.selfLike = answer.data.selfLike;
 
-				setLikes(item.likes);
-				setSelfLike(item.selfLike);
-				setDisabled(false);
-			})
-			.catch((err) => {
-				console.log(err);
-				setDisabled(false);
-			});
+					setLikes(item.likes);
+					setSelfLike(item.selfLike);
+					setDisabled(false);
+				})
+				.catch((err) => {
+					console.log(err);
+					setDisabled(false);
+				});
+		}
 	}
 
-	function removeLike() {}
+	function removeLike() {
+		if (!disabled) {
+			setDisabled(true);
+			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const config = {
+				headers: {
+					authorization: `Bearer ${user.token}`,
+				},
+			};
+			axios
+				.delete(Url, config)
+				.then((answer) => {
+					console.log(answer);
+					item.likes = answer.data.likes;
+					item.selfLike = answer.data.selfLike;
+
+					setLikes(item.likes);
+					setSelfLike(item.selfLike);
+					setDisabled(false);
+				})
+				.catch((err) => {
+					console.log(err);
+					setDisabled(false);
+				});
+		}
+	}
 
 	function openLink() {
 		window.open(item.link);
@@ -61,17 +88,9 @@ export function OnePost(props) {
 					<img src={item.image} alt="perfil" />
 					<Likes>
 						{selfLike ? (
-							<IoHeartSharp
-								color="#AC0000"
-								onClick={removeLike}
-								disabled={disabled}
-							/>
+							<IoHeartSharp color="#AC0000" onClick={removeLike} />
 						) : (
-							<IoHeartOutline
-								color="white"
-								onClick={postLike}
-								disabled={disabled}
-							/>
+							<IoHeartOutline color="white" onClick={postLike} />
 						)}
 						<h1>{likes} likes</h1>
 					</Likes>
