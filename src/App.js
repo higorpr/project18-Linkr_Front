@@ -3,8 +3,8 @@ import GlobalStyle from "./theme/globalStyles";
 import ProjectContext from "./constants/Context";
 import { useEffect, useState } from "react";
 import LoginPage from "./pages/LoginPage";
-import SignUp from "./Components/SignUp";
-import Main from "./components/Main";
+import SignUp from "./pages/SignUpPage";
+import Main from "./pages/Main";
 
 function App() {
 	const [user, setUser] = useState({ name: "", token: "", photo: "" });
