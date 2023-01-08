@@ -7,6 +7,7 @@ import SignUp from "./Components/SignUp";
 import Main from "./pages/Main";
 import HashtagPage from "./pages/HashtagPage";
 import { TooltipProvider } from "react-tooltip";
+import UserPage from "./pages/UserPage";
 
 function App() {
 	const [user, setUser] = useState({ name: "", token: "", photo: "" });
@@ -31,10 +32,11 @@ function App() {
 						<Route path="/" element={<LoginPage />} />
 						<Route path="/sign-up" element={<SignUp />} />
 						<Route path="/timeline" element={<Main />} />
-						<Route
+						<Route 
 							path="/hashtag/:hashtag"
 							element={<HashtagPage />}
 						/>
+						<Route path="/user/:id" element={<UserPage/>}/>
 					</Routes>
 				</BrowserRouter>
 			</ProjectContext.Provider>

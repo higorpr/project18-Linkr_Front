@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function Post() {    
     const [post, setPost] = useState({text:"", link:""});
     const [click, setClick] = useState(false);
-    const { user, setUser } = useContext(ProjectContext);
+    const { user } = useContext(ProjectContext);
     const navigate = useNavigate();
 
     function formHandler(e){
