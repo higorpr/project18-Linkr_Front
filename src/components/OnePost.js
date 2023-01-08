@@ -1,14 +1,22 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
+import { useNavigate } from "react-router-dom";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 
 export function OnePost(props) {
 	const { item } = props;
+	const navigate = useNavigate();
+	console.log(item.selfLike);
 
 	const tagStyle = {
 		color: "white",
 		fontWeight: 700,
 		cursor: "pointer",
 	};
+
+	function goToProfile() {
+		navigate(`/user/${item.id}`);
+	}
 
 	function openLink() {
 		window.open(item.link);
@@ -18,9 +26,17 @@ export function OnePost(props) {
 			<Container>
 				<PerfilLikes>
 					<img src={item.image} alt="perfil" />
+					<Likes>
+						{item.selfLike ? (
+							<IoHeartSharp color="#AC0000" />
+						) : (
+							<IoHeartOutline color="white" />
+						)}
+						<h1>{item.likes} likes</h1>
+					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
-					<UserName>{item.username}</UserName>
+					<UserName onClick={goToProfile}>{item.username}</UserName>
 					<ReactTagify tagStyle={tagStyle}>
 						<Text>{item.text}</Text>
 					</ReactTagify>
@@ -80,6 +96,31 @@ const PerfilLikes = styled.div`
 	}
 `;
 
+const Likes = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 19px;
+	svg {
+		color: ${(props) => props.color};
+		font-size: 20px;
+	}
+	h1 {
+		margin-top: 4px;
+		color: white;
+		font-size: 11px;
+	}
+	@media (max-width: 610px) {
+		margin-top: 15px;
+		svg {
+			font-size: 17px;
+		}
+		h1 {
+			font-size: 9px;
+		}
+	}
+`;
+
 const LinkPostBox = styled.div`
 	width: 505px;
 	margin-top: 17px;
@@ -95,6 +136,7 @@ const UserName = styled.p`
 	font-weight: 400;
 	color: white;
 	margin-bottom: 10px;
+	cursor: pointer;
 	@media (max-width: 610px) {
 		font-size: 17px;
 		margin-bottom: 8px;
