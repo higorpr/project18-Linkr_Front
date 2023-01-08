@@ -42,7 +42,7 @@ export function Posts() {
 					);
 				});
 		}
-	}, []);
+	}, [user]);
 
 	return (
 		<>
