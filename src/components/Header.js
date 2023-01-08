@@ -7,13 +7,16 @@ import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 import { defaultUser } from "../constants/resetStates";
 import { logoutUrl } from "../constants/urls";
+import Search from "./Search";
 
 export default function Header() {
-
 	const { user, setUser } = useContext(ProjectContext);
 	const [openedMenu, setOpenedMenu] = useState(false);
 	const nav = useNavigate();
 	const menuDisplay = openedMenu ? "flex" : "none";
+	const [value, setValue] = useState("");
+	const [result, setResult] = useState([]);
+	const [showResult, setShowResult] = useState(false);
 
 	function logout(event) {
 		event.preventDefault();
@@ -34,23 +37,45 @@ export default function Header() {
 	}
 
 	return (
-		<StyledTop>
-			<p>linkr</p>
-			<StyledTopMenu onClick={() => setOpenedMenu(!openedMenu)}>
-				<IconContext.Provider
-					value={{
-						color: "white",
-						size: "18px",
-					}}
-				>
-					{!openedMenu ? <SlArrowUp /> : <SlArrowDown />}
-				</IconContext.Provider>
-				<img src={user.photo} alt="User" />
-				<StyledDropDown onClick={logout} menuDisplay={menuDisplay}>
-					Logout
-				</StyledDropDown>
-			</StyledTopMenu>
-		</StyledTop>
+		<>
+			<SearchDiv2>
+				<Search
+					value={value}
+					setValue={setValue}
+					result={result}
+					setResult={setResult}
+					showResult={showResult}
+					setShowResult={setShowResult}
+				/>
+			</SearchDiv2>
+			<StyledTop>
+				<p>linkr</p>
+				<SearchDiv>
+					<Search
+						value={value}
+						setValue={setValue}
+						result={result}
+						setResult={setResult}
+						showResult={showResult}
+						setShowResult={setShowResult}
+					/>
+				</SearchDiv>
+				<StyledTopMenu onClick={() => setOpenedMenu(!openedMenu)}>
+					<IconContext.Provider
+						value={{
+							color: "white",
+							size: "18px",
+						}}
+					>
+						{!openedMenu ? <SlArrowUp /> : <SlArrowDown />}
+					</IconContext.Provider>
+					<img src={user.photo} alt="User" />
+					<StyledDropDown onClick={logout} menuDisplay={menuDisplay}>
+						Logout
+					</StyledDropDown>
+				</StyledTopMenu>
+			</StyledTop>
+		</>
 	);
 }
 
@@ -109,5 +134,29 @@ const StyledDropDown = styled.div`
 
 	&:hover {
 		cursor: pointer;
+	}
+`;
+
+const SearchDiv = styled.div`
+	margin-top: 13px;
+	margin-left: 35px;
+	margin-right: 35px;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	@media (max-width: 610px) {
+		display: none;
+	}
+`;
+
+const SearchDiv2 = styled.div`
+	display: none;
+	width: 100%;
+	@media (max-width: 610px) {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin: 72px 0px 0px 0px;
+		padding: 12px 12px 0px 12px;
 	}
 `;

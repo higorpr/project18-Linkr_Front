@@ -26,18 +26,29 @@ export default function HashtagPage() {
 const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
+	display: flex;
+	justify-content: center;
 `;
 
 const StyledBody = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 72px;
+	@media (max-width: 610px) {
+		margin-top: 0px;
+	}
 `;
 
 const TrendingBox = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 125px;
+	margin-left: 30px;
+	div {
+		height: 100px;
+		width: 200px;
+		background-color: blueviolet;
+	}
 	@media (max-width: 937px) {
 		display: none;
 	}

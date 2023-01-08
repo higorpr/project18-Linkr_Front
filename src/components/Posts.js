@@ -10,6 +10,7 @@ export function Posts() {
 	const [loading, setLoading] = useState(true);
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
+	const { user, setUser } = useContext(ProjectContext);
 
 	useEffect(() => {
 		const Url = "http://localhost:4000/posts";
@@ -18,28 +19,31 @@ export function Posts() {
 				authorization: `Bearer ${user.token}`,
 			},
 		};
-
-		axios
-			.get(Url, config)
-			.then((answer) => {
-				setPost(answer.data);
-				setLoading(false);
-				if (!answer.data.length) {
-					setError("There are no posts yet!");
-					alert("There are no posts yet");
-				} else {
-					setError("");
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-				setLoading(false);
-				const temp_err =
-					"An error occured while trying to fetch the posts, please refresh the page";
-				setError(temp_err);
-				alert(temp_err);
-			});
-	}, []);
+		if (user.token !== "") {
+			axios
+				.get(Url, config)
+				.then((answer) => {
+					setPost(answer.data);
+					setLoading(false);
+					if (!answer.data.length) {
+						setError("There are no posts yet!");
+						alert("There are no posts yet");
+					} else {
+						setError("");
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+					setLoading(false);
+					setError(
+						"An error occured while trying to fetch the posts, please refresh the page"
+					);
+					alert(
+						"An error occured while trying to fetch the posts, please refresh the page"
+					);
+				});
+		}
+	}, [user]);
 
 	return (
 		<>

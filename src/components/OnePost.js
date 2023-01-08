@@ -6,13 +6,16 @@ import "react-tooltip/dist/react-tooltip.css";
 import { usersLikedUrl } from "../constants/urls";
 import axios from "axios";
 import ProjectContext from "../constants/Context";
+import { useNavigate } from "react-router-dom";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 
 export function OnePost(props) {
 	const { item } = props;
 	const { user } = useContext(ProjectContext);
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
-	console.log(usersStr)
+	const navigate = useNavigate();
+	console.log(item.selfLike);
 
 	useEffect(() => {
 		const url = `${usersLikedUrl}/${postId}`;
@@ -69,6 +72,10 @@ export function OnePost(props) {
 		cursor: "pointer",
 	};
 
+	function goToProfile() {
+		navigate(`/user/${item.id}`);
+	}
+
 	function openLink() {
 		window.open(item.link);
 	}
@@ -76,20 +83,26 @@ export function OnePost(props) {
 		<>
 			<Container>
 				<PerfilLikes>
-					<img
-						id={`tooltip-anchor-${postId}`}
-						src={item.image}
-						alt="perfil"
-					/>
-					<Tooltip
-						anchorId={`tooltip-anchor-${postId}`}
-						content={usersStr}
-						place="bottom"
-						events={["hover"]}
-					/>
+					<img src={item.image} alt="perfil" />
+					<Likes>
+						{item.selfLike ? (
+							<IoHeartSharp color="#AC0000" />
+						) : (
+							<IoHeartOutline color="white" />
+						)}
+						<h1 id={`tooltip-anchor-${postId}`}>
+							{item.likes} likes
+						</h1>
+						<Tooltip
+							anchorId={`tooltip-anchor-${postId}`}
+							content={usersStr}
+							place="bottom"
+							events={["hover"]}
+						/>
+					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
-					<UserName>{item.username}</UserName>
+					<UserName onClick={goToProfile}>{item.username}</UserName>
 					<ReactTagify tagStyle={tagStyle}>
 						<Text>{item.text}</Text>
 					</ReactTagify>
@@ -155,6 +168,31 @@ const PerfilLikes = styled.div`
 	}
 `;
 
+const Likes = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 19px;
+	svg {
+		color: ${(props) => props.color};
+		font-size: 20px;
+	}
+	h1 {
+		margin-top: 4px;
+		color: white;
+		font-size: 11px;
+	}
+	@media (max-width: 610px) {
+		margin-top: 15px;
+		svg {
+			font-size: 17px;
+		}
+		h1 {
+			font-size: 9px;
+		}
+	}
+`;
+
 const LinkPostBox = styled.div`
 	width: 505px;
 	margin-top: 17px;
@@ -170,6 +208,7 @@ const UserName = styled.p`
 	font-weight: 400;
 	color: white;
 	margin-bottom: 10px;
+	cursor: pointer;
 	@media (max-width: 610px) {
 		font-size: 17px;
 		margin-bottom: 8px;
