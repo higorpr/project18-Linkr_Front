@@ -1,14 +1,136 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
+import { useContext, useEffect, useState } from "react";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import { usersLikedUrl } from "../constants/urls";
+import axios from "axios";
+import ProjectContext from "../constants/Context";
+import { useNavigate } from "react-router-dom";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 
 export function OnePost(props) {
+	const [disabled, setDisabled] = useState(false);
 	const { item } = props;
+	const postId = item.id;
+	const [usersStr, setUsersStr] = useState("");
+	const navigate = useNavigate();
+	const { user } = useContext(ProjectContext);
+	const [selfLike, setSelfLike] = useState(item.selfLike);
+	const [likes, setLikes] = useState(item.likes);
+
+	useEffect(() => {
+		const url = `${usersLikedUrl}/${postId}`;
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(url);
+				const userArr = response.data;
+				console.log(userArr);
+
+				if (userArr.length > 2) {
+					const remainingUsers = userArr.length - 2;
+					if (userArr.includes(user.name)) {
+						const userLiked =
+							userArr[0] === user.name ? userArr[1] : userArr[0];
+
+						setUsersStr(
+							`You, ${userLiked} and other ${remainingUsers} people liked this post`
+						);
+					} else {
+						setUsersStr(
+							`${userArr[0]}, ${userArr[1]} and other ${remainingUsers} people liked this post`
+						);
+					}
+				} else if (userArr.length === 2) {
+					if (userArr.includes(user.name)) {
+						const userLiked =
+							userArr[0] === user.name ? userArr[1] : userArr[0];
+
+						setUsersStr(`You and ${userLiked} liked this post`);
+					} else {
+						setUsersStr(
+							`${userArr[0]} and ${userArr[1]} liked this post`
+						);
+					}
+				} else if (userArr.length === 1) {
+					if (userArr.includes(user.name)) {
+						setUsersStr(`You liked this post`);
+					} else {
+						setUsersStr(`${userArr[0]} liked this post`);
+					}
+				} else {
+					setUsersStr("Be the first to like this post!");
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		};
+		fetchData();
+	}, []);
 
 	const tagStyle = {
 		color: "white",
 		fontWeight: 700,
 		cursor: "pointer",
 	};
+
+	function goToProfile() {
+		navigate(`/user/${item.user_id}`);
+	}
+
+	function postLike() {
+		if (!disabled) {
+			setDisabled(true);
+			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const config = {
+				headers: {
+					authorization: `Bearer ${user.token}`,
+				},
+			};
+			axios
+				.post(Url, {}, config)
+				.then((answer) => {
+					console.log(answer);
+					item.likes = answer.data.likes;
+					item.selfLike = answer.data.selfLike;
+
+					setLikes(item.likes);
+					setSelfLike(item.selfLike);
+					setDisabled(false);
+				})
+				.catch((err) => {
+					console.log(err);
+					setDisabled(false);
+				});
+		}
+	}
+
+	function removeLike() {
+		if (!disabled) {
+			setDisabled(true);
+			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const config = {
+				headers: {
+					authorization: `Bearer ${user.token}`,
+				},
+			};
+			axios
+				.delete(Url, config)
+				.then((answer) => {
+					console.log(answer);
+					item.likes = answer.data.likes;
+					item.selfLike = answer.data.selfLike;
+
+					setLikes(item.likes);
+					setSelfLike(item.selfLike);
+					setDisabled(false);
+				})
+				.catch((err) => {
+					console.log(err);
+					setDisabled(false);
+				});
+		}
+	}
 
 	function openLink() {
 		window.open(item.link);
@@ -18,9 +140,25 @@ export function OnePost(props) {
 			<Container>
 				<PerfilLikes>
 					<img src={item.image} alt="perfil" />
+					<Likes>
+						{selfLike ? (
+							<IoHeartSharp color="#AC0000" onClick={removeLike} />
+						) : (
+							<IoHeartOutline color="white" onClick={postLike} />
+						)}
+						<h1 id={`tooltip-anchor-${postId}`}>
+							{item.likes} likes
+						</h1>
+						<Tooltip
+							anchorId={`tooltip-anchor-${postId}`}
+							content={usersStr}
+							place="bottom"
+							events={["hover"]}
+						/>
+					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
-					<UserName>{item.username}</UserName>
+					<UserName onClick={goToProfile}>{item.username}</UserName>
 					<ReactTagify tagStyle={tagStyle}>
 						<Text>{item.text}</Text>
 					</ReactTagify>
@@ -30,7 +168,9 @@ export function OnePost(props) {
 								<Title>{item?.linkTitle}</Title>
 							)}
 							{item?.linkDescription === undefined ? null : (
-								<Description>{item?.linkDescription}</Description>
+								<Description>
+									{item?.linkDescription}
+								</Description>
 							)}
 							<Link>{item?.link}</Link>
 						</LinkInfo>
@@ -64,6 +204,10 @@ const PerfilLikes = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	p {
+		color: #ffffff;
+	}
+
 	img {
 		width: 50px;
 		height: 50px;
@@ -76,6 +220,32 @@ const PerfilLikes = styled.div`
 			height: 40px;
 			margin-left: 15px;
 			margin-right: 15px;
+		}
+	}
+`;
+
+const Likes = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 19px;
+	svg {
+		color: ${(props) => props.color};
+		font-size: 20px;
+		cursor: pointer;
+	}
+	h1 {
+		margin-top: 4px;
+		color: white;
+		font-size: 11px;
+	}
+	@media (max-width: 610px) {
+		margin-top: 15px;
+		svg {
+			font-size: 17px;
+		}
+		h1 {
+			font-size: 9px;
 		}
 	}
 `;
@@ -95,6 +265,7 @@ const UserName = styled.p`
 	font-weight: 400;
 	color: white;
 	margin-bottom: 10px;
+	cursor: pointer;
 	@media (max-width: 610px) {
 		font-size: 17px;
 		margin-bottom: 8px;

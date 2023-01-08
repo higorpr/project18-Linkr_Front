@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUp from "./pages/SignUpPage";
 import Main from "./pages/Main";
+import HashtagPage from "./pages/HashtagPage";
+import { TooltipProvider } from "react-tooltip";
+import UserPage from "./pages/UserPage";
 
 function App() {
 	const [user, setUser] = useState({ name: "", token: "", photo: "" });
@@ -21,16 +24,23 @@ function App() {
 	}, []);
 
 	return (
-		<ProjectContext.Provider value={{ user, setUser }}>
-			<BrowserRouter>
-				<GlobalStyle />
-				<Routes>
-					<Route path="/" element={<LoginPage />} />
-					<Route path="/sign-up" element={<SignUp />} />
-					<Route path="/timeline" element={<Main />} />
-				</Routes>
-			</BrowserRouter>
-		</ProjectContext.Provider>
+		<TooltipProvider>
+			<ProjectContext.Provider value={{ user, setUser }}>
+				<BrowserRouter>
+					<GlobalStyle />
+					<Routes>
+						<Route path="/" element={<LoginPage />} />
+						<Route path="/sign-up" element={<SignUp />} />
+						<Route path="/timeline" element={<Main />} />
+						<Route 
+							path="/hashtag/:hashtag"
+							element={<HashtagPage />}
+						/>
+						<Route path="/user/:id" element={<UserPage/>}/>
+					</Routes>
+				</BrowserRouter>
+			</ProjectContext.Provider>
+		</TooltipProvider>
 	);
 }
 
