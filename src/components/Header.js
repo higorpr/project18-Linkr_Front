@@ -28,7 +28,6 @@ export default function Header() {
 		axios
 			.post(logoutUrl, {}, config)
 			.then((res) => {
-				console.log(res);
 				setUser(defaultUser);
 				nav("/");
 			})

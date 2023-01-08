@@ -1,5 +1,11 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
+import { useContext, useEffect, useState } from "react";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import { usersLikedUrl } from "../constants/urls";
+import axios from "axios";
+import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import { useState, useContext } from "react";
@@ -9,10 +15,62 @@ import axios from "axios";
 export function OnePost(props) {
 	const [disabled, setDisabled] = useState(false);
 	const { item } = props;
+	const { user } = useContext(ProjectContext);
+	const postId = item.id;
+	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
 	const { user } = useContext(ProjectContext);
 	const [selfLike, setSelfLike] = useState(item.selfLike);
 	const [likes, setLikes] = useState(item.likes);
+
+	useEffect(() => {
+		const url = `${usersLikedUrl}/${postId}`;
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(url);
+				const userArr = response.data;
+				console.log(userArr);
+
+				if (userArr.length > 2) {
+					const remainingUsers = userArr.length - 2;
+					if (userArr.includes(user.name)) {
+						const userLiked =
+							userArr[0] === user.name ? userArr[1] : userArr[0];
+
+						setUsersStr(
+							`You, ${userLiked} and other ${remainingUsers} people liked this post`
+						);
+					} else {
+						setUsersStr(
+							`${userArr[0]}, ${userArr[1]} and other ${remainingUsers} people liked this post`
+						);
+					}
+				} else if (userArr.length === 2) {
+					if (userArr.includes(user.name)) {
+						const userLiked =
+							userArr[0] === user.name ? userArr[1] : userArr[0];
+
+						setUsersStr(`You and ${userLiked} liked this post`);
+					} else {
+						setUsersStr(
+							`${userArr[0]} and ${userArr[1]} liked this post`
+						);
+					}
+				} else if (userArr.length === 1) {
+					if (userArr.includes(user.name)) {
+						setUsersStr(`You liked this post`);
+					} else {
+						setUsersStr(`${userArr[0]} liked this post`);
+					}
+				} else {
+					setUsersStr("Be the first to like this post!");
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		};
+		fetchData();
+	}, []);
 
 	const tagStyle = {
 		color: "white",
@@ -92,7 +150,15 @@ export function OnePost(props) {
 						) : (
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
-						<h1>{likes} likes</h1>
+						<h1 id={`tooltip-anchor-${postId}`}>
+							{item.likes} likes
+						</h1>
+						<Tooltip
+							anchorId={`tooltip-anchor-${postId}`}
+							content={usersStr}
+							place="bottom"
+							events={["hover"]}
+						/>
 					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
@@ -106,7 +172,9 @@ export function OnePost(props) {
 								<Title>{item?.linkTitle}</Title>
 							)}
 							{item?.linkDescription === undefined ? null : (
-								<Description>{item?.linkDescription}</Description>
+								<Description>
+									{item?.linkDescription}
+								</Description>
 							)}
 							<Link>{item?.link}</Link>
 						</LinkInfo>
@@ -140,6 +208,10 @@ const PerfilLikes = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	p {
+		color: #ffffff;
+	}
+
 	img {
 		width: 50px;
 		height: 50px;

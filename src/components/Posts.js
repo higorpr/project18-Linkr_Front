@@ -6,6 +6,7 @@ import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 
 export function Posts() {
+	const { user } = useContext(ProjectContext);
 	const [loading, setLoading] = useState(true);
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");

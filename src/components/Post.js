@@ -4,6 +4,8 @@ import ProjectContext from "../constants/Context";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
+export default function Post() {
+	const { user } = useContext(ProjectContext);
 
 export default function Post(){
     
@@ -21,9 +23,9 @@ export default function Post(){
         e.preventDefault();
         setClick(true);
 
-        const obj = {...post};
+		const obj = { ...post };
 
-        const URL = `http://localhost:4000/publish`;
+		const URL = `http://localhost:4000/publish`;
 
         const config = {
             headers: {
@@ -76,15 +78,15 @@ export default function Post(){
     </StyledPost>);
 }
 
-const StyledPost = styled.div `
-    width: 611px;
-    height: 209px;
+const StyledPost = styled.div`
+	width: 611px;
+	height: 209px;
 
-    background-color: #fff;
+	background-color: #fff;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
 
     border-radius: 16px;
     div{
