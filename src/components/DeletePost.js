@@ -37,7 +37,7 @@ export default function DeletePost({ getPosts, item }) {
 		<DeleteBox>
 			<IoMdTrash onClick={() => setOpenConfirm(true)} />
 			{openConfirm ? (
-				<ConfirmDelete onClick={() => setOpenConfirm(false)}>
+				<ConfirmDelete>
 					<Container onClick={(e) => e.stopPropagation()}>
 						{loading ? (
 							<ContainerLoading>

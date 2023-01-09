@@ -70,7 +70,7 @@ export function OnePost(props) {
 			}
 		};
 		fetchData();
-	}, [numberReloads]);
+	}, [numberReloads, postId, user]);
 
 	const tagStyle = {
 		color: "white",
@@ -161,9 +161,10 @@ export function OnePost(props) {
 					<StyeldNameContainer>
 						<UserName onClick={goToProfile}>{item.username}</UserName>
 						<StyledIcons>
-							<IconContext.Provider value={{ size: "20px", color: "#FFFFFF" }}>
+							<IconContext.Provider value={{ color: "#FFFFFF" }}>
 								{item.ownPost ? (
 									<BsPencil
+										id="edit"
 										onClick={() => {
 											setEditBoxOpened(!editBoxOpened);
 										}}
@@ -292,24 +293,6 @@ const LinkPostBox = styled.div`
 	justify-content: space-between;
 `;
 
-const UserPostEdit = styled.div`
-	width: 503px;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 10px;
-	@media (max-width: 610px) {
-		width: 100%;
-		margin-bottom: 8px;
-	}
-`;
-
-const EditDelete = styled.div`
-	display: flex;
-	align-items: center;
-`;
-
 const UserName = styled.p`
 	font-size: 19px;
 	font-family: "Lato";
@@ -412,7 +395,18 @@ const StyledIcons = styled.div`
 	width: 50px;
 	justify-content: space-between;
 
+	#edit {
+		width: 13px;
+	}
+
 	&:hover {
 		cursor: pointer;
+	}
+
+	@media (max-width: 610px) {
+		width: 37px;
+		#edit {
+			width: 11px;
+		}
 	}
 `;
