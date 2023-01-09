@@ -9,6 +9,9 @@ import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import DeletePost from "./DeletePost";
+import { BsPencil } from "react-icons/bs";
+import { IconContext } from "react-icons";
+import EditBox from "./EditBox";
 
 export function OnePost(props) {
 	const [disabled, setDisabled] = useState(false);
@@ -19,6 +22,8 @@ export function OnePost(props) {
 	const { user } = useContext(ProjectContext);
 	const [selfLike, setSelfLike] = useState(item.selfLike);
 	const [likes, setLikes] = useState(item.likes);
+	const isMine = item.username === user.name;
+	const [editBoxOpened, setEditBoxOpened] = useState(false);
 
 	useEffect(() => {
 		const url = `${usersLikedUrl}/${postId}`;
@@ -26,7 +31,6 @@ export function OnePost(props) {
 			try {
 				const response = await axios.get(url);
 				const userArr = response.data;
-				console.log(userArr);
 
 				if (userArr.length > 2) {
 					const remainingUsers = userArr.length - 2;
@@ -143,7 +147,7 @@ export function OnePost(props) {
 						) : (
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
-						<h1 id={`tooltip-anchor-${postId}`}>{item.likes} likes</h1>
+						<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
 						<Tooltip
 							anchorId={`tooltip-anchor-${postId}`}
 							content={usersStr}
@@ -153,17 +157,26 @@ export function OnePost(props) {
 					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
-					<UserPostEdit>
+					<StyeldNameContainer>
 						<UserName onClick={goToProfile}>{item.username}</UserName>
-						{item.ownPost ? (
-							<EditDelete>
-								<DeletePost getPosts={getPosts} item={item} />
-							</EditDelete>
-						) : null}
-					</UserPostEdit>
-					<ReactTagify tagStyle={tagStyle}>
-						<Text>{item.text}</Text>
-					</ReactTagify>
+						<StyledIcons>
+							<IconContext.Provider value={{ size: "20px", color: "#FFFFFF" }}>
+								{isMine ? (
+									<BsPencil onClick={() => setEditBoxOpened(!editBoxOpened)} />
+								) : (
+									""
+								)}
+								{isMine ? <DeletePost getPosts={getPosts} item={item} /> : ""}
+							</IconContext.Provider>
+						</StyledIcons>
+					</StyeldNameContainer>
+					{editBoxOpened ? (
+						<EditBox previousText={item.text} />
+					) : (
+						<ReactTagify tagStyle={tagStyle}>
+							<Text>{item.text}</Text>
+						</ReactTagify>
+					)}
 					<LinkPreview onClick={openLink}>
 						<LinkInfo>
 							{item?.linkTitle === undefined ? null : (
@@ -366,5 +379,20 @@ const Link = styled.p`
 	color: #cecece;
 	@media (max-width: 610px) {
 		font-size: 9px;
+	}
+`;
+
+const StyeldNameContainer = styled.div`
+	display: flex;
+	justify-content: space-between;
+`;
+
+const StyledIcons = styled.div`
+	display: flex;
+	width: 50px;
+	justify-content: space-between;
+
+	&:hover {
+		cursor: pointer;
 	}
 `;
