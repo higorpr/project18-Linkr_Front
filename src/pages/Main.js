@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Post from "../components/Post";
 import { Posts } from "../components/Posts";
 import Header from "../components/Header";
+import TrendingBox from "../components/TrendingBox";
 
 export default function Main() {
 
@@ -31,15 +32,6 @@ const StyledBody = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 72px;
-`;
-
-const TrendingBox = styled.div`
-	display: flex;
-	justify-content: center;
-	margin-top: 125px;
-	@media (max-width: 937px) {
-		display: none;
-	}
 `;
 
 const PostsBox = styled.div`
