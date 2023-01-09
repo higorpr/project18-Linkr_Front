@@ -12,6 +12,7 @@ export function Posts() {
 	const { user, setUser } = useContext(ProjectContext);
 
 	function getPosts() {
+		setLoading(true);
 		const Url = "http://localhost:4000/posts";
 		const config = {
 			headers: {
@@ -22,6 +23,7 @@ export function Posts() {
 			axios
 				.get(Url, config)
 				.then((answer) => {
+					console.log(answer);
 					setPost(answer.data);
 					setLoading(false);
 					if (!answer.data.length) {
