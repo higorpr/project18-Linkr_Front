@@ -34,7 +34,6 @@ export default function Search(props) {
 			.get(Url, config)
 			.then((answer) => {
 				setResult(answer.data);
-				console.log(answer.data);
 			})
 			.catch((err) => {
 				console.log(err);

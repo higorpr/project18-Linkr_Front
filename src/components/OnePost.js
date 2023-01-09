@@ -8,10 +8,11 @@ import axios from "axios";
 import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import DeletePost from "./DeletePost";
 
 export function OnePost(props) {
 	const [disabled, setDisabled] = useState(false);
-	const { item } = props;
+	const { item, getPosts } = props;
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
@@ -48,9 +49,7 @@ export function OnePost(props) {
 
 						setUsersStr(`You and ${userLiked} liked this post`);
 					} else {
-						setUsersStr(
-							`${userArr[0]} and ${userArr[1]} liked this post`
-						);
+						setUsersStr(`${userArr[0]} and ${userArr[1]} liked this post`);
 					}
 				} else if (userArr.length === 1) {
 					if (userArr.includes(user.name)) {
@@ -90,7 +89,6 @@ export function OnePost(props) {
 			axios
 				.post(Url, {}, config)
 				.then((answer) => {
-					console.log(answer);
 					item.likes = answer.data.likes;
 					item.selfLike = answer.data.selfLike;
 
@@ -117,7 +115,6 @@ export function OnePost(props) {
 			axios
 				.delete(Url, config)
 				.then((answer) => {
-					console.log(answer);
 					item.likes = answer.data.likes;
 					item.selfLike = answer.data.selfLike;
 
@@ -146,9 +143,7 @@ export function OnePost(props) {
 						) : (
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
-						<h1 id={`tooltip-anchor-${postId}`}>
-							{item.likes} likes
-						</h1>
+						<h1 id={`tooltip-anchor-${postId}`}>{item.likes} likes</h1>
 						<Tooltip
 							anchorId={`tooltip-anchor-${postId}`}
 							content={usersStr}
@@ -158,7 +153,14 @@ export function OnePost(props) {
 					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
-					<UserName onClick={goToProfile}>{item.username}</UserName>
+					<UserPostEdit>
+						<UserName onClick={goToProfile}>{item.username}</UserName>
+						{item.ownPost ? (
+							<EditDelete>
+								<DeletePost getPosts={getPosts} item={item} />
+							</EditDelete>
+						) : null}
+					</UserPostEdit>
 					<ReactTagify tagStyle={tagStyle}>
 						<Text>{item.text}</Text>
 					</ReactTagify>
@@ -168,9 +170,7 @@ export function OnePost(props) {
 								<Title>{item?.linkTitle}</Title>
 							)}
 							{item?.linkDescription === undefined ? null : (
-								<Description>
-									{item?.linkDescription}
-								</Description>
+								<Description>{item?.linkDescription}</Description>
 							)}
 							<Link>{item?.link}</Link>
 						</LinkInfo>
@@ -259,16 +259,32 @@ const LinkPostBox = styled.div`
 	justify-content: space-between;
 `;
 
+const UserPostEdit = styled.div`
+	width: 503px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	@media (max-width: 610px) {
+		width: 100%;
+		margin-bottom: 8px;
+	}
+`;
+
+const EditDelete = styled.div`
+	display: flex;
+	align-items: center;
+`;
+
 const UserName = styled.p`
 	font-size: 19px;
 	font-family: "Lato";
 	font-weight: 400;
 	color: white;
-	margin-bottom: 10px;
 	cursor: pointer;
 	@media (max-width: 610px) {
 		font-size: 17px;
-		margin-bottom: 8px;
 	}
 `;
 

@@ -11,7 +11,7 @@ export function Posts() {
 	const [error, setError] = useState("");
 	const { user, setUser } = useContext(ProjectContext);
 
-	useEffect(() => {
+	function getPosts() {
 		const Url = "http://localhost:4000/posts";
 		const config = {
 			headers: {
@@ -42,6 +42,10 @@ export function Posts() {
 					);
 				});
 		}
+	}
+
+	useEffect(() => {
+		getPosts();
 	}, [user]);
 
 	return (
@@ -65,7 +69,9 @@ export function Posts() {
 					<ErrorMessage>{error}</ErrorMessage>
 				</Container>
 			) : (
-				post.map((item) => <OnePost key={item.id} item={item} />)
+				post.map((item) => (
+					<OnePost key={item.id} getPosts={getPosts} item={item} />
+				))
 			)}
 		</>
 	);
