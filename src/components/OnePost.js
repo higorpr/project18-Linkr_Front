@@ -22,7 +22,6 @@ export function OnePost(props) {
 	const { user } = useContext(ProjectContext);
 	const [selfLike, setSelfLike] = useState(item.selfLike);
 	const [likes, setLikes] = useState(item.likes);
-	const [numberLikes, setNumberLikes] = useState(0);
 	const isMine = item.username === user.name;
 	const [editBoxOpened, setEditBoxOpened] = useState(false);
 
@@ -32,7 +31,7 @@ export function OnePost(props) {
 			try {
 				const response = await axios.get(url);
 				const userArr = response.data;
-				setNumberLikes(userArr.length);
+				
 
 				if (userArr.length > 2) {
 					const remainingUsers = userArr.length - 2;
@@ -157,7 +156,7 @@ export function OnePost(props) {
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
 						<h1 id={`tooltip-anchor-${postId}`}>
-							{numberLikes} likes
+							{likes} likes
 						</h1>
 						<Tooltip
 							anchorId={`tooltip-anchor-${postId}`}
