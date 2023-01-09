@@ -3,7 +3,7 @@ import GlobalStyle from "./theme/globalStyles";
 import ProjectContext from "./constants/Context";
 import { useEffect, useState } from "react";
 import LoginPage from "./pages/LoginPage";
-import SignUp from "./Components/SignUp";
+import SignUp from "./pages/SignUpPage";
 import Main from "./pages/Main";
 import HashtagPage from "./pages/HashtagPage";
 import { TooltipProvider } from "react-tooltip";

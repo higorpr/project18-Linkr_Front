@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate} from 'react-router-dom';
-import './style.css';
+import { signUpUrl } from "../constants/urls";
+import '../styles/SignUpPage.css';
 
 function SignUp() {
     const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ function SignUp() {
     async function handleSingUp(e) {
         e.preventDefault();
         
-        fetch("http://localhost:4000/signup", {
+        fetch( signUpUrl, {
             method: 'POST',
             body: JSON.stringify({ email, password, username, image }),
             headers: { 'Content-Type': 'application/json' }
