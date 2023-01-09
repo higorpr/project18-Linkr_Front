@@ -13,7 +13,7 @@ export function Posts() {
 
 	function getPosts() {
 		setLoading(true);
-		const Url = "http://localhost:4000/posts";
+		const Url = "https://api-linkr-sql-9ai1.onrender.com/posts";
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,

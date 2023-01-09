@@ -17,7 +17,7 @@ export default function UserPage() {
 
 	useEffect(() => {
 		console.log("ID: ", id);
-		const URL = `http://localhost:4000/user/${id}`
+		const URL = `https://api-linkr-sql-9ai1.onrender.com/user/${id}`
 		axios.get(URL)
 			.then((ans) => {
 				console.log(ans.data);

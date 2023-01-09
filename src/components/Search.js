@@ -24,7 +24,7 @@ export default function Search(props) {
 	}
 
 	function search(event) {
-		const Url = `http://localhost:4000/search?text=${event.target.value}`;
+		const Url = `https://api-linkr-sql-9ai1.onrender.com/search?text=${event.target.value}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,

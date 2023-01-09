@@ -87,7 +87,7 @@ export function OnePost(props) {
 	function postLike() {
 		if (!disabled) {
 			setDisabled(true);
-			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const Url = `https://api-linkr-sql-9ai1.onrender.com/posts/${item.id}/like`;
 			const config = {
 				headers: {
 					authorization: `Bearer ${user.token}`,
@@ -113,7 +113,7 @@ export function OnePost(props) {
 	function removeLike() {
 		if (!disabled) {
 			setDisabled(true);
-			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const Url = `https://api-linkr-sql-9ai1.onrender.com/posts/${item.id}/like`;
 			const config = {
 				headers: {
 					authorization: `Bearer ${user.token}`,

@@ -21,7 +21,7 @@ export default function Post() {
 
 		const obj = { ...post };
 
-		const URL = `http://localhost:4000/publish`;
+		const URL = `https://api-linkr-sql-9ai1.onrender.com/publish`;
 
         const config = {
             headers: {

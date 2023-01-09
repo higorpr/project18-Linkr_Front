@@ -16,7 +16,7 @@ export function HashtagPosts() {
 
 	function getPosts() {
 		setLoading(true);
-		const Url = `http://localhost:4000/posts/hashtag/${hashtag}`;
+		const Url = `https://api-linkr-sql-9ai1.onrender.com/posts/hashtag/${hashtag}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
