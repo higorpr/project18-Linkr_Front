@@ -12,7 +12,7 @@ export default function DeletePost({ getPosts, item }) {
 
 	function deletePost() {
 		setLoading(true);
-		const Url = `http://localhost:4000/post/${item.id}`;
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/post/${item.id}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,

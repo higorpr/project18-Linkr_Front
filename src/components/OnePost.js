@@ -54,9 +54,7 @@ export function OnePost(props) {
 
 						setUsersStr(`You and ${userLiked} liked this post`);
 					} else {
-						setUsersStr(
-							`${userArr[0]} and ${userArr[1]} liked this post`
-						);
+						setUsersStr(`${userArr[0]} and ${userArr[1]} liked this post`);
 					}
 				} else if (userArr.length === 1) {
 					if (userArr.includes(user.name)) {
@@ -87,7 +85,7 @@ export function OnePost(props) {
 	function postLike() {
 		if (!disabled) {
 			setDisabled(true);
-			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/${item.id}/like`;
 			const config = {
 				headers: {
 					authorization: `Bearer ${user.token}`,
@@ -113,7 +111,7 @@ export function OnePost(props) {
 	function removeLike() {
 		if (!disabled) {
 			setDisabled(true);
-			const Url = `http://localhost:4000/posts/${item.id}/like`;
+			const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/${item.id}/like`;
 			const config = {
 				headers: {
 					authorization: `Bearer ${user.token}`,
@@ -146,10 +144,7 @@ export function OnePost(props) {
 					<img src={item.image} alt="perfil" />
 					<Likes>
 						{selfLike ? (
-							<IoHeartSharp
-								color="#AC0000"
-								onClick={removeLike}
-							/>
+							<IoHeartSharp color="#AC0000" onClick={removeLike} />
 						) : (
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
@@ -164,13 +159,9 @@ export function OnePost(props) {
 				</PerfilLikes>
 				<LinkPostBox>
 					<StyeldNameContainer>
-						<UserName onClick={goToProfile}>
-							{item.username}
-						</UserName>
+						<UserName onClick={goToProfile}>{item.username}</UserName>
 						<StyledIcons>
-							<IconContext.Provider
-								value={{ size: "20px", color: "#FFFFFF" }}
-							>
+							<IconContext.Provider value={{ size: "20px", color: "#FFFFFF" }}>
 								{item.ownPost ? (
 									<BsPencil
 										onClick={() => {
@@ -181,10 +172,7 @@ export function OnePost(props) {
 									""
 								)}
 								{item.ownPost ? (
-									<DeletePost
-										getPosts={getPosts}
-										item={item}
-									/>
+									<DeletePost getPosts={getPosts} item={item} />
 								) : (
 									""
 								)}
@@ -203,7 +191,7 @@ export function OnePost(props) {
 						<ReactTagify
 							tagStyle={tagStyle}
 							tagClicked={(tag) => {
-								nav(`/hashtag/${tag.replace('#','')}`);
+								nav(`/hashtag/${tag.replace("#", "")}`);
 							}}
 						>
 							<Text>{shownText}</Text>
@@ -215,9 +203,7 @@ export function OnePost(props) {
 								<Title>{item?.linkTitle}</Title>
 							)}
 							{item?.linkDescription === undefined ? null : (
-								<Description>
-									{item?.linkDescription}
-								</Description>
+								<Description>{item?.linkDescription}</Description>
 							)}
 							<Link>{item?.link}</Link>
 						</LinkInfo>
