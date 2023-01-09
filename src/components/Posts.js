@@ -11,7 +11,8 @@ export function Posts() {
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
 
-	useEffect(() => {
+	function getPosts() {
+		setLoading(true);
 		const Url = "http://localhost:4000/posts";
 		const config = {
 			headers: {
@@ -22,6 +23,7 @@ export function Posts() {
 			axios
 				.get(Url, config)
 				.then((answer) => {
+					console.log(answer);
 					setPost(answer.data);
 					setLoading(false);
 					if (!answer.data.length) {
@@ -42,7 +44,11 @@ export function Posts() {
 					);
 				});
 		}
-	}, [user,numberReloads]);
+	}
+
+	useEffect(() => {
+		getPosts();
+	}, [user, numberReloads]);
 
 	return (
 		<>
@@ -65,7 +71,9 @@ export function Posts() {
 					<ErrorMessage>{error}</ErrorMessage>
 				</Container>
 			) : (
-				post.map((item) => <OnePost key={item.id} item={item} />)
+				post.map((item) => (
+					<OnePost key={item.id} getPosts={getPosts} item={item} />
+				))
 			)}
 		</>
 	);
