@@ -24,6 +24,7 @@ export default function DeletePost({ getPosts, item }) {
 				setLoading(false);
 				setOpenConfirm(false);
 				getPosts();
+				console.log(answer.data);
 			})
 			.catch((err) => {
 				console.log(err);
