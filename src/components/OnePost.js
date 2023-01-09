@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { usersLikedUrl } from "../constants/urls";
@@ -19,11 +19,11 @@ export function OnePost(props) {
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
-	const { user } = useContext(ProjectContext);
+	const { user, numberReloads } = useContext(ProjectContext);
 	const [selfLike, setSelfLike] = useState(item.selfLike);
 	const [likes, setLikes] = useState(item.likes);
-	const isMine = item.username === user.name;
 	const [editBoxOpened, setEditBoxOpened] = useState(false);
+	const [shownText, setShownText] = useState(item.text);
 
 	useEffect(() => {
 		const url = `${usersLikedUrl}/${postId}`;
@@ -69,7 +69,7 @@ export function OnePost(props) {
 			}
 		};
 		fetchData();
-	}, []);
+	}, [numberReloads]);
 
 	const tagStyle = {
 		color: "white",
@@ -160,21 +160,33 @@ export function OnePost(props) {
 					<StyeldNameContainer>
 						<UserName onClick={goToProfile}>{item.username}</UserName>
 						<StyledIcons>
-							<IconContext.Provider value={{ size: "20px", color: "#FFFFFF" }}>
-								{isMine ? (
-									<BsPencil onClick={() => setEditBoxOpened(!editBoxOpened)} />
+							<IconContext.Provider
+								value={{ size: "20px", color: "#FFFFFF" }}
+							>
+								{item.ownPost ? (
+									<BsPencil
+										onClick={() => {
+											setEditBoxOpened(!editBoxOpened);
+										}}
+									/>
 								) : (
 									""
 								)}
-								{isMine ? <DeletePost getPosts={getPosts} item={item} /> : ""}
+								{item.ownPost ? <DeletePost getPosts={getPosts} item={item} /> : ""}
 							</IconContext.Provider>
 						</StyledIcons>
 					</StyeldNameContainer>
 					{editBoxOpened ? (
-						<EditBox previousText={item.text} />
+						<EditBox
+							previousText={item.text}
+							setEditBoxOpened={setEditBoxOpened}
+							postId={postId}
+							shownText={shownText}
+							setShownText={setShownText}
+						/>
 					) : (
 						<ReactTagify tagStyle={tagStyle}>
-							<Text>{item.text}</Text>
+							<Text>{shownText}</Text>
 						</ReactTagify>
 					)}
 					<LinkPreview onClick={openLink}>

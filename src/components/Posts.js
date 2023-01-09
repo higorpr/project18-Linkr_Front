@@ -9,7 +9,7 @@ export function Posts() {
 	const [loading, setLoading] = useState(true);
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
-	const { user, setUser } = useContext(ProjectContext);
+	const { user, numberReloads } = useContext(ProjectContext);
 
 	function getPosts() {
 		setLoading(true);
@@ -48,7 +48,7 @@ export function Posts() {
 
 	useEffect(() => {
 		getPosts();
-	}, [user]);
+	}, [user, numberReloads]);
 
 	return (
 		<>
