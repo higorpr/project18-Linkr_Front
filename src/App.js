@@ -11,6 +11,8 @@ import UserPage from "./pages/UserPage";
 
 function App() {
 	const [user, setUser] = useState({ name: "", token: "", photo: "" });
+	const [numberReloads, setNumberReloads] = useState(0);
+
 
 	useEffect(() => {
 		const token = JSON.parse(localStorage.getItem("user"));
@@ -25,18 +27,20 @@ function App() {
 
 	return (
 		<TooltipProvider>
-			<ProjectContext.Provider value={{ user, setUser }}>
+			<ProjectContext.Provider
+				value={{ user, setUser, numberReloads, setNumberReloads }}
+			>
 				<BrowserRouter>
 					<GlobalStyle />
 					<Routes>
 						<Route path="/" element={<LoginPage />} />
 						<Route path="/sign-up" element={<SignUp />} />
 						<Route path="/timeline" element={<Main />} />
-						<Route 
+						<Route
 							path="/hashtag/:hashtag"
 							element={<HashtagPage />}
 						/>
-						<Route path="/user/:id" element={<UserPage/>}/>
+						<Route path="/user/:id" element={<UserPage />} />
 					</Routes>
 				</BrowserRouter>
 			</ProjectContext.Provider>

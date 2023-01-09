@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import HashtagPosts from "../components/HashtagPosts";
+import { HashtagPosts } from "../components/HashtagPosts";
 import Header from "../components/Header";
 
 export default function HashtagPage() {

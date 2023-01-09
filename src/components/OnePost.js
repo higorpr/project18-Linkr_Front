@@ -8,16 +8,23 @@ import axios from "axios";
 import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import DeletePost from "./DeletePost";
+import { BsPencil } from "react-icons/bs";
+import { IconContext } from "react-icons";
+import EditBox from "./EditBox";
 
 export function OnePost(props) {
 	const [disabled, setDisabled] = useState(false);
-	const { item } = props;
+	const { item, getPosts } = props;
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
-	const { user } = useContext(ProjectContext);
+	const { user, numberReloads } = useContext(ProjectContext);
 	const [selfLike, setSelfLike] = useState(item.selfLike);
 	const [likes, setLikes] = useState(item.likes);
+	const [editBoxOpened, setEditBoxOpened] = useState(false);
+	const [shownText, setShownText] = useState(item.text);
+	const nav = useNavigate();
 
 	useEffect(() => {
 		const url = `${usersLikedUrl}/${postId}`;
@@ -25,7 +32,6 @@ export function OnePost(props) {
 			try {
 				const response = await axios.get(url);
 				const userArr = response.data;
-				console.log(userArr);
 
 				if (userArr.length > 2) {
 					const remainingUsers = userArr.length - 2;
@@ -66,7 +72,7 @@ export function OnePost(props) {
 			}
 		};
 		fetchData();
-	}, []);
+	}, [numberReloads]);
 
 	const tagStyle = {
 		color: "white",
@@ -90,7 +96,6 @@ export function OnePost(props) {
 			axios
 				.post(Url, {}, config)
 				.then((answer) => {
-					console.log(answer);
 					item.likes = answer.data.likes;
 					item.selfLike = answer.data.selfLike;
 
@@ -117,7 +122,6 @@ export function OnePost(props) {
 			axios
 				.delete(Url, config)
 				.then((answer) => {
-					console.log(answer);
 					item.likes = answer.data.likes;
 					item.selfLike = answer.data.selfLike;
 
@@ -142,13 +146,14 @@ export function OnePost(props) {
 					<img src={item.image} alt="perfil" />
 					<Likes>
 						{selfLike ? (
-							<IoHeartSharp color="#AC0000" onClick={removeLike} />
+							<IoHeartSharp
+								color="#AC0000"
+								onClick={removeLike}
+							/>
 						) : (
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
-						<h1 id={`tooltip-anchor-${postId}`}>
-							{item.likes} likes
-						</h1>
+						<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
 						<Tooltip
 							anchorId={`tooltip-anchor-${postId}`}
 							content={usersStr}
@@ -158,10 +163,52 @@ export function OnePost(props) {
 					</Likes>
 				</PerfilLikes>
 				<LinkPostBox>
-					<UserName onClick={goToProfile}>{item.username}</UserName>
-					<ReactTagify tagStyle={tagStyle}>
-						<Text>{item.text}</Text>
-					</ReactTagify>
+					<StyeldNameContainer>
+						<UserName onClick={goToProfile}>
+							{item.username}
+						</UserName>
+						<StyledIcons>
+							<IconContext.Provider
+								value={{ size: "20px", color: "#FFFFFF" }}
+							>
+								{item.ownPost ? (
+									<BsPencil
+										onClick={() => {
+											setEditBoxOpened(!editBoxOpened);
+										}}
+									/>
+								) : (
+									""
+								)}
+								{item.ownPost ? (
+									<DeletePost
+										getPosts={getPosts}
+										item={item}
+									/>
+								) : (
+									""
+								)}
+							</IconContext.Provider>
+						</StyledIcons>
+					</StyeldNameContainer>
+					{editBoxOpened ? (
+						<EditBox
+							previousText={item.text}
+							setEditBoxOpened={setEditBoxOpened}
+							postId={postId}
+							shownText={shownText}
+							setShownText={setShownText}
+						/>
+					) : (
+						<ReactTagify
+							tagStyle={tagStyle}
+							tagClicked={(tag) => {
+								nav(`/hashtag/${tag.replace('#','')}`);
+							}}
+						>
+							<Text>{shownText}</Text>
+						</ReactTagify>
+					)}
 					<LinkPreview onClick={openLink}>
 						<LinkInfo>
 							{item?.linkTitle === undefined ? null : (
@@ -259,16 +306,32 @@ const LinkPostBox = styled.div`
 	justify-content: space-between;
 `;
 
+const UserPostEdit = styled.div`
+	width: 503px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	@media (max-width: 610px) {
+		width: 100%;
+		margin-bottom: 8px;
+	}
+`;
+
+const EditDelete = styled.div`
+	display: flex;
+	align-items: center;
+`;
+
 const UserName = styled.p`
 	font-size: 19px;
 	font-family: "Lato";
 	font-weight: 400;
 	color: white;
-	margin-bottom: 10px;
 	cursor: pointer;
 	@media (max-width: 610px) {
 		font-size: 17px;
-		margin-bottom: 8px;
 	}
 `;
 
@@ -350,5 +413,20 @@ const Link = styled.p`
 	color: #cecece;
 	@media (max-width: 610px) {
 		font-size: 9px;
+	}
+`;
+
+const StyeldNameContainer = styled.div`
+	display: flex;
+	justify-content: space-between;
+`;
+
+const StyledIcons = styled.div`
+	display: flex;
+	width: 50px;
+	justify-content: space-between;
+
+	&:hover {
+		cursor: pointer;
 	}
 `;
