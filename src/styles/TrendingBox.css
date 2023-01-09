@@ -40,29 +40,39 @@
 }
 
 .trending-box .trending-hashtags{
+    width: 15vw;
+    height: fit-content;
+    margin: 0 0 auto 0;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .trending-box .trending-hashtags ul{
-    width: 15vw;
     max-width: 15vw;
     height: fit-content;
 
-    margin-bottom: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.2vh;
 }
 
-.trending-box .trending-hashtags li{
-    margin-top: 1.2vh;
+.trending-box .trending-hashtags li > a{
     margin-left: 1vw;
-    margin-right: 1vw;
 
     font-family: 'Lato';
     font-style: normal;
     font-weight: 700;
     font-size: 1.19rem;
     letter-spacing: 0.05em;
+    text-decoration: none;
     
     color: #FFFFFF;
+}
+
+.trending-box .trending-hashtags li > a:hover{
+    text-decoration: underline;
+    color: #3282eb;
 }

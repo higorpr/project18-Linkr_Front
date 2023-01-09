@@ -1,20 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { hashtagUrl } from "../constants/urls";
+import { trendingUrl } from "../constants/urls";
 import "../styles/TrendingBox.css";
 
-function TrendingBox (){
-    //Get the trending hashtags
-    const [trendingHashtags, setTrendingHashtags] = useState([]);
+export default function TrendingBox (){
+    /*
+export async function getHashtags(res, req){
+    //  Get the  hashtags from the posts
+    const findHashtags = await connection.query(` SELECT * FROM posts WHERE text LIKE '%#%' `);
 
-    //Get the trending hashtags by name
+    // Save the hashtags in a variable
+    const hashtags = findHashtags.rows;
+
+    // For each hashtag, insert with the name and the id
+    hashtags.forEach(async (hashtag) => { 
+        const [hashtagName] = (hashtag.text).split("#");
+        const postHashtags = await connection.query(` INSERT INTO hashtags (id, name) VALUES ($1, $2) `, [hashtag.id, hashtagName]);
+    });
+
+    // Get the hashtags from the table hashtags
+    const hashtagsFromHashtags = await connection.query(` SELECT * FROM hashtags `);
+
+    return hashtagsFromHashtags.rows;
+}
+*/
+
+    const [hashtags, setHashtags] = useState([]);
+
     useEffect(() => {
-        fetch(hashtagUrl, {
-            method: 'GET'
+        fetch(trendingUrl)
+        .then((res) => res.json())
+        .then((data) => {
+            setHashtags(data);
         })
-            .then(res => res.json())
-            .then(res => setTrendingHashtags(res.hashtags))
-    }, []);
-
+    }
+    , []);
 
     return (
         <div className="trending-box">
@@ -22,18 +41,17 @@ function TrendingBox (){
                 <h1>trending</h1>
             </div>
             <div className="trending-hashtags">
-                {/* Render the trending hashtags in order of popularity */}
-                {trendingHashtags.map((hashtag, index) => {
-                    return (
-                        <div className="trending-hashtag" key={index}>
-                            <p># {hashtag.name}</p>
-                        </div>
-                    )
-                }
-                )}
+                <ul>
+                    {hashtags.map((hashtag) => {
+                        return (
+                            
+                                <li key={hashtag.id}>
+                                    <a href={`/hashtag/${hashtag.name}`}>#{hashtag.name}</a>
+                                </li>
+                        )
+                    })}
+                </ul>
             </div>
         </div>
     )
 }
-
-export default TrendingBox;
