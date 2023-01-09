@@ -54,9 +54,7 @@ export function OnePost(props) {
 
 						setUsersStr(`You and ${userLiked} liked this post`);
 					} else {
-						setUsersStr(
-							`${userArr[0]} and ${userArr[1]} liked this post`
-						);
+						setUsersStr(`${userArr[0]} and ${userArr[1]} liked this post`);
 					}
 				} else if (userArr.length === 1) {
 					if (userArr.includes(user.name)) {
@@ -72,7 +70,7 @@ export function OnePost(props) {
 			}
 		};
 		fetchData();
-	}, [numberReloads]);
+	}, [numberReloads, postId, user]);
 
 	const tagStyle = {
 		color: "white",
@@ -87,7 +85,7 @@ export function OnePost(props) {
 	function postLike() {
 		if (!disabled) {
 			setDisabled(true);
-			const Url = `https://api-linkr-sql-9ai1.onrender.com/posts/${item.id}/like`;
+			const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/${item.id}/like`;
 			const config = {
 				headers: {
 					authorization: `Bearer ${user.token}`,
@@ -113,7 +111,7 @@ export function OnePost(props) {
 	function removeLike() {
 		if (!disabled) {
 			setDisabled(true);
-			const Url = `https://api-linkr-sql-9ai1.onrender.com/posts/${item.id}/like`;
+			const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/${item.id}/like`;
 			const config = {
 				headers: {
 					authorization: `Bearer ${user.token}`,
@@ -146,10 +144,7 @@ export function OnePost(props) {
 					<img src={item.image} alt="perfil" />
 					<Likes>
 						{selfLike ? (
-							<IoHeartSharp
-								color="#AC0000"
-								onClick={removeLike}
-							/>
+							<IoHeartSharp color="#AC0000" onClick={removeLike} />
 						) : (
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
@@ -164,15 +159,12 @@ export function OnePost(props) {
 				</PerfilLikes>
 				<LinkPostBox>
 					<StyeldNameContainer>
-						<UserName onClick={goToProfile}>
-							{item.username}
-						</UserName>
+						<UserName onClick={goToProfile}>{item.username}</UserName>
 						<StyledIcons>
-							<IconContext.Provider
-								value={{ size: "20px", color: "#FFFFFF" }}
-							>
+							<IconContext.Provider value={{ color: "#FFFFFF" }}>
 								{item.ownPost ? (
 									<BsPencil
+										id="edit"
 										onClick={() => {
 											setEditBoxOpened(!editBoxOpened);
 										}}
@@ -181,10 +173,7 @@ export function OnePost(props) {
 									""
 								)}
 								{item.ownPost ? (
-									<DeletePost
-										getPosts={getPosts}
-										item={item}
-									/>
+									<DeletePost getPosts={getPosts} item={item} />
 								) : (
 									""
 								)}
@@ -203,7 +192,7 @@ export function OnePost(props) {
 						<ReactTagify
 							tagStyle={tagStyle}
 							tagClicked={(tag) => {
-								nav(`/hashtag/${tag.replace('#','')}`);
+								nav(`/hashtag/${tag.replace("#", "")}`);
 							}}
 						>
 							<Text>{shownText}</Text>
@@ -215,9 +204,7 @@ export function OnePost(props) {
 								<Title>{item?.linkTitle}</Title>
 							)}
 							{item?.linkDescription === undefined ? null : (
-								<Description>
-									{item?.linkDescription}
-								</Description>
+								<Description>{item?.linkDescription}</Description>
 							)}
 							<Link>{item?.link}</Link>
 						</LinkInfo>
@@ -304,24 +291,6 @@ const LinkPostBox = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-`;
-
-const UserPostEdit = styled.div`
-	width: 503px;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 10px;
-	@media (max-width: 610px) {
-		width: 100%;
-		margin-bottom: 8px;
-	}
-`;
-
-const EditDelete = styled.div`
-	display: flex;
-	align-items: center;
 `;
 
 const UserName = styled.p`
@@ -426,7 +395,18 @@ const StyledIcons = styled.div`
 	width: 50px;
 	justify-content: space-between;
 
+	#edit {
+		width: 13px;
+	}
+
 	&:hover {
 		cursor: pointer;
+	}
+
+	@media (max-width: 610px) {
+		width: 37px;
+		#edit {
+			width: 11px;
+		}
 	}
 `;

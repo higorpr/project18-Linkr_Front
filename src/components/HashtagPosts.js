@@ -12,11 +12,11 @@ export function HashtagPosts() {
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
 	const { hashtag } = useParams();
-    console.log(hashtag)
+	console.log(hashtag);
 
 	function getPosts() {
 		setLoading(true);
-		const Url = `https://api-linkr-sql-9ai1.onrender.com/posts/hashtag/${hashtag}`;
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/hashtag/${hashtag}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,

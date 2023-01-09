@@ -12,7 +12,7 @@ export default function DeletePost({ getPosts, item }) {
 
 	function deletePost() {
 		setLoading(true);
-		const Url = `https://api-linkr-sql-9ai1.onrender.com/post/${item.id}`;
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/post/${item.id}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
@@ -38,7 +38,7 @@ export default function DeletePost({ getPosts, item }) {
 		<DeleteBox>
 			<IoMdTrash onClick={() => setOpenConfirm(true)} />
 			{openConfirm ? (
-				<ConfirmDelete onClick={() => setOpenConfirm(false)}>
+				<ConfirmDelete>
 					<Container onClick={(e) => e.stopPropagation()}>
 						{loading ? (
 							<ContainerLoading>

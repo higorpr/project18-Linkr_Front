@@ -1,27 +1,28 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import styled from "styled-components"
+import styled from "styled-components";
 import Header from "../components/Header";
 import { ThreeDots } from "react-loader-spinner";
 import { OnePost } from "../components/OnePost";
 
-
 export default function UserPage() {
-
 	const { id } = useParams();
-	const [pageOwner, setPageOwner] = useState({username:"", image:""});
+	const [pageOwner, setPageOwner] = useState({ username: "", image: "" });
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [pageOwnerPosts, setPageOwnerPosts] = useState([]);
 
-	useEffect(() => {
-		console.log("ID: ", id);
-		const URL = `https://api-linkr-sql-9ai1.onrender.com/user/${id}`
-		axios.get(URL)
+	function getPosts() {
+		const URL = `${process.env.REACT_APP_API_BASE_URL}/user/${id}`;
+		axios
+			.get(URL)
 			.then((ans) => {
 				console.log(ans.data);
-				setPageOwner({username:ans.data[0].username, image: ans.data[0].image});
+				setPageOwner({
+					username: ans.data[0].username,
+					image: ans.data[0].image,
+				});
 				setPageOwnerPosts(ans.data);
 
 				setLoading(false);
@@ -43,13 +44,17 @@ export default function UserPage() {
 					"An error occured while trying to fetch the posts, please refresh the page"
 				);
 			});
-	}, [])
+	}
+
+	useEffect(() => {
+		console.log("ID: ", id);
+		getPosts();
+	}, [id]);
 
 	return (
 		<StyledPage>
 			<Header />
 			<StyledBody>
-
 				{loading ? (
 					<Container>
 						<ThreeDots
@@ -68,30 +73,28 @@ export default function UserPage() {
 					<Container>
 						<ErrorMessage>{error}</ErrorMessage>
 					</Container>
-				) :
+				) : (
 					<>
 						<PostsBox>
 							<TitlePage>
-								<img src={pageOwner.image} alt="User"/>
+								<img src={pageOwner.image} alt="User" />
 								{pageOwner.username}'s posts
 							</TitlePage>
 						</PostsBox>
-						{
-							pageOwnerPosts.map((item) => <OnePost key={item.id} item={item} />)
-						}
-
-					</>}
+						{pageOwnerPosts.map((item) => (
+							<OnePost key={item.id} getPosts={getPosts} item={item} />
+						))}
+					</>
+				)}
 			</StyledBody>
-		</StyledPage>);
+		</StyledPage>
+	);
 }
-
 
 const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
 `;
-
-
 
 const StyledBody = styled.div`
 	display: flex;
@@ -113,7 +116,7 @@ const TitlePage = styled.p`
 	font-weight: 700;
 	margin-top: 53px;
 	margin-bottom: 43px;
-	
+
 	img {
 		width: 50px;
 		height: 50px;
@@ -134,7 +137,6 @@ const TitlePage = styled.p`
 			margin-right: 15px;
 		}
 	}
-	
 `;
 const Container = styled.div`
 	width: 100vw;
