@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { usersLikedUrl } from "../constants/urls";
@@ -24,6 +24,7 @@ export function OnePost(props) {
 	const [likes, setLikes] = useState(item.likes);
 	const [editBoxOpened, setEditBoxOpened] = useState(false);
 	const [shownText, setShownText] = useState(item.text);
+	const nav = useNavigate();
 
 	useEffect(() => {
 		const url = `${usersLikedUrl}/${postId}`;
@@ -53,7 +54,9 @@ export function OnePost(props) {
 
 						setUsersStr(`You and ${userLiked} liked this post`);
 					} else {
-						setUsersStr(`${userArr[0]} and ${userArr[1]} liked this post`);
+						setUsersStr(
+							`${userArr[0]} and ${userArr[1]} liked this post`
+						);
 					}
 				} else if (userArr.length === 1) {
 					if (userArr.includes(user.name)) {
@@ -143,7 +146,10 @@ export function OnePost(props) {
 					<img src={item.image} alt="perfil" />
 					<Likes>
 						{selfLike ? (
-							<IoHeartSharp color="#AC0000" onClick={removeLike} />
+							<IoHeartSharp
+								color="#AC0000"
+								onClick={removeLike}
+							/>
 						) : (
 							<IoHeartOutline color="white" onClick={postLike} />
 						)}
@@ -158,7 +164,9 @@ export function OnePost(props) {
 				</PerfilLikes>
 				<LinkPostBox>
 					<StyeldNameContainer>
-						<UserName onClick={goToProfile}>{item.username}</UserName>
+						<UserName onClick={goToProfile}>
+							{item.username}
+						</UserName>
 						<StyledIcons>
 							<IconContext.Provider
 								value={{ size: "20px", color: "#FFFFFF" }}
@@ -172,7 +180,14 @@ export function OnePost(props) {
 								) : (
 									""
 								)}
-								{item.ownPost ? <DeletePost getPosts={getPosts} item={item} /> : ""}
+								{item.ownPost ? (
+									<DeletePost
+										getPosts={getPosts}
+										item={item}
+									/>
+								) : (
+									""
+								)}
 							</IconContext.Provider>
 						</StyledIcons>
 					</StyeldNameContainer>
@@ -185,7 +200,12 @@ export function OnePost(props) {
 							setShownText={setShownText}
 						/>
 					) : (
-						<ReactTagify tagStyle={tagStyle}>
+						<ReactTagify
+							tagStyle={tagStyle}
+							tagClicked={(tag) => {
+								nav(`/hashtag/${tag.replace('#','')}`);
+							}}
+						>
 							<Text>{shownText}</Text>
 						</ReactTagify>
 					)}
@@ -195,7 +215,9 @@ export function OnePost(props) {
 								<Title>{item?.linkTitle}</Title>
 							)}
 							{item?.linkDescription === undefined ? null : (
-								<Description>{item?.linkDescription}</Description>
+								<Description>
+									{item?.linkDescription}
+								</Description>
 							)}
 							<Link>{item?.link}</Link>
 						</LinkInfo>
