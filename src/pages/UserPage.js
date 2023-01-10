@@ -1,17 +1,20 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { ThreeDots } from "react-loader-spinner";
 import { OnePost } from "../components/OnePost";
+import ProjectContext from "../constants/Context";
 
 export default function UserPage() {
 	const { id } = useParams();
+	const { user } = useContext(ProjectContext);
 	const [pageOwner, setPageOwner] = useState({ username: "", image: "" });
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [pageOwnerPosts, setPageOwnerPosts] = useState([]);
+	const [follow, setFollow] = useState('Follow');
 
 	function getPosts() {
 		const URL = `${process.env.REACT_APP_API_BASE_URL}/user/${id}`;
@@ -47,7 +50,8 @@ export default function UserPage() {
 	}
 
 	useEffect(() => {
-		console.log("ID: ", id);
+		console.log("Owner Id: ", id);
+		console.log("User Id: ", user);
 		getPosts();
 	}, [id]);
 
@@ -80,6 +84,11 @@ export default function UserPage() {
 								<img src={pageOwner.image} alt="User" />
 								{pageOwner.username}'s posts
 							</TitlePage>
+							{user.id !== id ?
+								(
+									<FollowButton>{follow}</FollowButton>
+								):<></>
+							}
 						</PostsBox>
 						{pageOwnerPosts.map((item) => (
 							<OnePost key={item.id} getPosts={getPosts} item={item} />
@@ -105,8 +114,14 @@ const StyledBody = styled.div`
 `;
 
 const PostsBox = styled.div`
+	width: 670px;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+	@media(max-width: 670px){
+		width: 580px;
+	}
 `;
 
 const TitlePage = styled.p`
@@ -161,3 +176,20 @@ const ErrorMessage = styled.p`
 	color: white;
 	margin-top: 15px;
 `;
+const FollowButton = styled.button`
+	width: 115px;
+	height: 30px;
+
+	color: #fff;
+	font-weight: 700;
+	font-size: 14px;
+	
+	background-color: #1877F2;
+	border-radius: 5px;
+
+	margin-top: 40px;
+	:hover{
+		cursor: pointer;
+		opacity: 0.8;
+	}
+`

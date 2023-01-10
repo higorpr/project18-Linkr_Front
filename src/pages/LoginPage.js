@@ -24,6 +24,7 @@ export default function LoginPage() {
 					name: response.username,
 					token: response.token,
 					photo: response.image,
+					id: response.id
 				};
 				setUser(user);
 				setLoading(false);
