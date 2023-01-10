@@ -27,7 +27,7 @@ export function OnePost(props) {
 	const nav = useNavigate();
 
 	useEffect(() => {
-		const url = `${usersLikedUrl}/${postId}`;
+		const url = `${process.env.REACT_APP_API_BASE_URL}/posts/likes/${postId}`;
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(url);

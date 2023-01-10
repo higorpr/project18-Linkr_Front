@@ -20,13 +20,14 @@ export default function Header() {
 
 	function logout(event) {
 		event.preventDefault();
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/logout`;
 		const config = {
 			headers: {
 				Authorization: `Bearer ${user.token}`,
 			},
 		};
 		axios
-			.post(logoutUrl, {}, config)
+			.post(Url, {}, config)
 			.then((res) => {
 				setUser(defaultUser);
 				nav("/");
@@ -49,7 +50,7 @@ export default function Header() {
 				/>
 			</SearchDiv2>
 			<StyledTop>
-				<p>linkr</p>
+				<p onClick={() => nav("/timeline")}>linkr</p>
 				<SearchDiv>
 					<Search
 						value={value}
@@ -97,6 +98,7 @@ const StyledTop = styled.div`
 		line-height: 54px;
 		font-family: "Passion One", cursive;
 		margin: 10px 0 0 28px;
+		cursor: pointer;
 	}
 `;
 
