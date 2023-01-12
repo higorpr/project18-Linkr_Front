@@ -49,11 +49,56 @@ export default function UserPage() {
 			});
 	}
 
+	function followButtonHandler(e){
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+
+		e.preventDefault();
+		if(follow === 'Follow'){
+			axios.post(`http://localhost:4000/follow/${id}`,{},config)
+			.then((ans)=>{
+				console.log(ans.data);
+				setFollow('Unfollow');
+			}).catch((err)=>{
+				console.log(err.data);
+			})
+		} else if (follow === 'Unfollow'){
+			axios.delete(`http://localhost:4000/unfollow/${id}`,config)
+			.then((ans)=>{
+				console.log(ans.data);
+				setFollow('Follow');
+			}).catch((err)=>{
+				console.log(err.data);
+			});
+		}
+	}
+
 	useEffect(() => {
 		console.log("Owner Id: ", id);
-		console.log("User Id: ", user);
+		console.log("User Id: ", user.id);
+		
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+
+		const obj = {id: user.id}
+		const followed = axios.get(`http://localhost:4000/following/${id}`, config)
+		.then((ans)=>{
+			console.log(ans);
+			if(ans.status === 200){
+				setFollow('Unfollow');
+			}
+ 		}).catch((err)=>{
+			console.log(err.data);
+		});
+
 		getPosts();
-	}, [id]);
+	}, [id, user]);
 
 	return (
 		<StyledPage>
@@ -86,7 +131,7 @@ export default function UserPage() {
 							</TitlePage>
 							{user.id !== id ?
 								(
-									<FollowButton>{follow}</FollowButton>
+									<FollowButton onClick={followButtonHandler}>{follow}</FollowButton>
 								):<></>
 							}
 						</PostsBox>
