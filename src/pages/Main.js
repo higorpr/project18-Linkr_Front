@@ -5,17 +5,16 @@ import Header from "../components/Header";
 import TrendingBox from "../components/TrendingBox";
 
 export default function Main() {
-
 	return (
 		<StyledPage>
-			<Header/>
+			<Header />
 			<StyledBody>
 				<PostsBox>
 					<TitlePage>timeline</TitlePage>
 					<Post></Post>
 					<Posts></Posts>
 				</PostsBox>
-				<TrendingBox>{/* Insert here the code for the trending */}</TrendingBox>
+				<TrendingBox/>
 			</StyledBody>
 		</StyledPage>
 	);
@@ -25,8 +24,6 @@ const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
 `;
-
-
 
 const StyledBody = styled.div`
 	display: flex;

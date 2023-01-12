@@ -3,7 +3,6 @@ import { ReactTagify } from "react-tagify";
 import { useContext, useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { usersLikedUrl } from "../constants/urls";
 import axios from "axios";
 import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,8 @@ import DeletePost from "./DeletePost";
 import { BsPencil } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import EditBox from "./EditBox";
+import { getLikesData } from "../constants/functions";
+import RepostIcon from "./RepostIcon";
 
 export function OnePost(props) {
 	const [disabled, setDisabled] = useState(false);
@@ -19,58 +20,19 @@ export function OnePost(props) {
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
-	const { user, numberReloads } = useContext(ProjectContext);
+	const { user } = useContext(ProjectContext);
 	const [selfLike, setSelfLike] = useState(item.selfLike);
 	const [likes, setLikes] = useState(item.likes);
 	const [editBoxOpened, setEditBoxOpened] = useState(false);
 	const [shownText, setShownText] = useState(item.text);
+	const [updatePost, setUpdatePost] = useState(0);
 	const nav = useNavigate();
 
 	useEffect(() => {
-		const url = `${process.env.REACT_APP_API_BASE_URL}/posts/likes/${postId}`;
-		const fetchData = async () => {
-			try {
-				const response = await axios.get(url);
-				const userArr = response.data;
-
-				if (userArr.length > 2) {
-					const remainingUsers = userArr.length - 2;
-					if (userArr.includes(user.name)) {
-						const userLiked =
-							userArr[0] === user.name ? userArr[1] : userArr[0];
-
-						setUsersStr(
-							`You, ${userLiked} and other ${remainingUsers} people liked this post`
-						);
-					} else {
-						setUsersStr(
-							`${userArr[0]}, ${userArr[1]} and other ${remainingUsers} people liked this post`
-						);
-					}
-				} else if (userArr.length === 2) {
-					if (userArr.includes(user.name)) {
-						const userLiked =
-							userArr[0] === user.name ? userArr[1] : userArr[0];
-
-						setUsersStr(`You and ${userLiked} liked this post`);
-					} else {
-						setUsersStr(`${userArr[0]} and ${userArr[1]} liked this post`);
-					}
-				} else if (userArr.length === 1) {
-					if (userArr.includes(user.name)) {
-						setUsersStr(`You liked this post`);
-					} else {
-						setUsersStr(`${userArr[0]} liked this post`);
-					}
-				} else {
-					setUsersStr("Be the first to like this post!");
-				}
-			} catch (err) {
-				console.log(err);
-			}
-		};
-		fetchData();
-	}, [numberReloads, postId, user]);
+		getLikesData(user, postId)
+			.then((res) => setUsersStr(res))
+			.catch((err) => console.log(err));
+	}, [updatePost, user]);
 
 	const tagStyle = {
 		color: "white",
@@ -100,6 +62,7 @@ export function OnePost(props) {
 					setLikes(item.likes);
 					setSelfLike(item.selfLike);
 					setDisabled(false);
+					setUpdatePost(updatePost + 1);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -126,6 +89,7 @@ export function OnePost(props) {
 					setLikes(item.likes);
 					setSelfLike(item.selfLike);
 					setDisabled(false);
+					setUpdatePost(updatePost + 1);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -138,83 +102,85 @@ export function OnePost(props) {
 		window.open(item.link);
 	}
 	return (
-		<>
-			<Container>
-				<PerfilLikes>
-					<img src={item.image} alt="perfil" />
-					<Likes>
-						{selfLike ? (
-							<IoHeartSharp color="#AC0000" onClick={removeLike} />
-						) : (
-							<IoHeartOutline color="white" onClick={postLike} />
-						)}
-						<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
-						<Tooltip
-							anchorId={`tooltip-anchor-${postId}`}
-							content={usersStr}
-							place="bottom"
-							events={["hover"]}
-						/>
-					</Likes>
-				</PerfilLikes>
-				<LinkPostBox>
-					<StyeldNameContainer>
-						<UserName onClick={goToProfile}>{item.username}</UserName>
-						<StyledIcons>
-							<IconContext.Provider value={{ color: "#FFFFFF" }}>
-								{item.ownPost ? (
-									<BsPencil
-										id="edit"
-										onClick={() => {
-											setEditBoxOpened(!editBoxOpened);
-										}}
-									/>
-								) : (
-									""
-								)}
-								{item.ownPost ? (
-									<DeletePost getPosts={getPosts} item={item} />
-								) : (
-									""
-								)}
-							</IconContext.Provider>
-						</StyledIcons>
-					</StyeldNameContainer>
-					{editBoxOpened ? (
-						<EditBox
-							previousText={item.text}
-							setEditBoxOpened={setEditBoxOpened}
-							postId={postId}
-							shownText={shownText}
-							setShownText={setShownText}
-						/>
+		<Container>
+			<StyledRepostMessage>
+				
+			</StyledRepostMessage>
+			<PerfilLikes>
+				<img src={item.image} alt="perfil" />
+				<Likes>
+					{selfLike ? (
+						<IoHeartSharp color="#AC0000" onClick={removeLike} />
 					) : (
-						<ReactTagify
-							tagStyle={tagStyle}
-							tagClicked={(tag) => {
-								nav(`/hashtag/${tag.replace("#", "")}`);
-							}}
-						>
-							<Text>{shownText}</Text>
-						</ReactTagify>
+						<IoHeartOutline color="white" onClick={postLike} />
 					)}
-					<LinkPreview onClick={openLink}>
-						<LinkInfo>
-							{item?.linkTitle === undefined ? null : (
-								<Title>{item?.linkTitle}</Title>
+					<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
+					<Tooltip
+						anchorId={`tooltip-anchor-${postId}`}
+						content={usersStr}
+						place="bottom"
+						events={["hover"]}
+					/>
+				</Likes>
+				<RepostIcon />
+			</PerfilLikes>
+			<LinkPostBox>
+				<StyeldNameContainer>
+					<UserName onClick={goToProfile}>{item.username}</UserName>
+					<StyledIcons>
+						<IconContext.Provider value={{ color: "#FFFFFF" }}>
+							{item.ownPost ? (
+								<BsPencil
+									id="edit"
+									onClick={() => {
+										setEditBoxOpened(!editBoxOpened);
+									}}
+								/>
+							) : (
+								""
 							)}
-							{item?.linkDescription === undefined ? null : (
-								<Description>{item?.linkDescription}</Description>
+							{item.ownPost ? (
+								<DeletePost getPosts={getPosts} item={item} />
+							) : (
+								""
 							)}
-							<Link>{item?.link}</Link>
-						</LinkInfo>
-						{item?.linkImage === undefined ? null : (
-							<img src={item.linkImage} alt="" />
+						</IconContext.Provider>
+					</StyledIcons>
+				</StyeldNameContainer>
+				{editBoxOpened ? (
+					<EditBox
+						previousText={item.text}
+						setEditBoxOpened={setEditBoxOpened}
+						postId={postId}
+						shownText={shownText}
+						setShownText={setShownText}
+					/>
+				) : (
+					<ReactTagify
+						tagStyle={tagStyle}
+						tagClicked={(tag) => {
+							nav(`/hashtag/${tag.replace("#", "")}`);
+						}}
+					>
+						<Text>{shownText}</Text>
+					</ReactTagify>
+				)}
+				<LinkPreview onClick={openLink}>
+					<LinkInfo>
+						{item?.linkTitle === undefined ? null : (
+							<Title>{item?.linkTitle}</Title>
 						)}
-					</LinkPreview>
-				</LinkPostBox>
-			</Container>
-		</>
+						{item?.linkDescription === undefined ? null : (
+							<Description>{item?.linkDescription}</Description>
+						)}
+						<Link>{item?.link}</Link>
+					</LinkInfo>
+					{item?.linkImage === undefined ? null : (
+						<img src={item.linkImage} alt="" />
+					)}
+				</LinkPreview>
+			</LinkPostBox>
+		</Container>
 	);
 }
 
@@ -227,10 +193,13 @@ const Container = styled.div`
 	margin-top: 16px;
 	display: flex;
 	padding-right: 18px;
+	z-index: 1;
 	@media (max-width: 610px) {
 		border-radius: 0px;
 	}
 `;
+
+const StyledRepostMessage = styled.div``;
 
 const PerfilLikes = styled.div`
 	width: 87px;
