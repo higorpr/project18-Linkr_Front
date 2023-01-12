@@ -13,7 +13,7 @@ export function Posts() {
 
 	function getPosts() {
 		setLoading(true);
-		const Url = "http://localhost:4000/posts";
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
