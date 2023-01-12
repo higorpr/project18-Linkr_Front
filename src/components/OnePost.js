@@ -26,6 +26,7 @@ export function OnePost({ item, getPosts }) {
 	const [likes, setLikes] = useState(item.likes);
 	const [editBoxOpened, setEditBoxOpened] = useState(false);
 	const [shownText, setShownText] = useState(item.text);
+	const [commentCount, setCommetCount] = useState(item.comments.length);
 	const nav = useNavigate();
 
 	useEffect(() => {
@@ -169,7 +170,7 @@ export function OnePost({ item, getPosts }) {
 						</Likes>
 						<Likes>
 							<AiOutlineComment color="white" onClick={openComments} />
-							<h1>{item.comments.length} comments</h1>
+							<h1>{commentCount} comments</h1>
 						</Likes>
 						<Likes>
 							<AiOutlineComment color="white" />
@@ -233,7 +234,7 @@ export function OnePost({ item, getPosts }) {
 						</LinkPreview>
 					</LinkPostBox>
 				</Post>
-				<Comments openCommentBox={openCommentBox} comments={item.comments} />
+				<Comments openCommentBox={openCommentBox} item={item} setCommetCount={setCommetCount}/>
 			</Container>
 		</>
 	);
