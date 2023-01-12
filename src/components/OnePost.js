@@ -11,12 +11,14 @@ import DeletePost from "./DeletePost";
 import { BsPencil } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import EditBox from "./EditBox";
+import Comments from "./Comments";
+import { AiOutlineComment } from "react-icons/ai";
 import { getLikesData } from "../constants/functions";
 import RepostIcon from "./RepostIcon";
 
-export function OnePost(props) {
+export function OnePost({ item, getPosts }) {
 	const [disabled, setDisabled] = useState(false);
-	const { item, getPosts } = props;
+	const [openCommentBox, setOpenCommentBox] = useState(false);
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
@@ -101,96 +103,129 @@ export function OnePost(props) {
 	function openLink() {
 		window.open(item.link);
 	}
+
+	function openComments() {
+		if (openCommentBox) {
+			setOpenCommentBox(false);
+		} else {
+			setOpenCommentBox(true);
+		}
+	}
 	return (
-		<Container>
+		<>
+			<Container>
 			<StyledRepostMessage>
 				
-			</StyledRepostMessage>
-			<PerfilLikes>
-				<img src={item.image} alt="perfil" />
-				<Likes>
-					{selfLike ? (
-						<IoHeartSharp color="#AC0000" onClick={removeLike} />
-					) : (
-						<IoHeartOutline color="white" onClick={postLike} />
-					)}
-					<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
-					<Tooltip
-						anchorId={`tooltip-anchor-${postId}`}
-						content={usersStr}
-						place="bottom"
-						events={["hover"]}
-					/>
-				</Likes>
-				<RepostIcon />
-			</PerfilLikes>
-			<LinkPostBox>
-				<StyeldNameContainer>
-					<UserName onClick={goToProfile}>{item.username}</UserName>
-					<StyledIcons>
-						<IconContext.Provider value={{ color: "#FFFFFF" }}>
-							{item.ownPost ? (
-								<BsPencil
-									id="edit"
-									onClick={() => {
-										setEditBoxOpened(!editBoxOpened);
-									}}
-								/>
+				</StyledRepostMessage>
+				<Post>
+					<PerfilLikes>
+						<img src={item.image} alt="perfil" />
+						<Likes>
+							{selfLike ? (
+								<IoHeartSharp color="#AC0000" onClick={removeLike} />
 							) : (
-								""
+								<IoHeartOutline color="white" onClick={postLike} />
 							)}
-							{item.ownPost ? (
-								<DeletePost getPosts={getPosts} item={item} />
-							) : (
-								""
+							<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
+							<Tooltip
+								anchorId={`tooltip-anchor-${postId}`}
+								content={usersStr}
+								place="bottom"
+								events={["hover"]}
+							/>
+						</Likes>
+						<Likes>
+							<AiOutlineComment color="white" onClick={openComments} />
+							<h1>{item.comments.length} comments</h1>
+						</Likes>
+						<Likes>
+							<AiOutlineComment color="white" />
+							<h1>{item.comments.length} comments</h1>
+						</Likes>
+						<RepostIcon />
+					</PerfilLikes>
+					<LinkPostBox>
+						<StyeldNameContainer>
+							<UserName onClick={goToProfile}>{item.username}</UserName>
+							<StyledIcons>
+								<IconContext.Provider value={{ color: "#FFFFFF" }}>
+									{item.ownPost ? (
+										<BsPencil
+											id="edit"
+											onClick={() => {
+												setEditBoxOpened(!editBoxOpened);
+											}}
+										/>
+									) : (
+										""
+									)}
+									{item.ownPost ? (
+										<DeletePost getPosts={getPosts} item={item} />
+									) : (
+										""
+									)}
+								</IconContext.Provider>
+							</StyledIcons>
+						</StyeldNameContainer>
+						{editBoxOpened ? (
+							<EditBox
+								previousText={item.text}
+								setEditBoxOpened={setEditBoxOpened}
+								postId={postId}
+								shownText={shownText}
+								setShownText={setShownText}
+							/>
+						) : (
+							<ReactTagify
+								tagStyle={tagStyle}
+								tagClicked={(tag) => {
+									nav(`/hashtag/${tag.replace("#", "")}`);
+								}}
+							>
+								<Text>{shownText}</Text>
+							</ReactTagify>
+						)}
+						<LinkPreview onClick={openLink}>
+							<LinkInfo>
+								{item.metadata?.linkTitle === undefined ? null : (
+									<Title>{item.metadata?.linkTitle}</Title>
+								)}
+								{item.metadata?.linkDescription === undefined ? null : (
+									<Description>{item.metadata?.linkDescription}</Description>
+								)}
+								<Link>{item.metadata?.link}</Link>
+							</LinkInfo>
+							{item.metadata?.linkImage === undefined ? null : (
+								<img src={item.metadata.linkImage} alt="" />
 							)}
-						</IconContext.Provider>
-					</StyledIcons>
-				</StyeldNameContainer>
-				{editBoxOpened ? (
-					<EditBox
-						previousText={item.text}
-						setEditBoxOpened={setEditBoxOpened}
-						postId={postId}
-						shownText={shownText}
-						setShownText={setShownText}
-					/>
-				) : (
-					<ReactTagify
-						tagStyle={tagStyle}
-						tagClicked={(tag) => {
-							nav(`/hashtag/${tag.replace("#", "")}`);
-						}}
-					>
-						<Text>{shownText}</Text>
-					</ReactTagify>
-				)}
-				<LinkPreview onClick={openLink}>
-					<LinkInfo>
-						{item?.linkTitle === undefined ? null : (
-							<Title>{item?.linkTitle}</Title>
-						)}
-						{item?.linkDescription === undefined ? null : (
-							<Description>{item?.linkDescription}</Description>
-						)}
-						<Link>{item?.link}</Link>
-					</LinkInfo>
-					{item?.linkImage === undefined ? null : (
-						<img src={item.linkImage} alt="" />
-					)}
-				</LinkPreview>
-			</LinkPostBox>
-		</Container>
+						</LinkPreview>
+					</LinkPostBox>
+				</Post>
+				<Comments openCommentBox={openCommentBox} comments={item.comments} />
+			</Container>
+		</>
 	);
 }
 
 const Container = styled.div`
+	height: 100%;
+	width: 100vw;
+	max-width: 611px;
+	background-color: #1e1e1e;
+	margin-top: 16px;
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	@media (max-width: 610px) {
+		border-radius: 0px;
+	}
+`;
+
+const Post = styled.div`
 	background-color: black;
 	width: 100vw;
 	max-width: 611px;
-	height: 100%;
 	border-radius: 16px;
-	margin-top: 16px;
 	display: flex;
 	padding-right: 18px;
 	z-index: 1;
@@ -207,6 +242,7 @@ const PerfilLikes = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-bottom: 17px;
 	p {
 		color: #ffffff;
 	}
@@ -259,7 +295,6 @@ const LinkPostBox = styled.div`
 	margin-bottom: 17px;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 `;
 
 const UserName = styled.p`
@@ -289,7 +324,6 @@ const LinkPreview = styled.div`
 	width: 503px;
 	border: 1px solid #4d4d4d;
 	border-radius: 11px;
-	height: 100%;
 	display: flex;
 	justify-content: space-between;
 	cursor: pointer;
@@ -357,6 +391,7 @@ const Link = styled.p`
 const StyeldNameContainer = styled.div`
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 10px;
 `;
 
 const StyledIcons = styled.div`

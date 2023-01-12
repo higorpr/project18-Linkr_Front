@@ -10,6 +10,7 @@ export function Posts() {
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
+	const [closeComment, setCloseComment] = useState(1);
 
 	function getPosts() {
 		setLoading(true);
@@ -72,7 +73,13 @@ export function Posts() {
 				</Container>
 			) : (
 				post.map((item) => (
-					<OnePost key={item.id} getPosts={getPosts} item={item} />
+					<OnePost
+						key={item.id}
+						getPosts={getPosts}
+						item={item}
+						closeComment={closeComment}
+						setCloseComment={setCloseComment}
+					/>
 				))
 			)}
 		</>
