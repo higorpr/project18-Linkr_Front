@@ -23,6 +23,7 @@ export default function SearchResult(props) {
 					<img src={item.image} alt="perfil" />
 				</Image>
 				<h2>{item.username}</h2>
+				{item.following ? <h3>• following</h3> : null}
 			</Result>
 		</>
 	);
@@ -39,6 +40,13 @@ const Result = styled.div`
 		font-weight: 400;
 		font-family: "Lato";
 		margin: 0px 0px 0px 12px;
+	}
+	h3 {
+		font-size: 19px;
+		color: #c5c5c5;
+		font-weight: 400;
+		font-family: "Lato";
+		margin: 0px 0px 0px 7px;
 	}
 `;
 

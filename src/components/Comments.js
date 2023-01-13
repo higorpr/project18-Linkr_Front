@@ -3,18 +3,44 @@ import styled from "styled-components";
 import OneComment from "./OneComment";
 import ProjectContext from "../constants/Context";
 import { IoPaperPlaneOutline } from "react-icons/io5";
+import axios from "axios";
 
 export default function Comments(props) {
 	const { user } = useContext(ProjectContext);
-	const { openCommentBox, comments } = props;
+	const { openCommentBox, item, setCommetCount } = props;
 	const [value, setValue] = useState("");
+    const [commentsNow, setCommentsNow] = useState(item.comments);
+
+    function sendComment(){
+        const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/comment`;
+        const config = {
+            headers: {
+                authorization: `Bearer ${user.token}`,
+            },
+        };
+        const body = {
+            text: value,
+            post_id: item.id
+        }
+        axios
+            .post(Url, body, config)
+            .then((answer) => {
+                item.comments = answer.data;
+                setCommentsNow(answer.data);
+                setValue("");
+                setCommetCount(answer.data.length)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
 	return (
 		<>
 			<Container>
 				{openCommentBox ? (
 					<>
-						{comments.map((item) => (
+						{commentsNow.map((item) => (
 							<OneComment comment={item} />
 						))}
 						<PostComment>
@@ -25,7 +51,7 @@ export default function Comments(props) {
 									value={value}
 									onChange={(event) => setValue(event.target.value)}
 								/>
-								<IoPaperPlaneOutline onClick={() => console.log(value)} />
+								<IoPaperPlaneOutline onClick={sendComment} />
 							</InputDiv>
 						</PostComment>
 					</>

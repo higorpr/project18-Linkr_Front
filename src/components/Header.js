@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 import { defaultUser } from "../constants/resetStates";
-import { logoutUrl } from "../constants/urls";
 import Search from "./Search";
 
 export default function Header() {

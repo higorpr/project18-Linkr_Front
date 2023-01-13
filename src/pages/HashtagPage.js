@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { HashtagPosts } from "../components/HashtagPosts";
 import Header from "../components/Header";
+import TrendingBox from "../components/TrendingBox";
 
 export default function HashtagPage() {
 	const { hashtag } = useParams();
@@ -14,9 +15,7 @@ export default function HashtagPage() {
 					<TitlePage>#{hashtag}</TitlePage>
 					<HashtagPosts />
 				</PostsBox>
-				<TrendingBox>
-					{/* Insert here the code for the trending menu*/}
-				</TrendingBox>
+				<TrendingBox/>
 			</StyledBody>
 		</StyledPage>
 	);
@@ -38,20 +37,20 @@ const StyledBody = styled.div`
 	}
 `;
 
-const TrendingBox = styled.div`
-	display: flex;
-	justify-content: center;
-	margin-top: 125px;
-	margin-left: 30px;
-	div {
-		height: 100px;
-		width: 200px;
-		background-color: blueviolet;
-	}
-	@media (max-width: 937px) {
-		display: none;
-	}
-`;
+// const TrendingBox = styled.div`
+// 	display: flex;
+// 	justify-content: center;
+// 	margin-top: 125px;
+// 	margin-left: 30px;
+// 	div {
+// 		height: 100px;
+// 		width: 200px;
+// 		background-color: blueviolet;
+// 	}
+// 	@media (max-width: 937px) {
+// 		display: none;
+// 	}
+// `;
 
 const PostsBox = styled.div`
 	display: flex;
