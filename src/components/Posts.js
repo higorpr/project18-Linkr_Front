@@ -24,7 +24,6 @@ export function Posts() {
 			axios
 				.get(Url, config)
 				.then((answer) => {
-					console.log(answer);
 					setPost(answer.data);
 					setLoading(false);
 					if (!answer.data.length) {

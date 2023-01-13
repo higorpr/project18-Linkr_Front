@@ -5,7 +5,6 @@ import Header from "../components/Header";
 
 export default function HashtagPage() {
 	const { hashtag } = useParams();
-	console.log(hashtag);
 
 	return (
 		<StyledPage>

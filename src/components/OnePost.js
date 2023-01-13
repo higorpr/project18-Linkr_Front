@@ -27,6 +27,7 @@ export function OnePost({ item, getPosts }) {
 	const [editBoxOpened, setEditBoxOpened] = useState(false);
 	const [shownText, setShownText] = useState(item.text);
 	const nav = useNavigate();
+	console.log(item)
 
 	useEffect(() => {
 		const url = `${process.env.REACT_APP_API_BASE_URL}/posts/likes/${postId}`;

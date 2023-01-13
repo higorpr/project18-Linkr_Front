@@ -12,7 +12,6 @@ export function HashtagPosts() {
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
 	const { hashtag } = useParams();
-	console.log(hashtag);
 
 	function getPosts() {
 		setLoading(true);
@@ -26,7 +25,6 @@ export function HashtagPosts() {
 			axios
 				.get(Url, config)
 				.then((answer) => {
-					console.log(answer);
 					setPost(answer.data);
 					setLoading(false);
 					if (!answer.data.length) {
