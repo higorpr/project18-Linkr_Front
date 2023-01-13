@@ -1,6 +1,7 @@
 // Front end
 import axios from 'axios';
 import { useContext, useEffect, useState } from "react";
+import { IoReload } from "react-icons/io5";
 import { timelineUpdateUrl } from "../constants/urls";
 import ProjectContext from "../constants/Context";
 import "../styles/timelineUpdates.css";
@@ -42,7 +43,7 @@ export default function TimelineUpdate({ updatePosts }) {
     return (
         <>
             <div className="timeline-update">
-                <button onClick={ handleNewPosts }>New posts: { totalCount }</button>
+                <button onClick={ handleNewPosts }>{ totalCount } new posts, load more! <IoReload /></button>
             </div>
         </>
     );
