@@ -2,22 +2,43 @@ import styled from "styled-components";
 import { BiRepost } from "react-icons/bi";
 import axios from "axios";
 import { IconContext } from "react-icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import ProjectContext from "../constants/Context";
 
-export default function RepostIcon({postId}) {
+export default function RepostIcon({ postId }) {
 	const [nShares, setNShares] = useState(0);
+	const [updateControl, setUpdateControl] = useState(0);
+	const { user } = useContext(ProjectContext);
 
-	useEffect(()=>{
+	useEffect(() => {
 		axios
 			.get(`${process.env.REACT_APP_API_BASE_URL}/posts/shares/${postId}`)
 			.then((res) => {
 				setNShares(res.data.numberOfShares);
 			})
 			.catch((err) => console.log(err));
-	},[])
+	}, [updateControl]);
 
 	function follow() {
-		axios.post(`${process.env.REACT_APP_API_BASE_URL}/posts/shares/${postId}`)
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+		axios
+			.post(
+				`${process.env.REACT_APP_API_BASE_URL}/posts/shares/${postId}`,
+				{},
+				config
+			)
+			.then((res) => {
+				console.log(res);
+				setUpdateControl(updateControl + 1);
+			})
+			.catch((err) => {
+				console.log(err);
+				alert(err.response.data)
+			});
 	}
 
 	return (
@@ -37,6 +58,10 @@ const StyledIcon = styled.div`
 	margin-top: 18px;
 	justify-content: center;
 	align-items: center;
+
+	&:hover {
+		cursor: pointer;
+	}
 
 	p {
 		color: #ffffff;
