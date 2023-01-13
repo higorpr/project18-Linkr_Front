@@ -6,7 +6,7 @@ import { timelineUpdateUrl } from "../constants/urls";
 import ProjectContext from "../constants/Context";
 import "../styles/timelineUpdates.css";
 
-export default function TimelineUpdate({ updatePosts, post, setPost }) {
+export default function TimelineUpdate({ updatePosts, post, setPost, setLastPost }) {
 	const { user } = useContext(ProjectContext);
 	const [count, setCount] = useState(0);
 	const [totalCount, setTotalCount] = useState(0);
@@ -52,6 +52,7 @@ export default function TimelineUpdate({ updatePosts, post, setPost }) {
 			config
 		);
 		request.then((response) => {
+            setLastPost(response.data.posts[0].published_post_id)
 			setPost([...response.data.posts, ...post]);
 		});
 		request.catch((error) => {

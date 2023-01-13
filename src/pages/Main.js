@@ -9,6 +9,8 @@ import TimelineUpdate from "../components/timelineUpdate";
 export default function Main() {
 	const [posts, setPosts] = useState([]);
 	const [post, setPost] = useState([]);
+	const [lastPost, setLastPost] = useState(null);
+	const [firstPost, setFirstPost] = useState(null);
 
 	const updatePosts = (newPosts) => {
 		setPosts(newPosts);
@@ -26,12 +28,17 @@ export default function Main() {
 						updatePosts={updatePosts}
 						post={post}
 						setPost={setPost}
+						setLastPost={setLastPost}
 					/>
 					<Posts
 						posts={posts}
 						post={post}
 						setPost={setPost}
 						updatePosts={updatePosts}
+						lastPost={lastPost}
+						setLastPost={setLastPost}
+						firstPost={firstPost}
+						setFirstPost={setFirstPost}
 					/>
 				</PostsBox>
 

@@ -9,7 +9,7 @@ export function Posts(props) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
-	const { updatePosts, post, setPost } = props;
+	const { updatePosts, post, setPost, setFirstPost, setLastPost, lastPost, firstPost } = props;
 	const [closeComment, setCloseComment] = useState(1);
 
 	// Using useCallback to avoid that the function is redefined every time the component is rendered
@@ -40,7 +40,12 @@ export function Posts(props) {
 
 	function getPosts() {
 		setLoading(true);
-		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts`;
+		let limit = ''
+		if(lastPost!==null){
+			console.log(lastPost)
+			limit = `?lastPost=${lastPost}&firstPost=${firstPost}`
+		}
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts${limit}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
@@ -52,6 +57,8 @@ export function Posts(props) {
 				.then((answer) => {
 					console.log(answer.data);
 					setPost(answer.data);
+					setFirstPost(answer.data[answer.data.length-1].published_post_id)
+					setLastPost(answer.data[0].published_post_id)
 					setLoading(false);
 					if (answer.data.length === 0) {
 						if (getFriends()) {
