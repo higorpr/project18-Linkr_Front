@@ -13,6 +13,7 @@ export default function LoginPage() {
 	const nav = useNavigate();
 
 	function login(event) {
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/login`;
 		event.preventDefault();
 		setLoading(true);
 		const body = loginInfo;
@@ -30,7 +31,6 @@ export default function LoginPage() {
 				setLoading(false);
 				localStorage.setItem("user", JSON.stringify(user));
 				nav("/timeline");
-				
 			})
 			.catch((err) => {
 				const errorStatus = err.response.status;
