@@ -6,7 +6,6 @@ import TrendingBox from "../components/TrendingBox";
 
 export default function HashtagPage() {
 	const { hashtag } = useParams();
-	console.log(hashtag);
 
 	return (
 		<StyledPage>

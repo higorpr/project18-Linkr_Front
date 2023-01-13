@@ -1,15 +1,15 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { OnePost } from "./OnePost";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 
-export function Posts() {
+export function Posts(props) {
 	const [loading, setLoading] = useState(true);
-	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
+	const { updatePosts, post, setPost } = props;
 	const [closeComment, setCloseComment] = useState(1);
 
 	function getFollows (){
@@ -20,20 +20,19 @@ export function Posts() {
 		};
 		let response;
 
-		axios.get(`http://localhost:4000/followeds`,config)
-		.then((ans)=>{
+		axios
+			.get(`http://localhost:4000/followeds`, config)
+			.then((ans) => {
+				if (ans.status === 404) {
+					response = false;
+				} else {
+					response = true;
+				}
+			})
+			.catch((err) => {
+				console.log(err.data);
+			});
 
-			if(ans.status === 404){
-				response = false;
-			} else {
-				response = true;
-			}
-
-		})
-		.catch((err)=>{
-			console.log(err.data)
-		})
-		
 		return response;
 	}
 
@@ -49,21 +48,20 @@ export function Posts() {
 			axios
 				.get(Url, config)
 				.then((answer) => {
-					console.log(answer);
+					console.log(answer.data);
 					setPost(answer.data);
 					setLoading(false);
 					if (answer.data.length === 0) {
 						if(getFollows()){
 							setError("No posts found from your friends");
-						}
-						else{
+						} else {
 							setError("You don't follow anyone yet. Search for new friends!");
-
-						} 
+						}
 						alert("There are no posts yet");
 					} else {
 						setError("");
 					}
+					updatePosts();
 				})
 				.catch((err) => {
 					console.log(err);
@@ -76,7 +74,8 @@ export function Posts() {
 					);
 				});
 		}
-	}
+	} /*, [user.token, updatePosts]);*/
+
 
 	useEffect(() => {
 		getPosts();
@@ -105,7 +104,7 @@ export function Posts() {
 			) : (
 				post.map((item) => (
 					<OnePost
-						key={item.id}
+						key={item.published_post_id}
 						getPosts={getPosts}
 						item={item}
 						closeComment={closeComment}
