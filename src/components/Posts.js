@@ -53,7 +53,7 @@ export function Posts(props) {
 
 	useEffect(() => {
 		getPosts();
-	}, [user, numberReloads, getPosts]);
+	}, [user, numberReloads]);
 
 	return (
 		<>

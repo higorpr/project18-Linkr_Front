@@ -16,7 +16,6 @@ export default function Main() {
 
 
 	return (
-
 		<StyledPage>
 			<Header />
 			<StyledBody>

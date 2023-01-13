@@ -17,11 +17,11 @@ export default function TimelineUpdate({ updatePosts }) {
             const request = axios.get(timelineUpdateUrl);
             request.then((response) => {
                 setCount(response.data.count);
-                console.log(response.data.count);
-                console.log("15 sec passed");
+                // console.log(response.data.count);
+                // console.log("15 sec passed");
             });
             request.catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
         }, 15000);
         return () => clearInterval(interval);
