@@ -21,7 +21,7 @@ export default function TimelineUpdate({ updatePosts, post, setPost, setLastPost
 		};
 		const interval = setInterval(() => {
 			const request = axios.get(
-				`${timelineUpdateUrl}/${post[0].published_post_id}`,
+				`${process.env.REACT_APP_API_BASE_URL}/timelineUpdate/${post[0].published_post_id}`,
 				config
 			);
 			request.then((response) => {
