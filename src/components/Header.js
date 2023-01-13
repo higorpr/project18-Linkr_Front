@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 import { defaultUser } from "../constants/resetStates";
-import { logoutUrl } from "../constants/urls";
 import Search from "./Search";
 
 export default function Header() {
@@ -85,7 +84,7 @@ const StyledTop = styled.div`
 	display: flex;
 	justify-content: space-between;
 	position: fixed;
-	z-index: 1;
+	z-index: 2;
 	left: 0;
 	top: 0;
 	color: #ffffff;
@@ -146,6 +145,7 @@ const SearchDiv = styled.div`
 	display: flex;
 	justify-content: center;
 	width: 100%;
+	z-index: 2;
 	@media (max-width: 610px) {
 		display: none;
 	}
@@ -154,6 +154,7 @@ const SearchDiv = styled.div`
 const SearchDiv2 = styled.div`
 	display: none;
 	width: 100%;
+	z-index: 2;
 	@media (max-width: 610px) {
 		width: 100%;
 		display: flex;
