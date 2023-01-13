@@ -13,7 +13,6 @@ function App() {
 	const [user, setUser] = useState({ name: "", token: "", photo: "", id: 0 });
 	const [numberReloads, setNumberReloads] = useState(0);
 
-
 	useEffect(() => {
 		const token = JSON.parse(localStorage.getItem("user"));
 		if (token) {
@@ -21,7 +20,7 @@ function App() {
 				name: token.name,
 				token: token.token,
 				photo: token.photo,
-				id: token.id
+				id: token.id,
 			});
 		}
 	}, []);
@@ -29,7 +28,12 @@ function App() {
 	return (
 		<TooltipProvider>
 			<ProjectContext.Provider
-				value={{ user, setUser, numberReloads, setNumberReloads }}
+				value={{
+					user,
+					setUser,
+					numberReloads,
+					setNumberReloads,
+				}}
 			>
 				<BrowserRouter>
 					<GlobalStyle />
@@ -50,3 +54,4 @@ function App() {
 }
 
 export default App;
+
