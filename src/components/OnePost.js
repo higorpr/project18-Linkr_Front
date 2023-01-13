@@ -158,10 +158,6 @@ export function OnePost({ item, getPosts }) {
 							<AiOutlineComment color="white" onClick={openComments} />
 							<h1>{commentCount} comments</h1>
 						</Likes>
-						<Likes>
-							<AiOutlineComment color="white" />
-							<h1>{item.comments.length} comments</h1>
-						</Likes>
 						<RepostIcon postId={postId} />
 					</PerfilLikes>
 					<LinkPostBox>

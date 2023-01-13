@@ -25,7 +25,7 @@ export default function LoginPage() {
 					name: response.username,
 					token: response.token,
 					photo: response.image,
-					id: response.id
+					id: response.id,
 				};
 				setUser(user);
 				setLoading(false);
@@ -113,8 +113,8 @@ const StyledLeft = styled.div`
 
 	@media (max-width: 375px) {
 		width: 375px;
-		max-height:175px ;
-		min-height: 175px;	
+		max-height: 175px;
+		min-height: 175px;
 		padding: 0;
 		display: flex;
 		flex-direction: column;
@@ -151,11 +151,14 @@ const StyledLeft = styled.div`
 `;
 
 const StyledRight = styled.div`
-	width: 375px;
+	width: 37.2%;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	@media (max-width: 375px) {
+		width: 375px;
+	}
 `;
 
 const StyledForm = styled.form`
