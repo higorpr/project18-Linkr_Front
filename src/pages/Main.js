@@ -7,16 +7,18 @@ import TrendingBox from "../components/TrendingBox";
 import TimelineUpdate from "../components/timelineUpdate"
 
 export default function Main() {
+
 	const [posts, setPosts] = useState([]);
 
 	const updatePosts = (newPosts) => {
 		setPosts(newPosts);
 	}
 
+
 	return (
 
 		<StyledPage>
-			<Header/>
+			<Header />
 			<StyledBody>
 				<PostsBox>
 					<TitlePage>timeline</TitlePage>
@@ -24,7 +26,9 @@ export default function Main() {
 					<TimelineUpdate posts={posts} updatePosts={updatePosts}/>
 					<Posts posts={posts} updatePosts={updatePosts}  />
 				</PostsBox>
+
 				<TrendingBox />
+
 			</StyledBody>
 		</StyledPage>
 	);
@@ -34,8 +38,6 @@ const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
 `;
-
-
 
 const StyledBody = styled.div`
 	display: flex;

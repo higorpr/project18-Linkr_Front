@@ -11,9 +11,37 @@ export function Posts(props) {
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
 	const { updatePosts } = props;
+	const [closeComment, setCloseComment] = useState(1);
+
 
 	// Using useCallback to avoid that the function is redefined every time the component is rendered
 	const getPosts = useCallback(() => {
+	function getFriends (){
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+		let response;
+
+		axios.get(`http://localhost:4000/followeds`,config)
+		.then((ans)=>{
+
+			if(ans.status === 404){
+				response = false;
+			} else {
+				response = true;
+			}
+
+		})
+		.catch((err)=>{
+			console.log(err.data)
+		})
+		
+		return response;
+	}
+
+	function getPosts() {
 		setLoading(true);
 		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts`;
 		const config = {
@@ -28,8 +56,14 @@ export function Posts(props) {
 					console.log(answer);
 					setPost(answer.data);
 					setLoading(false);
-					if (!answer.data.length) {
-						setError("There are no posts yet!");
+					if (answer.data.length === 0) {
+						if(getFriends()){
+							setError("No posts found from your friends");
+						}
+						else{
+							setError("You don't follow anyone yet. Search for new friends!");
+
+						} 
 						alert("There are no posts yet");
 					} else {
 						setError("");
@@ -75,7 +109,13 @@ export function Posts(props) {
 				</Container>
 			) : (
 				post.map((item) => (
-					<OnePost key={item.id} getPosts={getPosts} item={item} />
+					<OnePost
+						key={item.published_post_id}
+						getPosts={getPosts}
+						item={item}
+						closeComment={closeComment}
+						setCloseComment={setCloseComment}
+					/>
 				))
 			)}
 		</>
