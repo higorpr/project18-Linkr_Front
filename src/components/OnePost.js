@@ -3,7 +3,6 @@ import { ReactTagify } from "react-tagify";
 import { useContext, useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { usersLikedUrl } from "../constants/urls";
 import axios from "axios";
 import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +13,9 @@ import { IconContext } from "react-icons";
 import EditBox from "./EditBox";
 import Comments from "./Comments";
 import { AiOutlineComment } from "react-icons/ai";
+import { getLikesData } from "../constants/functions";
+import RepostIcon from "./RepostIcon";
+import { BiRepost } from "react-icons/bi";
 
 export function OnePost({ item, getPosts }) {
 	const [disabled, setDisabled] = useState(false);
@@ -21,58 +23,22 @@ export function OnePost({ item, getPosts }) {
 	const postId = item.id;
 	const [usersStr, setUsersStr] = useState("");
 	const navigate = useNavigate();
-	const { user, numberReloads } = useContext(ProjectContext);
+	const { user } = useContext(ProjectContext);
 	const [selfLike, setSelfLike] = useState(item.selfLike);
 	const [likes, setLikes] = useState(item.likes);
 	const [editBoxOpened, setEditBoxOpened] = useState(false);
 	const [shownText, setShownText] = useState(item.text);
+	const [commentCount, setCommetCount] = useState(item.comments.length);
+	const [updatePost, setUpdatePost] = useState(0);
 	const nav = useNavigate();
 
+	console.log(item);
+
 	useEffect(() => {
-		const url = `${process.env.REACT_APP_API_BASE_URL}/posts/likes/${postId}`;
-		const fetchData = async () => {
-			try {
-				const response = await axios.get(url);
-				const userArr = response.data;
-
-				if (userArr.length > 2) {
-					const remainingUsers = userArr.length - 2;
-					if (userArr.includes(user.name)) {
-						const userLiked =
-							userArr[0] === user.name ? userArr[1] : userArr[0];
-
-						setUsersStr(
-							`You, ${userLiked} and other ${remainingUsers} people liked this post`
-						);
-					} else {
-						setUsersStr(
-							`${userArr[0]}, ${userArr[1]} and other ${remainingUsers} people liked this post`
-						);
-					}
-				} else if (userArr.length === 2) {
-					if (userArr.includes(user.name)) {
-						const userLiked =
-							userArr[0] === user.name ? userArr[1] : userArr[0];
-
-						setUsersStr(`You and ${userLiked} liked this post`);
-					} else {
-						setUsersStr(`${userArr[0]} and ${userArr[1]} liked this post`);
-					}
-				} else if (userArr.length === 1) {
-					if (userArr.includes(user.name)) {
-						setUsersStr(`You liked this post`);
-					} else {
-						setUsersStr(`${userArr[0]} liked this post`);
-					}
-				} else {
-					setUsersStr("Be the first to like this post!");
-				}
-			} catch (err) {
-				console.log(err);
-			}
-		};
-		fetchData();
-	}, [numberReloads, postId, user]);
+		getLikesData(user, postId)
+			.then((res) => setUsersStr(res))
+			.catch((err) => console.log(err));
+	}, [updatePost, user]);
 
 	const tagStyle = {
 		color: "white",
@@ -102,6 +68,7 @@ export function OnePost({ item, getPosts }) {
 					setLikes(item.likes);
 					setSelfLike(item.selfLike);
 					setDisabled(false);
+					setUpdatePost(updatePost + 1);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -128,6 +95,7 @@ export function OnePost({ item, getPosts }) {
 					setLikes(item.likes);
 					setSelfLike(item.selfLike);
 					setDisabled(false);
+					setUpdatePost(updatePost + 1);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -150,16 +118,34 @@ export function OnePost({ item, getPosts }) {
 	return (
 		<>
 			<Container>
+				<StyledRepostMessage>
+					<IconContext.Provider
+						value={{ size: "20px", color: "#FFFFFF" }}
+					>
+						<BiRepost />
+					</IconContext.Provider>
+					<p>
+						Re-posted by <strong>{"Placeholder"} </strong>{" "}
+					</p>
+				</StyledRepostMessage>
 				<Post>
 					<PerfilLikes>
 						<img src={item.image} alt="perfil" />
 						<Likes>
 							{selfLike ? (
-								<IoHeartSharp color="#AC0000" onClick={removeLike} />
+								<IoHeartSharp
+									color="#AC0000"
+									onClick={removeLike}
+								/>
 							) : (
-								<IoHeartOutline color="white" onClick={postLike} />
+								<IoHeartOutline
+									color="white"
+									onClick={postLike}
+								/>
 							)}
-							<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
+							<h1 id={`tooltip-anchor-${postId}`}>
+								{likes} likes
+							</h1>
 							<Tooltip
 								anchorId={`tooltip-anchor-${postId}`}
 								content={usersStr}
@@ -169,30 +155,40 @@ export function OnePost({ item, getPosts }) {
 						</Likes>
 						<Likes>
 							<AiOutlineComment color="white" onClick={openComments} />
-							<h1>{item.comments.length} comments</h1>
+							<h1>{commentCount} comments</h1>
 						</Likes>
 						<Likes>
 							<AiOutlineComment color="white" />
 							<h1>{item.comments.length} comments</h1>
 						</Likes>
+						<RepostIcon postId={postId} />
 					</PerfilLikes>
 					<LinkPostBox>
 						<StyeldNameContainer>
-							<UserName onClick={goToProfile}>{item.username}</UserName>
+							<UserName onClick={goToProfile}>
+								{item.username}
+							</UserName>
 							<StyledIcons>
-								<IconContext.Provider value={{ color: "#FFFFFF" }}>
+								<IconContext.Provider
+									value={{ color: "#FFFFFF" }}
+								>
 									{item.ownPost ? (
 										<BsPencil
 											id="edit"
 											onClick={() => {
-												setEditBoxOpened(!editBoxOpened);
+												setEditBoxOpened(
+													!editBoxOpened
+												);
 											}}
 										/>
 									) : (
 										""
 									)}
 									{item.ownPost ? (
-										<DeletePost getPosts={getPosts} item={item} />
+										<DeletePost
+											getPosts={getPosts}
+											item={item}
+										/>
 									) : (
 										""
 									)}
@@ -219,11 +215,15 @@ export function OnePost({ item, getPosts }) {
 						)}
 						<LinkPreview onClick={openLink}>
 							<LinkInfo>
-								{item.metadata?.linkTitle === undefined ? null : (
+								{item.metadata?.linkTitle ===
+								undefined ? null : (
 									<Title>{item.metadata?.linkTitle}</Title>
 								)}
-								{item.metadata?.linkDescription === undefined ? null : (
-									<Description>{item.metadata?.linkDescription}</Description>
+								{item.metadata?.linkDescription ===
+								undefined ? null : (
+									<Description>
+										{item.metadata?.linkDescription}
+									</Description>
 								)}
 								<Link>{item.metadata?.link}</Link>
 							</LinkInfo>
@@ -233,7 +233,7 @@ export function OnePost({ item, getPosts }) {
 						</LinkPreview>
 					</LinkPostBox>
 				</Post>
-				<Comments openCommentBox={openCommentBox} comments={item.comments} />
+				<Comments openCommentBox={openCommentBox} item={item} setCommetCount={setCommetCount}/>
 			</Container>
 		</>
 	);
@@ -260,8 +260,28 @@ const Post = styled.div`
 	border-radius: 16px;
 	display: flex;
 	padding-right: 18px;
+	z-index: 1;
 	@media (max-width: 610px) {
 		border-radius: 0px;
+	}
+`;
+
+const StyledRepostMessage = styled.div`
+	display: flex;
+	height: 33px;
+	margin: 7px 0 0 13px;
+	align-items: center;
+	p {
+		color: #ffffff;
+		font-family: "Lato", cursive;
+		font-size: 11px;
+		line-height: 13px;
+		font-weight: 400;
+		margin-left: 6px;
+
+		strong {
+			font-weight: 700;
+		}
 	}
 `;
 

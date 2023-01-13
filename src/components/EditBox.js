@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
-import { editPostUrl } from "../constants/urls";
+
 
 export default function EditBox({
 	previousText,
