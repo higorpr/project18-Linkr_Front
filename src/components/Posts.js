@@ -21,7 +21,7 @@ export function Posts(props) {
 		let response;
 
 		axios
-			.get(`http://localhost:4000/followeds`, config)
+			.get(`process.env.REACT_APP_API_BASE_URL/followeds`, config)
 			.then((ans) => {
 				if (ans.status === 404) {
 					response = false;
