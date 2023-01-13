@@ -151,6 +151,9 @@ const StyledButtonYes = styled.button`
 	width: 134px;
 	height: 37px;
 	border-radius: 5px;
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
 const StyledButtonNo = styled.button`
@@ -163,4 +166,8 @@ const StyledButtonNo = styled.button`
 	width: 134px;
 	height: 37px;
 	border-radius: 5px;
+
+	&:hover {
+		cursor: pointer;
+	}
 `;

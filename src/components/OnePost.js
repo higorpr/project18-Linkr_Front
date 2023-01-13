@@ -266,7 +266,6 @@ const Post = styled.div`
 	border-radius: 16px;
 	display: flex;
 	padding-right: 18px;
-	z-index: 1;
 	@media (max-width: 610px) {
 		border-radius: 0px;
 	}
