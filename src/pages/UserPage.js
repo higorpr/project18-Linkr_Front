@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useResolvedPath } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { ThreeDots } from "react-loader-spinner";
@@ -28,11 +28,11 @@ export default function UserPage() {
 			.get(URL)
 			.then((ans) => {
 				console.log(ans.data);
-				setPageOwner({
-					username: ans.data[0].username,
-					image: ans.data[0].image,
+				setPageOwner({					
+					username: ans.data[0][0].username,
+					image: ans.data[0][0].image,
 				});
-				setPageOwnerPosts(ans.data);
+				setPageOwnerPosts(ans.data[1]);
 
 				setLoading(false);
 
@@ -104,8 +104,10 @@ export default function UserPage() {
 			},
 		};
 
-		const obj = { id: user.id };
-		const followed = axios
+		console.log('userId:', user.id);
+		console.log('id:', id);
+
+		axios
 			.get(`http://localhost:4000/following/${id}`, config)
 			.then((ans) => {
 				console.log(ans);
@@ -118,7 +120,8 @@ export default function UserPage() {
 			});
 
 		getPosts();
-	}, [id, user, buttonColors]);
+		
+	}, [user, buttonColors]);
 
 	return (
 		<StyledPage>

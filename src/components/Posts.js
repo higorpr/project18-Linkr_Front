@@ -12,9 +12,7 @@ export function Posts(props) {
 	const { updatePosts, post, setPost } = props;
 	const [closeComment, setCloseComment] = useState(1);
 
-	// Using useCallback to avoid that the function is redefined every time the component is rendered
-	/*const getPosts = useCallback(() => {*/
-	function getFriends() {
+	function getFollows (){
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
@@ -54,7 +52,7 @@ export function Posts(props) {
 					setPost(answer.data);
 					setLoading(false);
 					if (answer.data.length === 0) {
-						if (getFriends()) {
+						if(getFollows()){
 							setError("No posts found from your friends");
 						} else {
 							setError("You don't follow anyone yet. Search for new friends!");
