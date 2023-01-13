@@ -1,15 +1,13 @@
-export const loginUrl = "http://localhost:4000/login";
+export const loginUrl = "https://api-linkr-sql-9ai1.onrender.com/login";
 
-export const logoutUrl = "http://localhost:4000/logout";
+export const logoutUrl = "https://api-linkr-sql-9ai1.onrender.com/logout";
 
-export const signUpUrl = "http://localhost:4000/signup";
+export const signUpUrl = "https://api-linkr-sql-9ai1.onrender.com/signup";
 
-export const trendingUrl = "http://localhost:4000/trending";
+export const trendingUrl = "https://api-linkr-sql-9ai1.onrender.com/trending";
 
-export const usersLikedUrl = "http://localhost:4000/posts/likes";
-
-export const editPostUrl = "http://localhost:4000/posts";
-
-export const getPostsUrl = "http://localhost:4000/posts";
+export const usersLikedUrl = "https://api-linkr-sql-9ai1.onrender.com/posts/likes";
 
 export const timelineUpdateUrl = "http://localhost:4000/timelineUpdate";
+
+export const editPostUrl = "https://api-linkr-sql-9ai1.onrender.com/posts";

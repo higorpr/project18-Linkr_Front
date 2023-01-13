@@ -11,6 +11,7 @@ export function Posts(props) {
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
 	const { updatePosts } = props;
+	const [closeComment, setCloseComment] = useState(1);
 
 	// Using useCallback to avoid that the function is redefined every time the component is rendered
 	const getPosts = useCallback(() => {
@@ -75,7 +76,13 @@ export function Posts(props) {
 				</Container>
 			) : (
 				post.map((item) => (
-					<OnePost key={item.id} getPosts={getPosts} item={item} />
+					<OnePost
+						key={item.id}
+						getPosts={getPosts}
+						item={item}
+						closeComment={closeComment}
+						setCloseComment={setCloseComment}
+					/>
 				))
 			)}
 		</>
