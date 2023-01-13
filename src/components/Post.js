@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function Post() {
 	const [post, setPost] = useState({ text: "", link: "" });
 	const [click, setClick] = useState(false);
-	const { user } = useContext(ProjectContext);
+	const { user, numberReloads, setNumberReloads } = useContext(ProjectContext);
 	const navigate = useNavigate();
 
 	function formHandler(e) {
@@ -36,6 +36,7 @@ export default function Post() {
 				setPost({ text: "", link: "" });
 				setClick(false);
 				navigate("/timeline");
+				setNumberReloads(numberReloads + 1);
 			})
 			.catch((err) => {
 				console.log(err);
