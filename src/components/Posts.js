@@ -1,17 +1,19 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { OnePost } from "./OnePost";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 
-export function Posts() {
+export function Posts(props) {
 	const [loading, setLoading] = useState(true);
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
+	const { updatePosts } = props;
 
-	function getPosts() {
+	// Using useCallback to avoid that the function is redefined every time the component is rendered
+	const getPosts = useCallback(() => {
 		setLoading(true);
 		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts`;
 		const config = {
@@ -32,6 +34,7 @@ export function Posts() {
 					} else {
 						setError("");
 					}
+					updatePosts();
 				})
 				.catch((err) => {
 					console.log(err);
@@ -44,11 +47,11 @@ export function Posts() {
 					);
 				});
 		}
-	}
+	}, [user.token, updatePosts]);
 
 	useEffect(() => {
 		getPosts();
-	}, [user, numberReloads]);
+	  }, [user, numberReloads, getPosts]);
 
 	return (
 		<>
