@@ -126,7 +126,7 @@ export function OnePost({ item, getPosts }) {
 						</IconContext.Provider>
 						<p>
 							Re-posted by{" "}
-							<strong>{item.originaluser.username} </strong>{" "}
+							<strong>{(item.originaluser.id === user.id) ? 'you' : item.originaluser.username} </strong>{" "}
 						</p>
 					</StyledRepostMessage>
 				) : (
