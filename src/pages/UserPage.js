@@ -1,18 +1,26 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { ThreeDots } from "react-loader-spinner";
 import { OnePost } from "../components/OnePost";
+import ProjectContext from "../constants/Context";
 
 export default function UserPage() {
 	const { id } = useParams();
+	const { user } = useContext(ProjectContext);
 	const [pageOwner, setPageOwner] = useState({ username: "", image: "" });
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [pageOwnerPosts, setPageOwnerPosts] = useState([]);
-	const [closeComment, setCloseComment] = useState(1);
+	const [follow, setFollow] = useState("Follow");
+	const [click, setClick] = useState(false);
+	const [buttonColors, setButtonColors] = useState({
+		color1: "#1877F2",
+		color2: "#fff",
+	});
+	const navigate = useNavigate();
 
 	function getPosts() {
 		const URL = `${process.env.REACT_APP_API_BASE_URL}/user/${id}`;
@@ -36,7 +44,7 @@ export default function UserPage() {
 				}
 			})
 			.catch((err) => {
-				console.log(err.response.data);
+				console.log(err.data);
 				setLoading(false);
 				setError(
 					"An error occured while trying to fetch the posts, please refresh the page"
@@ -47,10 +55,70 @@ export default function UserPage() {
 			});
 	}
 
+	function followButtonHandler(e) {
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+
+		e.preventDefault();
+		setClick(true);
+		let color3 = buttonColors.color2;
+		let colorChange = { color1: color3, color2: buttonColors.color1 };
+
+		if (follow === "Follow") {
+			axios
+				.post(`http://localhost:4000/follow/${id}`, {}, config)
+				.then((ans) => {
+					console.log(ans.data);
+					setFollow("Unfollow");
+					setClick(false);
+					setButtonColors(colorChange);
+				})
+				.catch((err) => {
+					console.log(err.data);
+				});
+		} else if (follow === "Unfollow") {
+			axios
+				.delete(`http://localhost:4000/unfollow/${id}`, config)
+				.then((ans) => {
+					console.log(ans.data);
+					setFollow("Follow");
+					setClick(false);
+					setButtonColors(colorChange);
+				})
+				.catch((err) => {
+					console.log(err.data);
+					alert("Failed to send request!");
+				});
+		}
+
+		navigate(`/user/${id}`);
+	}
+
 	useEffect(() => {
-		console.log("ID: ", id);
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+
+		const obj = { id: user.id };
+		const followed = axios
+			.get(`http://localhost:4000/following/${id}`, config)
+			.then((ans) => {
+				console.log(ans);
+				if (ans.status === 200) {
+					setFollow("Unfollow");
+				}
+			})
+			.catch((err) => {
+				console.log(err.data);
+			});
+
 		getPosts();
-	}, [id]);
+	}, [id, user, buttonColors]);
 
 	return (
 		<StyledPage>
@@ -81,14 +149,34 @@ export default function UserPage() {
 								<img src={pageOwner.image} alt="User" />
 								{pageOwner.username}'s posts
 							</TitlePage>
+							{user.id !== id ? (
+								click ? (
+									<FollowButton
+										color1={"#fafafa"}
+										color2={"#777"}
+										disabled={click}
+									>
+										{follow}ing
+									</FollowButton>
+								) : (
+									<FollowButton
+										color1={buttonColors.color1}
+										color2={buttonColors.color2}
+										disabled={click}
+										onClick={followButtonHandler}
+									>
+										{follow}
+									</FollowButton>
+								)
+							) : (
+								<></>
+							)}
 						</PostsBox>
 						{pageOwnerPosts.map((item) => (
 							<OnePost
 								key={item.published_post_id}
 								getPosts={getPosts}
 								item={item}
-								closeComment={closeComment}
-								setCloseComment={setCloseComment}
 							/>
 						))}
 					</>
@@ -112,8 +200,14 @@ const StyledBody = styled.div`
 `;
 
 const PostsBox = styled.div`
+	width: 670px;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+	@media (max-width: 670px) {
+		width: 580px;
+	}
 `;
 
 const TitlePage = styled.p`
@@ -167,4 +261,21 @@ const ErrorMessage = styled.p`
 	font-weight: 400;
 	color: white;
 	margin-top: 15px;
+`;
+const FollowButton = styled.button`
+	width: 115px;
+	height: 30px;
+
+	color: ${(props) => props.color1};
+	font-weight: 700;
+	font-size: 14px;
+
+	background-color: ${(props) => props.color2};
+	border-radius: 5px;
+
+	margin-top: 40px;
+	:hover {
+		cursor: pointer;
+		opacity: 0.8;
+	}
 `;

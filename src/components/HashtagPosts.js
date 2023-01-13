@@ -12,8 +12,6 @@ export function HashtagPosts() {
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
 	const { hashtag } = useParams();
-	const [closeComment, setCloseComment] = useState(1);
-	console.log(hashtag);
 
 	function getPosts() {
 		setLoading(true);
@@ -27,7 +25,6 @@ export function HashtagPosts() {
 			axios
 				.get(Url, config)
 				.then((answer) => {
-					console.log(answer);
 					setPost(answer.data);
 					setLoading(false);
 					if (!answer.data.length) {
@@ -80,8 +77,6 @@ export function HashtagPosts() {
 						key={item.published_post_id}
 						getPosts={getPosts}
 						item={item}
-						closeComment={closeComment}
-						setCloseComment={setCloseComment}
 					/>
 				))
 			)}

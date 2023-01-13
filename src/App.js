@@ -10,7 +10,7 @@ import { TooltipProvider } from "react-tooltip";
 import UserPage from "./pages/UserPage";
 
 function App() {
-	const [user, setUser] = useState({ name: "", token: "", photo: "" });
+	const [user, setUser] = useState({ name: "", token: "", photo: "", id: 0 });
 	const [numberReloads, setNumberReloads] = useState(0);
 
 
@@ -21,6 +21,7 @@ function App() {
 				name: token.name,
 				token: token.token,
 				photo: token.photo,
+				id: token.id
 			});
 		}
 	}, []);

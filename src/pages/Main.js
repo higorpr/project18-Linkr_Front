@@ -1,21 +1,48 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Post from "../components/Post";
 import { Posts } from "../components/Posts";
 import Header from "../components/Header";
 import TrendingBox from "../components/TrendingBox";
+import TimelineUpdate from "../components/timelineUpdate";
 
 export default function Main() {
+	const [posts, setPosts] = useState([]);
+	const [post, setPost] = useState([]);
+	const [lastPost, setLastPost] = useState(null);
+	const [firstPost, setFirstPost] = useState(null);
+
+	const updatePosts = (newPosts) => {
+		setPosts(newPosts);
+	};
 
 	return (
 		<StyledPage>
-			<Header/>
+			<Header />
 			<StyledBody>
 				<PostsBox>
 					<TitlePage>timeline</TitlePage>
 					<Post></Post>
-					<Posts></Posts>
+					<TimelineUpdate
+						posts={posts}
+						updatePosts={updatePosts}
+						post={post}
+						setPost={setPost}
+						setLastPost={setLastPost}
+					/>
+					<Posts
+						posts={posts}
+						post={post}
+						setPost={setPost}
+						updatePosts={updatePosts}
+						lastPost={lastPost}
+						setLastPost={setLastPost}
+						firstPost={firstPost}
+						setFirstPost={setFirstPost}
+					/>
 				</PostsBox>
-				<TrendingBox>{/* Insert here the code for the trending */}</TrendingBox>
+
+				<TrendingBox />
 			</StyledBody>
 		</StyledPage>
 	);
@@ -25,8 +52,6 @@ const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
 `;
-
-
 
 const StyledBody = styled.div`
 	display: flex;

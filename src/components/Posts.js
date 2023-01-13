@@ -1,20 +1,51 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { OnePost } from "./OnePost";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 
-export function Posts() {
+export function Posts(props) {
 	const [loading, setLoading] = useState(true);
-	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
+	const { updatePosts, post, setPost, setFirstPost, setLastPost, lastPost, firstPost } = props;
 	const [closeComment, setCloseComment] = useState(1);
+
+	// Using useCallback to avoid that the function is redefined every time the component is rendered
+	/*const getPosts = useCallback(() => {*/
+	function getFriends() {
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+		let response;
+
+		axios
+			.get(`http://localhost:4000/followeds`, config)
+			.then((ans) => {
+				if (ans.status === 404) {
+					response = false;
+				} else {
+					response = true;
+				}
+			})
+			.catch((err) => {
+				console.log(err.data);
+			});
+
+		return response;
+	}
 
 	function getPosts() {
 		setLoading(true);
-		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts`;
+		let limit = ''
+		if(lastPost!==null){
+			console.log(lastPost)
+			limit = `?lastPost=${lastPost}&firstPost=${firstPost}`
+		}
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts${limit}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
@@ -24,15 +55,22 @@ export function Posts() {
 			axios
 				.get(Url, config)
 				.then((answer) => {
-					console.log(answer);
+					console.log(answer.data);
 					setPost(answer.data);
+					setFirstPost(answer.data[answer.data.length-1].published_post_id)
+					setLastPost(answer.data[0].published_post_id)
 					setLoading(false);
-					if (!answer.data.length) {
-						setError("There are no posts yet!");
+					if (answer.data.length === 0) {
+						if (getFriends()) {
+							setError("No posts found from your friends");
+						} else {
+							setError("You don't follow anyone yet. Search for new friends!");
+						}
 						alert("There are no posts yet");
 					} else {
 						setError("");
 					}
+					updatePosts();
 				})
 				.catch((err) => {
 					console.log(err);
@@ -45,7 +83,7 @@ export function Posts() {
 					);
 				});
 		}
-	}
+	} /*, [user.token, updatePosts]);*/
 
 	useEffect(() => {
 		getPosts();
