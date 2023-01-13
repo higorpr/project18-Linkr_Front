@@ -42,9 +42,14 @@ export default function TimelineUpdate({ updatePosts }) {
 
     return (
         <>
-            <div className="timeline-update">
-                <button onClick={ handleNewPosts }>{ totalCount } new posts, load more! <IoReload /></button>
-            </div>
+            {
+                totalCount > 0 ?
+                <div className="timeline-update">
+                    <button onClick={ handleNewPosts }>{ totalCount } new posts, load more! <IoReload /></button>
+                </div>
+                :
+                null
+            }
         </>
     );
 }
