@@ -14,9 +14,12 @@ export default function UserPage() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [pageOwnerPosts, setPageOwnerPosts] = useState([]);
-	const [follow, setFollow] = useState('Follow');
+	const [follow, setFollow] = useState("Follow");
 	const [click, setClick] = useState(false);
-	const [buttonColors, setButtonColors] = useState({color1: '#1877F2', color2: '#fff'});
+	const [buttonColors, setButtonColors] = useState({
+		color1: "#1877F2",
+		color2: "#fff",
+	});
 	const navigate = useNavigate();
 
 	function getPosts() {
@@ -62,52 +65,55 @@ export default function UserPage() {
 		e.preventDefault();
 		setClick(true);
 		let color3 = buttonColors.color2;
-		let colorChange = {color1: color3, color2: buttonColors.color1}
-		
-		if (follow === 'Follow') {
-			axios.post(`http://localhost:4000/follow/${id}`, {}, config)
+		let colorChange = { color1: color3, color2: buttonColors.color1 };
+
+		if (follow === "Follow") {
+			axios
+				.post(`http://localhost:4000/follow/${id}`, {}, config)
 				.then((ans) => {
 					console.log(ans.data);
-					setFollow('Unfollow');
+					setFollow("Unfollow");
 					setClick(false);
 					setButtonColors(colorChange);
-				}).catch((err) => {
-					console.log(err.data);
 				})
-		} else if (follow === 'Unfollow') {
-			axios.delete(`http://localhost:4000/unfollow/${id}`, config)
+				.catch((err) => {
+					console.log(err.data);
+				});
+		} else if (follow === "Unfollow") {
+			axios
+				.delete(`http://localhost:4000/unfollow/${id}`, config)
 				.then((ans) => {
 					console.log(ans.data);
-					setFollow('Follow');
+					setFollow("Follow");
 					setClick(false);
 					setButtonColors(colorChange);
-				}).catch((err) => {
+				})
+				.catch((err) => {
 					console.log(err.data);
-					alert('Failed to send request!');
+					alert("Failed to send request!");
 				});
 		}
 
-		
 		navigate(`/user/${id}`);
-
 	}
 
 	useEffect(() => {
-
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
 			},
 		};
 
-		const obj = { id: user.id }
-		const followed = axios.get(`http://localhost:4000/following/${id}`, config)
+		const obj = { id: user.id };
+		const followed = axios
+			.get(`http://localhost:4000/following/${id}`, config)
 			.then((ans) => {
 				console.log(ans);
 				if (ans.status === 200) {
-					setFollow('Unfollow');
+					setFollow("Unfollow");
 				}
-			}).catch((err) => {
+			})
+			.catch((err) => {
 				console.log(err.data);
 			});
 
@@ -143,28 +149,35 @@ export default function UserPage() {
 								<img src={pageOwner.image} alt="User" />
 								{pageOwner.username}'s posts
 							</TitlePage>
-							{user.id !== id ?
-								(
-									click ?
-										<FollowButton  
-										color1={'#fafafa'} 
-										color2={'#777'}
-										disabled={click} >
-											{follow}ing
-										</FollowButton>
-										:
-										<FollowButton 
-										color1={buttonColors.color1} 
+							{user.id !== id ? (
+								click ? (
+									<FollowButton
+										color1={"#fafafa"}
+										color2={"#777"}
+										disabled={click}
+									>
+										{follow}ing
+									</FollowButton>
+								) : (
+									<FollowButton
+										color1={buttonColors.color1}
 										color2={buttonColors.color2}
-										disabled={click} 
-										onClick={followButtonHandler}>
-											{follow}
-										</FollowButton>
-								) : <></>
-							}
+										disabled={click}
+										onClick={followButtonHandler}
+									>
+										{follow}
+									</FollowButton>
+								)
+							) : (
+								<></>
+							)}
 						</PostsBox>
 						{pageOwnerPosts.map((item) => (
-							<OnePost key={item.id} getPosts={getPosts} item={item} />
+							<OnePost
+								key={item.published_post_id}
+								getPosts={getPosts}
+								item={item}
+							/>
 						))}
 					</>
 				)}
@@ -192,7 +205,7 @@ const PostsBox = styled.div`
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-around;
-	@media(max-width: 670px){
+	@media (max-width: 670px) {
 		width: 580px;
 	}
 `;
@@ -253,16 +266,16 @@ const FollowButton = styled.button`
 	width: 115px;
 	height: 30px;
 
-	color: ${props => props.color1};
+	color: ${(props) => props.color1};
 	font-weight: 700;
 	font-size: 14px;
-	
-	background-color: ${props => props.color2};
+
+	background-color: ${(props) => props.color2};
 	border-radius: 5px;
 
 	margin-top: 40px;
-	:hover{
+	:hover {
 		cursor: pointer;
 		opacity: 0.8;
 	}
-`
+`;

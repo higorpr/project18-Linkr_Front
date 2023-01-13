@@ -1,19 +1,18 @@
-import { useState } from 'react';
+import { useState } from "react";
 import styled from "styled-components";
 import Post from "../components/Post";
 import { Posts } from "../components/Posts";
 import Header from "../components/Header";
 import TrendingBox from "../components/TrendingBox";
-import TimelineUpdate from "../components/timelineUpdate"
+import TimelineUpdate from "../components/timelineUpdate";
 
 export default function Main() {
-
 	const [posts, setPosts] = useState([]);
+	const [post, setPost] = useState([]);
 
 	const updatePosts = (newPosts) => {
 		setPosts(newPosts);
-	}
-
+	};
 
 	return (
 		<StyledPage>
@@ -22,12 +21,21 @@ export default function Main() {
 				<PostsBox>
 					<TitlePage>timeline</TitlePage>
 					<Post></Post>
-					<TimelineUpdate posts={posts} updatePosts={updatePosts}/>
-					<Posts posts={posts} updatePosts={updatePosts}  />
+					<TimelineUpdate
+						posts={posts}
+						updatePosts={updatePosts}
+						post={post}
+						setPost={setPost}
+					/>
+					<Posts
+						posts={posts}
+						post={post}
+						setPost={setPost}
+						updatePosts={updatePosts}
+					/>
 				</PostsBox>
 
 				<TrendingBox />
-
 			</StyledBody>
 		</StyledPage>
 	);
