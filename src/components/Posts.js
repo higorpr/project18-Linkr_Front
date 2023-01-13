@@ -10,6 +10,32 @@ export function Posts() {
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
+	const [closeComment, setCloseComment] = useState(1);
+
+	function getFriends (){
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+		let response;
+
+		axios.get(`http://localhost:4000/followeds`,config)
+		.then((ans)=>{
+
+			if(ans.status === 404){
+				response = false;
+			} else {
+				response = true;
+			}
+
+		})
+		.catch((err)=>{
+			console.log(err.data)
+		})
+		
+		return response;
+	}
 
 	function getPosts() {
 		setLoading(true);
@@ -26,8 +52,14 @@ export function Posts() {
 					console.log(answer);
 					setPost(answer.data);
 					setLoading(false);
-					if (!answer.data.length) {
-						setError("There are no posts yet!");
+					if (answer.data.length === 0) {
+						if(getFriends()){
+							setError("No posts found from your friends");
+						}
+						else{
+							setError("You don't follow anyone yet. Search for new friends!");
+
+						} 
 						alert("There are no posts yet");
 					} else {
 						setError("");
@@ -72,7 +104,13 @@ export function Posts() {
 				</Container>
 			) : (
 				post.map((item) => (
-					<OnePost key={item.id} getPosts={getPosts} item={item} />
+					<OnePost
+						key={item.id}
+						getPosts={getPosts}
+						item={item}
+						closeComment={closeComment}
+						setCloseComment={setCloseComment}
+					/>
 				))
 			)}
 		</>

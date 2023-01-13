@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 import { ThreeDots } from "react-loader-spinner";
@@ -15,6 +15,9 @@ export default function UserPage() {
 	const [error, setError] = useState("");
 	const [pageOwnerPosts, setPageOwnerPosts] = useState([]);
 	const [follow, setFollow] = useState('Follow');
+	const [click, setClick] = useState(false);
+	const [buttonColors, setButtonColors] = useState({color1: '#1877F2', color2: '#fff'});
+	const navigate = useNavigate();
 
 	function getPosts() {
 		const URL = `${process.env.REACT_APP_API_BASE_URL}/user/${id}`;
@@ -38,7 +41,7 @@ export default function UserPage() {
 				}
 			})
 			.catch((err) => {
-				console.log(err.response.data);
+				console.log(err.data);
 				setLoading(false);
 				setError(
 					"An error occured while trying to fetch the posts, please refresh the page"
@@ -49,7 +52,7 @@ export default function UserPage() {
 			});
 	}
 
-	function followButtonHandler(e){
+	function followButtonHandler(e) {
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
@@ -57,48 +60,59 @@ export default function UserPage() {
 		};
 
 		e.preventDefault();
-		if(follow === 'Follow'){
-			axios.post(`http://localhost:4000/follow/${id}`,{},config)
-			.then((ans)=>{
-				console.log(ans.data);
-				setFollow('Unfollow');
-			}).catch((err)=>{
-				console.log(err.data);
-			})
-		} else if (follow === 'Unfollow'){
-			axios.delete(`http://localhost:4000/unfollow/${id}`,config)
-			.then((ans)=>{
-				console.log(ans.data);
-				setFollow('Follow');
-			}).catch((err)=>{
-				console.log(err.data);
-			});
+		setClick(true);
+		let color3 = buttonColors.color2;
+		let colorChange = {color1: color3, color2: buttonColors.color1}
+		
+		if (follow === 'Follow') {
+			axios.post(`http://localhost:4000/follow/${id}`, {}, config)
+				.then((ans) => {
+					console.log(ans.data);
+					setFollow('Unfollow');
+					setClick(false);
+					setButtonColors(colorChange);
+				}).catch((err) => {
+					console.log(err.data);
+				})
+		} else if (follow === 'Unfollow') {
+			axios.delete(`http://localhost:4000/unfollow/${id}`, config)
+				.then((ans) => {
+					console.log(ans.data);
+					setFollow('Follow');
+					setClick(false);
+					setButtonColors(colorChange);
+				}).catch((err) => {
+					console.log(err.data);
+					alert('Failed to send request!');
+				});
 		}
+
+		
+		navigate(`/user/${id}`);
+
 	}
 
 	useEffect(() => {
-		console.log("Owner Id: ", id);
-		console.log("User Id: ", user.id);
-		
+
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
 			},
 		};
 
-		const obj = {id: user.id}
+		const obj = { id: user.id }
 		const followed = axios.get(`http://localhost:4000/following/${id}`, config)
-		.then((ans)=>{
-			console.log(ans);
-			if(ans.status === 200){
-				setFollow('Unfollow');
-			}
- 		}).catch((err)=>{
-			console.log(err.data);
-		});
+			.then((ans) => {
+				console.log(ans);
+				if (ans.status === 200) {
+					setFollow('Unfollow');
+				}
+			}).catch((err) => {
+				console.log(err.data);
+			});
 
 		getPosts();
-	}, [id, user]);
+	}, [id, user, buttonColors]);
 
 	return (
 		<StyledPage>
@@ -131,8 +145,22 @@ export default function UserPage() {
 							</TitlePage>
 							{user.id !== id ?
 								(
-									<FollowButton onClick={followButtonHandler}>{follow}</FollowButton>
-								):<></>
+									click ?
+										<FollowButton  
+										color1={'#fafafa'} 
+										color2={'#777'}
+										disabled={click} >
+											{follow}ing
+										</FollowButton>
+										:
+										<FollowButton 
+										color1={buttonColors.color1} 
+										color2={buttonColors.color2}
+										disabled={click} 
+										onClick={followButtonHandler}>
+											{follow}
+										</FollowButton>
+								) : <></>
 							}
 						</PostsBox>
 						{pageOwnerPosts.map((item) => (
@@ -225,11 +253,11 @@ const FollowButton = styled.button`
 	width: 115px;
 	height: 30px;
 
-	color: #fff;
+	color: ${props => props.color1};
 	font-weight: 700;
 	font-size: 14px;
 	
-	background-color: #1877F2;
+	background-color: ${props => props.color2};
 	border-radius: 5px;
 
 	margin-top: 40px;
