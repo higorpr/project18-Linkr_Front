@@ -85,7 +85,8 @@ export default function Post() {
 }
 
 const StyledPost = styled.div`
-	width: 611px;
+	width: 100%;
+	max-width: 611px;
 	height: 209px;
 
 	background-color: #fff;
@@ -110,6 +111,15 @@ const StyledPost = styled.div`
 		height: 50px;
 		border-radius: 50%;
 		margin: 16px 18px 0 18px;
+	}
+	@media (max-width: 610px) {
+		border-radius: 0px;
+		div {
+			justify-content: center;
+		}
+		img {
+			display: none;
+		}
 	}
 `;
 const FormStyle = styled.form`
@@ -141,6 +151,18 @@ const FormStyle = styled.form`
 		:hover {
 			cursor: pointer;
 			opacity: 0.8;
+		}
+	}
+	@media (max-width: 610px) {
+		width: 100%;
+		padding-right: 15px;
+		padding-left: 15px;
+		input {
+			align-self: center;
+			width: 100%;
+		}
+		button {
+			margin-right: 0px;
 		}
 	}
 `;
