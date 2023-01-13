@@ -69,7 +69,7 @@ export default function UserPage() {
 
 		if (follow === "Follow") {
 			axios
-				.post(`http://localhost:4000/follow/${id}`, {}, config)
+				.post(`process.env.REACT_APP_API_BASE_URL/follow/${id}`, {}, config)
 				.then((ans) => {
 					console.log(ans.data);
 					setFollow("Unfollow");
@@ -81,7 +81,7 @@ export default function UserPage() {
 				});
 		} else if (follow === "Unfollow") {
 			axios
-				.delete(`http://localhost:4000/unfollow/${id}`, config)
+				.delete(`process.env.REACT_APP_API_BASE_URL/unfollow/${id}`, config)
 				.then((ans) => {
 					console.log(ans.data);
 					setFollow("Follow");
@@ -108,7 +108,7 @@ export default function UserPage() {
 		console.log('id:', id);
 
 		axios
-			.get(`http://localhost:4000/following/${id}`, config)
+			.get(`process.env.REACT_APP_API_BASE_URL/following/${id}`, config)
 			.then((ans) => {
 				console.log(ans);
 				if (ans.status === 200) {
