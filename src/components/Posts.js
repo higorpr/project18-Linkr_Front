@@ -12,7 +12,7 @@ export function Posts() {
 	const { user, numberReloads } = useContext(ProjectContext);
 	const [closeComment, setCloseComment] = useState(1);
 
-	function getFriends (){
+	function getFollows (){
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
@@ -53,7 +53,7 @@ export function Posts() {
 					setPost(answer.data);
 					setLoading(false);
 					if (answer.data.length === 0) {
-						if(getFriends()){
+						if(getFollows()){
 							setError("No posts found from your friends");
 						}
 						else{
