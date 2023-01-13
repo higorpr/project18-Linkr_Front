@@ -105,7 +105,7 @@ export function Posts() {
 			) : (
 				post.map((item) => (
 					<OnePost
-						key={item.id}
+						key={item.published_post_id}
 						getPosts={getPosts}
 						item={item}
 						closeComment={closeComment}
