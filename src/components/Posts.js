@@ -78,6 +78,7 @@ export function Posts(props) {
 		}
 	} /*, [user.token, updatePosts]);*/
 
+
 	useEffect(() => {
 		getPosts();
 	}, [user, numberReloads]);
