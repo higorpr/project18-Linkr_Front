@@ -12,6 +12,7 @@ export function HashtagPosts() {
 	const [error, setError] = useState("");
 	const { user, numberReloads } = useContext(ProjectContext);
 	const { hashtag } = useParams();
+	const [closeComment, setCloseComment] = useState(1);
 	console.log(hashtag);
 
 	function getPosts() {
@@ -75,7 +76,13 @@ export function HashtagPosts() {
 				</Container>
 			) : (
 				post.map((item) => (
-					<OnePost key={item.id} getPosts={getPosts} item={item} />
+					<OnePost
+						key={item.published_post_id}
+						getPosts={getPosts}
+						item={item}
+						closeComment={closeComment}
+						setCloseComment={setCloseComment}
+					/>
 				))
 			)}
 		</>

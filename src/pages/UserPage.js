@@ -12,6 +12,7 @@ export default function UserPage() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [pageOwnerPosts, setPageOwnerPosts] = useState([]);
+	const [closeComment, setCloseComment] = useState(1);
 
 	function getPosts() {
 		const URL = `${process.env.REACT_APP_API_BASE_URL}/user/${id}`;
@@ -82,7 +83,13 @@ export default function UserPage() {
 							</TitlePage>
 						</PostsBox>
 						{pageOwnerPosts.map((item) => (
-							<OnePost key={item.id} getPosts={getPosts} item={item} />
+							<OnePost
+								key={item.published_post_id}
+								getPosts={getPosts}
+								item={item}
+								closeComment={closeComment}
+								setCloseComment={setCloseComment}
+							/>
 						))}
 					</>
 				)}
