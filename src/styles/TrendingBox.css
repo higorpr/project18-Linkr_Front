@@ -1,78 +1,83 @@
-.trending-box{
-    background-color: #151515;
-    border-radius: 16px;
+.trending-box {
+	background-color: #151515;
+	border-radius: 16px;
 
 	display: flex;
 	justify-content: center;
-    align-items: center;
-    flex-direction: column;
+	align-items: center;
+	flex-direction: column;
 
-    width: 15vw;
-    max-width: 15vw;
-    height: 44vh;
+	width: 301px;
+	height: 100%;
 	margin-top: 140px;
-    margin-left: 4vw;
-    margin-right: 0vw;
+	margin-left: 40px;
 }
 
-.trending-box .trending-title{
-    border-bottom: 1px solid #484848;
-    width: 15vw;
-    max-width: 15vw;
-    height: 7vh;
-    margin-top: 0vh;
-    margin-bottom: auto;
-
-    display: flex;
-    justify-content: left;
-    align-items: center;
+@media (max-width: 952px) {
+	.trending-box {
+		display: none;
+	}
 }
 
-.trending-box .trending-title h1{
-    margin-left: 1vw;
+.trending-box .trending-title {
+	border-bottom: 1px solid #484848;
+	width: 301px;
+	height: 60px;
+	margin-top: 0vh;
+	margin-bottom: auto;
 
-    font-family: 'Oswald';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1.7rem;
-    font-weight: 600;
-    color: #fff;
+	display: flex;
+	justify-content: left;
+	align-items: center;
 }
 
-.trending-box .trending-hashtags{
-    width: 15vw;
-    height: fit-content;
-    margin: 0 0 auto 0;
+.trending-box .trending-title h1 {
+	margin-left: 1vw;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	font-family: "Oswald";
+	font-style: normal;
+	font-weight: 700;
+	font-size: 1.7rem;
+	font-weight: 600;
+	color: #fff;
 }
 
-.trending-box .trending-hashtags ul{
-    max-width: 15vw;
-    height: fit-content;
+.trending-box .trending-hashtags {
+	width: 301px;
+	height: 100%;
+	margin: 15px 0 15px 0;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 1.2vh;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.trending-box .trending-hashtags li > a{
-    margin-left: 1vw;
+.trending-box .trending-hashtags ul {
+	max-width: 15vw;
+	height: 100%;
 
-    font-family: 'Lato';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1.19rem;
-    letter-spacing: 0.05em;
-    text-decoration: none;
+	display: flex;
+	flex-direction: column;
+}
+
+.trending-box .trending-hashtags li{
+    margin: 0 0 8px 15px;
+}
+
+.trending-box .trending-hashtags li > a {
     
-    color: #FFFFFF;
+    
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: 700;
+	font-size: 1.19rem;
+	letter-spacing: 0.05em;
+	text-decoration: none;
+
+	color: #ffffff;
 }
 
-.trending-box .trending-hashtags li > a:hover{
-    text-decoration: underline;
-    color: #3282eb;
+.trending-box .trending-hashtags li > a:hover {
+	text-decoration: underline;
+	color: #3282eb;
 }
