@@ -15,6 +15,7 @@ import Comments from "./Comments";
 import { AiOutlineComment } from "react-icons/ai";
 import { getLikesData } from "../constants/functions";
 import RepostIcon from "./RepostIcon";
+import { BiRepost } from "react-icons/bi";
 
 export function OnePost({ item, getPosts }) {
 	const [disabled, setDisabled] = useState(false);
@@ -29,6 +30,8 @@ export function OnePost({ item, getPosts }) {
 	const [shownText, setShownText] = useState(item.text);
 	const [updatePost, setUpdatePost] = useState(0);
 	const nav = useNavigate();
+
+	console.log(item);
 
 	useEffect(() => {
 		getLikesData(user, postId)
@@ -114,19 +117,34 @@ export function OnePost({ item, getPosts }) {
 	return (
 		<>
 			<Container>
-			<StyledRepostMessage>
-				
+				<StyledRepostMessage>
+					<IconContext.Provider
+						value={{ size: "20px", color: "#FFFFFF" }}
+					>
+						<BiRepost />
+					</IconContext.Provider>
+					<p>
+						Re-posted by <strong>{"Placeholder"} </strong>{" "}
+					</p>
 				</StyledRepostMessage>
 				<Post>
 					<PerfilLikes>
 						<img src={item.image} alt="perfil" />
 						<Likes>
 							{selfLike ? (
-								<IoHeartSharp color="#AC0000" onClick={removeLike} />
+								<IoHeartSharp
+									color="#AC0000"
+									onClick={removeLike}
+								/>
 							) : (
-								<IoHeartOutline color="white" onClick={postLike} />
+								<IoHeartOutline
+									color="white"
+									onClick={postLike}
+								/>
 							)}
-							<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
+							<h1 id={`tooltip-anchor-${postId}`}>
+								{likes} likes
+							</h1>
 							<Tooltip
 								anchorId={`tooltip-anchor-${postId}`}
 								content={usersStr}
@@ -135,32 +153,40 @@ export function OnePost({ item, getPosts }) {
 							/>
 						</Likes>
 						<Likes>
-							<AiOutlineComment color="white" onClick={openComments} />
+							<AiOutlineComment
+								color="white"
+								onClick={openComments}
+							/>
 							<h1>{item.comments.length} comments</h1>
 						</Likes>
-						<Likes>
-							<AiOutlineComment color="white" />
-							<h1>{item.comments.length} comments</h1>
-						</Likes>
-						<RepostIcon />
+						<RepostIcon postId={postId} />
 					</PerfilLikes>
 					<LinkPostBox>
 						<StyeldNameContainer>
-							<UserName onClick={goToProfile}>{item.username}</UserName>
+							<UserName onClick={goToProfile}>
+								{item.username}
+							</UserName>
 							<StyledIcons>
-								<IconContext.Provider value={{ color: "#FFFFFF" }}>
+								<IconContext.Provider
+									value={{ color: "#FFFFFF" }}
+								>
 									{item.ownPost ? (
 										<BsPencil
 											id="edit"
 											onClick={() => {
-												setEditBoxOpened(!editBoxOpened);
+												setEditBoxOpened(
+													!editBoxOpened
+												);
 											}}
 										/>
 									) : (
 										""
 									)}
 									{item.ownPost ? (
-										<DeletePost getPosts={getPosts} item={item} />
+										<DeletePost
+											getPosts={getPosts}
+											item={item}
+										/>
 									) : (
 										""
 									)}
@@ -187,11 +213,15 @@ export function OnePost({ item, getPosts }) {
 						)}
 						<LinkPreview onClick={openLink}>
 							<LinkInfo>
-								{item.metadata?.linkTitle === undefined ? null : (
+								{item.metadata?.linkTitle ===
+								undefined ? null : (
 									<Title>{item.metadata?.linkTitle}</Title>
 								)}
-								{item.metadata?.linkDescription === undefined ? null : (
-									<Description>{item.metadata?.linkDescription}</Description>
+								{item.metadata?.linkDescription ===
+								undefined ? null : (
+									<Description>
+										{item.metadata?.linkDescription}
+									</Description>
 								)}
 								<Link>{item.metadata?.link}</Link>
 							</LinkInfo>
@@ -201,7 +231,10 @@ export function OnePost({ item, getPosts }) {
 						</LinkPreview>
 					</LinkPostBox>
 				</Post>
-				<Comments openCommentBox={openCommentBox} comments={item.comments} />
+				<Comments
+					openCommentBox={openCommentBox}
+					comments={item.comments}
+				/>
 			</Container>
 		</>
 	);
@@ -234,7 +267,24 @@ const Post = styled.div`
 	}
 `;
 
-const StyledRepostMessage = styled.div``;
+const StyledRepostMessage = styled.div`
+	display: flex;
+	height: 33px;
+	margin: 7px 0 0 13px;
+	align-items: center;
+	p {
+		color: #ffffff;
+		font-family: "Lato", cursive;
+		font-size: 11px;
+		line-height: 13px;
+		font-weight: 400;
+		margin-left: 6px;
+
+		strong {
+			font-weight: 700;
+		}
+	}
+`;
 
 const PerfilLikes = styled.div`
 	width: 87px;
