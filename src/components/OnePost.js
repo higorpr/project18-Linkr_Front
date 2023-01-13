@@ -116,7 +116,8 @@ export function OnePost({ item, getPosts }) {
 	return (
 		<>
 			<Container>
-				{item.shared === true ? (
+				{item.shared === true &&
+				item.user_id !== item.originaluser.id ? (
 					<StyledRepostMessage>
 						<IconContext.Provider
 							value={{ size: "20px", color: "#FFFFFF" }}
@@ -124,7 +125,8 @@ export function OnePost({ item, getPosts }) {
 							<BiRepost />
 						</IconContext.Provider>
 						<p>
-							Re-posted by <strong>{user.name} </strong>{" "}
+							Re-posted by{" "}
+							<strong>{item.originaluser.username} </strong>{" "}
 						</p>
 					</StyledRepostMessage>
 				) : (
