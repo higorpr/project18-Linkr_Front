@@ -32,6 +32,9 @@ const StyledBody = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 72px;
+	@media (max-width: 610px) {
+		margin-top: 30px;
+	}
 `;
 
 const PostsBox = styled.div`

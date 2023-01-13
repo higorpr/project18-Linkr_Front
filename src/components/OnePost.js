@@ -3,7 +3,6 @@ import { ReactTagify } from "react-tagify";
 import { useContext, useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { usersLikedUrl } from "../constants/urls";
 import axios from "axios";
 import ProjectContext from "../constants/Context";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +13,7 @@ import { IconContext } from "react-icons";
 import EditBox from "./EditBox";
 import Comments from "./Comments";
 import { AiOutlineComment } from "react-icons/ai";
+import alternativeImage from '../assets/img/alternative_img.png'
 
 export function OnePost({ item, getPosts }) {
 	const [disabled, setDisabled] = useState(false);
@@ -153,7 +153,9 @@ export function OnePost({ item, getPosts }) {
 			<Container>
 				<Post>
 					<PerfilLikes>
-						<img src={item.image} alt="perfil" />
+						<Image>
+							<img src={item.image} alt="perfil" />
+						</Image>
 						<Likes>
 							{selfLike ? (
 								<IoHeartSharp color="#AC0000" onClick={removeLike} />
@@ -226,11 +228,15 @@ export function OnePost({ item, getPosts }) {
 								{item.metadata?.linkDescription === undefined ? null : (
 									<Description>{item.metadata?.linkDescription}</Description>
 								)}
-								<Link>{item.metadata?.link}</Link>
+								<LinkDiv id = 'oioi'>
+									<Link>{item.metadata?.link}</Link>
+								</LinkDiv>
 							</LinkInfo>
-							{item.metadata?.linkImage === undefined ? null : (
-								<img src={item.metadata.linkImage} alt="" />
-							)}
+							<ImageLink>
+								{item.metadata?.linkImage === undefined ? <img src={alternativeImage} alt=''/> : (
+									<img src={item.metadata.linkImage} alt="" />
+								)}
+							</ImageLink>
 						</LinkPreview>
 					</LinkPostBox>
 				</Post>
@@ -277,21 +283,30 @@ const PerfilLikes = styled.div`
 		color: #ffffff;
 	}
 
+`;
+
+const Image = styled.div`
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	margin-top: 17px;
+	overflow: hidden;
+	background-color: white;
 	img {
-		width: 50px;
 		height: 50px;
-		border-radius: 25px;
-		margin-top: 17px;
+        margin-left: 50%;
+        transform: translateX(-50%);
 	}
 	@media (max-width: 610px) {
+		width: 40px;
+		height: 40px;
+		margin-left: 15px;
+		margin-right: 15px;
 		img {
-			width: 40px;
 			height: 40px;
-			margin-left: 15px;
-			margin-right: 15px;
 		}
 	}
-`;
+`
 
 const Likes = styled.div`
 	display: flex;
@@ -325,6 +340,9 @@ const LinkPostBox = styled.div`
 	margin-bottom: 17px;
 	display: flex;
 	flex-direction: column;
+	@media (max-width:610px) {
+		width: calc(100vw - 80px);
+	}
 `;
 
 const UserName = styled.p`
@@ -351,26 +369,33 @@ const Text = styled.p`
 `;
 
 const LinkPreview = styled.div`
-	width: 503px;
+	width: 100%;
+	max-width: 503px;
 	border: 1px solid #4d4d4d;
 	border-radius: 11px;
 	display: flex;
 	justify-content: space-between;
 	cursor: pointer;
+`;
+
+const ImageLink = styled.div`
+	width: 155px;
+	height: 155px;
+	border-bottom-right-radius: 12px;
+	border-top-right-radius: 12px;
+	overflow: hidden;
 	img {
-		width: 155px;
 		height: 155px;
-		border-bottom-right-radius: 12px;
-		border-top-right-radius: 12px;
+        margin-left: 50%;
+        transform: translateX(-50%);
 	}
 	@media (max-width: 610px) {
-		width: 100%;
+		height: 130px;
 		img {
-			width: 95px;
 			height: 100%;
 		}
 	}
-`;
+`
 
 const LinkInfo = styled.div`
 	max-width: 350px;
@@ -417,6 +442,9 @@ const Link = styled.p`
 		font-size: 9px;
 	}
 `;
+
+const LinkDiv = styled.div`
+`
 
 const StyeldNameContainer = styled.div`
 	display: flex;
