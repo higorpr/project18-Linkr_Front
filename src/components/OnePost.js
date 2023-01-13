@@ -31,9 +31,6 @@ export function OnePost({ item, getPosts }) {
 	const [commentCount, setCommetCount] = useState(item.comments.length);
 	const [updatePost, setUpdatePost] = useState(0);
 	const nav = useNavigate();
-	console.log(item)
-
-	console.log(item);
 
 	useEffect(() => {
 		getLikesData(user, postId)
@@ -119,16 +116,23 @@ export function OnePost({ item, getPosts }) {
 	return (
 		<>
 			<Container>
-				<StyledRepostMessage>
-					<IconContext.Provider
-						value={{ size: "20px", color: "#FFFFFF" }}
-					>
-						<BiRepost />
-					</IconContext.Provider>
-					<p>
-						Re-posted by <strong>{"Placeholder"} </strong>{" "}
-					</p>
-				</StyledRepostMessage>
+				{item.shared === true &&
+				item.user_id !== item.originaluser.id ? (
+					<StyledRepostMessage>
+						<IconContext.Provider
+							value={{ size: "20px", color: "#FFFFFF" }}
+						>
+							<BiRepost />
+						</IconContext.Provider>
+						<p>
+							Re-posted by{" "}
+							<strong>{item.originaluser.username} </strong>{" "}
+						</p>
+					</StyledRepostMessage>
+				) : (
+					""
+				)}
+
 				<Post>
 					<PerfilLikes>
 						<img src={item.image} alt="perfil" />
@@ -155,12 +159,11 @@ export function OnePost({ item, getPosts }) {
 							/>
 						</Likes>
 						<Likes>
-							<AiOutlineComment color="white" onClick={openComments} />
+							<AiOutlineComment
+								color="white"
+								onClick={openComments}
+							/>
 							<h1>{commentCount} comments</h1>
-						</Likes>
-						<Likes>
-							<AiOutlineComment color="white" />
-							<h1>{item.comments.length} comments</h1>
 						</Likes>
 						<RepostIcon postId={postId} />
 					</PerfilLikes>
@@ -234,7 +237,11 @@ export function OnePost({ item, getPosts }) {
 						</LinkPreview>
 					</LinkPostBox>
 				</Post>
-				<Comments openCommentBox={openCommentBox} item={item} setCommetCount={setCommetCount}/>
+				<Comments
+					openCommentBox={openCommentBox}
+					item={item}
+					setCommetCount={setCommetCount}
+				/>
 			</Container>
 		</>
 	);
