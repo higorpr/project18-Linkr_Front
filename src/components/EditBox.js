@@ -3,7 +3,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
 
-
 export default function EditBox({
 	previousText,
 	setEditBoxOpened,
@@ -34,12 +33,9 @@ export default function EditBox({
 					},
 				};
 
-				console.log(body);
-				console.log(config);
 				axios
 					.put(url, body, config)
 					.then((res) => {
-						console.log(res);
 						setNumberReloads(numberReloads + 1);
 						setEditBoxOpened(false);
 						setLoading(false);

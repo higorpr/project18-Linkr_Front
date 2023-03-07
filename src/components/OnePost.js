@@ -13,12 +13,12 @@ import { IconContext } from "react-icons";
 import EditBox from "./EditBox";
 import Comments from "./Comments";
 import { AiOutlineComment } from "react-icons/ai";
-import alternativeImage from '../assets/img/alternative_img.png'
+import alternativeImage from "../assets/img/alternative_img.png";
 import { getLikesData } from "../constants/functions";
 import RepostIcon from "./RepostIcon";
 import { BiRepost } from "react-icons/bi";
 
-export function OnePost({ item, getPosts }) {
+export function OnePost({ item, render, setRender }) {
 	const [disabled, setDisabled] = useState(false);
 	const [openCommentBox, setOpenCommentBox] = useState(false);
 	const postId = item.id;
@@ -117,17 +117,18 @@ export function OnePost({ item, getPosts }) {
 	return (
 		<>
 			<Container>
-				{item.shared === true &&
-				item.user_id !== item.originaluser.id ? (
+				{item.shared === true && item.user_id !== item.originaluser.id ? (
 					<StyledRepostMessage>
-						<IconContext.Provider
-							value={{ size: "20px", color: "#FFFFFF" }}
-						>
+						<IconContext.Provider value={{ size: "20px", color: "#FFFFFF" }}>
 							<BiRepost />
 						</IconContext.Provider>
 						<p>
 							Re-posted by{" "}
-							<strong>{(item.originaluser.id === user.id) ? 'you' : item.originaluser.username} </strong>{" "}
+							<strong>
+								{item.originaluser.id === user.id
+									? "you"
+									: item.originaluser.username}{" "}
+							</strong>{" "}
 						</p>
 					</StyledRepostMessage>
 				) : (
@@ -141,19 +142,11 @@ export function OnePost({ item, getPosts }) {
 						</Image>
 						<Likes>
 							{selfLike ? (
-								<IoHeartSharp
-									color="#AC0000"
-									onClick={removeLike}
-								/>
+								<IoHeartSharp color="#AC0000" onClick={removeLike} />
 							) : (
-								<IoHeartOutline
-									color="white"
-									onClick={postLike}
-								/>
+								<IoHeartOutline color="white" onClick={postLike} />
 							)}
-							<h1 id={`tooltip-anchor-${postId}`}>
-								{likes} likes
-							</h1>
+							<h1 id={`tooltip-anchor-${postId}`}>{likes} likes</h1>
 							<Tooltip
 								anchorId={`tooltip-anchor-${postId}`}
 								content={usersStr}
@@ -162,30 +155,21 @@ export function OnePost({ item, getPosts }) {
 							/>
 						</Likes>
 						<Likes>
-							<AiOutlineComment
-								color="white"
-								onClick={openComments}
-							/>
+							<AiOutlineComment color="white" onClick={openComments} />
 							<h1>{commentCount} comments</h1>
 						</Likes>
 						<RepostIcon postId={postId} />
 					</PerfilLikes>
 					<LinkPostBox>
 						<StyeldNameContainer>
-							<UserName onClick={goToProfile}>
-								{item.username}
-							</UserName>
+							<UserName onClick={goToProfile}>{item.username}</UserName>
 							<StyledIcons>
-								<IconContext.Provider
-									value={{ color: "#FFFFFF" }}
-								>
+								<IconContext.Provider value={{ color: "#FFFFFF" }}>
 									{item.ownPost ? (
 										<BsPencil
 											id="edit"
 											onClick={() => {
-												setEditBoxOpened(
-													!editBoxOpened
-												);
+												setEditBoxOpened(!editBoxOpened);
 											}}
 										/>
 									) : (
@@ -193,7 +177,8 @@ export function OnePost({ item, getPosts }) {
 									)}
 									{item.ownPost ? (
 										<DeletePost
-											getPosts={getPosts}
+											setRender={setRender}
+											render={render}
 											item={item}
 										/>
 									) : (
@@ -222,22 +207,25 @@ export function OnePost({ item, getPosts }) {
 						)}
 						<LinkPreview onClick={openLink}>
 							<LinkInfo>
-								{item.metadata?.linkTitle ===
-								undefined ? null : (
+								{item.metadata?.linkTitle === undefined ? null : (
 									<Title>{item.metadata?.linkTitle}</Title>
 								)}
-								{item.metadata?.linkDescription ===
-								undefined ? null : (
-									<Description>
-										{item.metadata?.linkDescription}
-									</Description>
+								{item.metadata?.linkDescription === undefined ? null : (
+									<Description>{item.metadata?.linkDescription}</Description>
 								)}
-								<LinkDiv id = 'oioi'>
-									<Link>{item.metadata?.link}</Link>
+								<LinkDiv id="oioi">
+									<Link>
+										{item.metadata?.source === undefined
+											? item.metadata?.link
+											: item.metadata?.source}
+									</Link>
 								</LinkDiv>
 							</LinkInfo>
 							<ImageLink>
-								{item.metadata?.linkImage === undefined ? <img src={alternativeImage} alt=''/> : (
+								{item.metadata?.linkImage === undefined ||
+								item.metadata?.linkImage === "" ? (
+									<img src={alternativeImage} alt="" />
+								) : (
 									<img src={item.metadata.linkImage} alt="" />
 								)}
 							</ImageLink>
@@ -255,7 +243,7 @@ export function OnePost({ item, getPosts }) {
 }
 
 const Container = styled.div`
-	height: 100%;
+	height: fit-content;
 	width: 100vw;
 	max-width: 611px;
 	background-color: #1e1e1e;
@@ -309,7 +297,6 @@ const PerfilLikes = styled.div`
 	p {
 		color: #ffffff;
 	}
-
 `;
 
 const Image = styled.div`
@@ -321,8 +308,8 @@ const Image = styled.div`
 	background-color: white;
 	img {
 		height: 50px;
-        margin-left: 50%;
-        transform: translateX(-50%);
+		margin-left: 50%;
+		transform: translateX(-50%);
 	}
 	@media (max-width: 610px) {
 		width: 40px;
@@ -333,7 +320,7 @@ const Image = styled.div`
 			height: 40px;
 		}
 	}
-`
+`;
 
 const Likes = styled.div`
 	display: flex;
@@ -367,7 +354,7 @@ const LinkPostBox = styled.div`
 	margin-bottom: 17px;
 	display: flex;
 	flex-direction: column;
-	@media (max-width:610px) {
+	@media (max-width: 610px) {
 		width: calc(100vw - 80px);
 	}
 `;
@@ -406,23 +393,24 @@ const LinkPreview = styled.div`
 `;
 
 const ImageLink = styled.div`
+	position: relative;
 	width: 155px;
-	height: 155px;
+	height: 100%;
+	min-height: 155px;
 	border-bottom-right-radius: 12px;
 	border-top-right-radius: 12px;
 	overflow: hidden;
 	img {
-		height: 155px;
-        margin-left: 50%;
-        transform: translateX(-50%);
+		position: absolute;
+		max-height: 100%;
+		margin-left: 50%;
+		transform: translateX(-50%);
 	}
 	@media (max-width: 610px) {
-		height: 130px;
-		img {
-			height: 100%;
-		}
+		height: 100%;
+		min-height: 130px;
 	}
-`
+`;
 
 const LinkInfo = styled.div`
 	max-width: 350px;
@@ -470,8 +458,7 @@ const Link = styled.p`
 	}
 `;
 
-const LinkDiv = styled.div`
-`
+const LinkDiv = styled.div``;
 
 const StyeldNameContainer = styled.div`
 	display: flex;

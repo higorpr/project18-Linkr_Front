@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import ProjectContext from "../constants/Context";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-export default function Post() {
+export default function Post({ setLastPost }) {
 	const [post, setPost] = useState({ text: "", link: "" });
 	const [click, setClick] = useState(false);
 	const { user, numberReloads, setNumberReloads } = useContext(ProjectContext);
@@ -32,6 +32,7 @@ export default function Post() {
 		axios
 			.post(URL, obj, config)
 			.then((ans) => {
+				setLastPost(ans.data.id);
 				alert("Post realizado com sucesso!");
 				setPost({ text: "", link: "" });
 				setClick(false);
@@ -46,10 +47,12 @@ export default function Post() {
 
 	return (
 		<StyledPost>
-			<div>
-				<img src={user.photo} alt="" />
+			<Div>
+				<Image>
+					<img src={user.photo} alt="" />
+				</Image>
 				<p>What are you going to share today?</p>
-			</div>
+			</Div>
 			<FormStyle onSubmit={sendPostToBd}>
 				<input
 					name="link"
@@ -97,30 +100,14 @@ const StyledPost = styled.div`
 	justify-content: flex-start;
 
 	border-radius: 16px;
-	div {
-		display: flex;
-		flex-direction: row;
-	}
 	p {
 		margin-top: 21px;
 		font-size: 20px;
 		font-weight: 300;
 		color: #707070;
 	}
-	img {
-		width: 50px;
-		height: 50px;
-		border-radius: 50%;
-		margin: 16px 18px 0 18px;
-	}
 	@media (max-width: 610px) {
 		border-radius: 0px;
-		div {
-			justify-content: center;
-		}
-		img {
-			display: none;
-		}
 	}
 `;
 const FormStyle = styled.form`
@@ -165,5 +152,30 @@ const FormStyle = styled.form`
 		button {
 			margin-right: 0px;
 		}
+	}
+`;
+
+const Div = styled.div`
+	display: flex;
+	flex-direction: row;
+	@media (max-width: 610px) {
+		justify-content: center;
+	}
+`;
+
+const Image = styled.div`
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	margin: 16px 18px 0 18px;
+	overflow: hidden;
+	background-color: white;
+	img {
+		height: 50px;
+		margin-left: 50%;
+		transform: translateX(-50%);
+	}
+	@media (max-width: 610px) {
+		display: none;
 	}
 `;

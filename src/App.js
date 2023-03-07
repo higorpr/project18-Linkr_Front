@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GlobalStyle from "./theme/globalStyles";
 import ProjectContext from "./constants/Context";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUp from "./pages/SignUpPage";
 import Main from "./pages/Main";
@@ -10,20 +10,16 @@ import { TooltipProvider } from "react-tooltip";
 import UserPage from "./pages/UserPage";
 
 function App() {
-	const [user, setUser] = useState({ name: "", token: "", photo: "", id: 0 });
+	const [user, setUser] = useState(what);
 	const [numberReloads, setNumberReloads] = useState(0);
 
-	useEffect(() => {
-		const token = JSON.parse(localStorage.getItem("user"));
-		if (token) {
-			setUser({
-				name: token.name,
-				token: token.token,
-				photo: token.photo,
-				id: token.id,
-			});
+	function what() {
+		if (localStorage.getItem("user")) {
+			return JSON.parse(localStorage.getItem("user"));
+		} else {
+			return { name: "", token: "", photo: "", id: 0 };
 		}
-	}, []);
+	}
 
 	return (
 		<TooltipProvider>
@@ -41,10 +37,7 @@ function App() {
 						<Route path="/" element={<LoginPage />} />
 						<Route path="/sign-up" element={<SignUp />} />
 						<Route path="/timeline" element={<Main />} />
-						<Route
-							path="/hashtag/:hashtag"
-							element={<HashtagPage />}
-						/>
+						<Route path="/hashtag/:hashtag" element={<HashtagPage />} />
 						<Route path="/user/:id" element={<UserPage />} />
 					</Routes>
 				</BrowserRouter>
@@ -54,4 +47,3 @@ function App() {
 }
 
 export default App;
-

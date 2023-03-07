@@ -3,20 +3,34 @@ import styled from "styled-components";
 import { HashtagPosts } from "../components/HashtagPosts";
 import Header from "../components/Header";
 import TrendingBox from "../components/TrendingBox";
+import { useState } from "react";
 
 export default function HashtagPage() {
+	const [lastPost, setLastPost] = useState(null);
+	const [firstPost, setFirstPost] = useState(null);
 	const { hashtag } = useParams();
 
 	return (
 		<StyledPage>
 			<Header />
-			<StyledBody>
-				<PostsBox>
+			<Container>
+				<TitleBox>
 					<TitlePage>#{hashtag}</TitlePage>
-					<HashtagPosts />
-				</PostsBox>
-				<TrendingBox/>
-			</StyledBody>
+				</TitleBox>
+				<StyledBody>
+					<PostsBox>
+						<HashtagPosts
+							lastPost={lastPost}
+							setLastPost={setLastPost}
+							firstPost={firstPost}
+							setFirstPost={setFirstPost}
+						/>
+					</PostsBox>
+					<Box>
+						<TrendingBox />
+					</Box>
+				</StyledBody>
+			</Container>
 		</StyledPage>
 	);
 }
@@ -25,15 +39,24 @@ const StyledPage = styled.div`
 	width: 100%;
 	height: 100%;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 `;
 
 const StyledBody = styled.div`
 	display: flex;
 	justify-content: center;
-	margin-top: 72px;
+	margin-top: 50px;
 	@media (max-width: 610px) {
 		margin-top: 0px;
+	}
+`;
+
+const TitleBox = styled.div`
+	width: 100%;
+	max-width: 952px;
+	@media (max-width: 952px) {
+		max-width: 610px;
 	}
 `;
 
@@ -55,6 +78,7 @@ const StyledBody = styled.div`
 const PostsBox = styled.div`
 	display: flex;
 	flex-direction: column;
+	height: fit-content;
 `;
 
 const TitlePage = styled.p`
@@ -62,12 +86,26 @@ const TitlePage = styled.p`
 	font-family: "Oswald";
 	font-size: 43px;
 	font-weight: 700;
-	margin-top: 53px;
-	margin-bottom: 43px;
+	margin-left: 10px;
 	@media (max-width: 610px) {
 		margin: 17px;
-		margin-top: 17px;
+		margin-top: 10px;
 		margin-bottom: 17px;
 		font-size: 33px;
 	}
+`;
+
+const Container = styled.div`
+	width: 100%;
+	margin-top: 125px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	@media (max-width: 610px) {
+		margin-top: 47px;
+	}
+`;
+
+const Box = styled.div`
+	margin-top: 16px;
 `;

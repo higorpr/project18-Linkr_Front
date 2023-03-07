@@ -4,52 +4,99 @@ import { OnePost } from "./OnePost";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import ProjectContext from "../constants/Context";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroller";
 
-export function HashtagPosts() {
+export function HashtagPosts(props) {
+	const { setFirstPost, setLastPost, lastPost, firstPost } = props;
 	const [loading, setLoading] = useState(true);
 	const [post, setPost] = useState([]);
 	const [error, setError] = useState("");
-	const { user, numberReloads } = useContext(ProjectContext);
+	const { user, setUser, numberReloads } = useContext(ProjectContext);
 	const { hashtag } = useParams();
+	const [render, setRender] = useState(1);
+	const [hashtagNow, setHashtagNow] = useState("");
+	const [loadMore, setLoadMore] = useState(true);
+	const nav = useNavigate();
 
-	function getPosts() {
+	useEffect(() => {
+		if (!user.token) {
+			nav("/");
+		}
 		setLoading(true);
-		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/hashtag/${hashtag}`;
+		let limit = "";
+		if (hashtagNow === hashtag) {
+			if (lastPost !== null) {
+				limit = `&lastPost=${lastPost}&firstPost=${firstPost}`;
+			}
+		}
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/hashtag?hashtag=${hashtag}${limit}`;
 		const config = {
 			headers: {
 				authorization: `Bearer ${user.token}`,
 			},
 		};
-		if (user.token !== "") {
-			axios
-				.get(Url, config)
-				.then((answer) => {
-					setPost(answer.data);
-					setLoading(false);
-					if (!answer.data.length) {
-						setError("There are no posts yet!");
-						alert("There are no posts yet");
-					} else {
-						setError("");
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-					setLoading(false);
-					setError(
-						"An error occured while trying to fetch the posts, please refresh the page"
-					);
-					alert(
-						"An error occured while trying to fetch the posts, please refresh the page"
-					);
-				});
-		}
-	}
+		axios
+			.get(Url, config)
+			.then((answer) => {
+				const listPosts = answer.data;
+				setPost(answer.data);
+				setLoading(false);
+				if (!answer.data.length) {
+					setError("There are no posts yet!");
+					alert("There are no posts yet");
+				} else {
+					setError("");
+					setFirstPost(listPosts[listPosts.length - 1].published_post_id);
+					setLastPost(listPosts[0].published_post_id);
+					setHashtagNow(hashtag);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				if (err.response.status === 401) {
+					localStorage.removeItem("user");
+					setUser({ name: "", token: "", photo: "", id: 0 });
+					nav("/");
+				}
+				setLoading(false);
+				setError(
+					"An error occured while trying to fetch the posts, please refresh the page"
+				);
+				alert(
+					"An error occured while trying to fetch the posts, please refresh the page"
+				);
+			});
+	}, [user, numberReloads, render, hashtag]);
 
-	useEffect(() => {
-		getPosts();
-	}, [user, numberReloads]);
+	async function scroll() {
+		let limit = `&firstPost=${firstPost}`;
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/hashtag?hashtag=${hashtag}${limit}`;
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+		axios
+			.get(Url, config)
+			.then((answer) => {
+				const listPosts = answer.data;
+				setPost([...post, ...listPosts]);
+				if (listPosts.length) {
+					setFirstPost(listPosts[listPosts.length - 1].published_post_id);
+				} else {
+					setLoadMore(false);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				if (err.response.status === 401) {
+					localStorage.removeItem("user");
+					setUser({ name: "", token: "", photo: "", id: 0 });
+					nav("/");
+				}
+			});
+	}
 
 	return (
 		<>
@@ -72,13 +119,25 @@ export function HashtagPosts() {
 					<ErrorMessage>{error}</ErrorMessage>
 				</Container>
 			) : (
-				post.map((item) => (
-					<OnePost
-						key={item.published_post_id}
-						getPosts={getPosts}
-						item={item}
-					/>
-				))
+				<InfiniteScroll
+					pageStart={0}
+					loadMore={scroll}
+					hasMore={loadMore}
+					loader={
+						<div className="loader" key={0}>
+							Loading ...
+						</div>
+					}
+				>
+					{post.map((item) => (
+						<OnePost
+							key={item.published_post_id}
+							render={render}
+							setRender={setRender}
+							item={item}
+						/>
+					))}
+				</InfiniteScroll>
 			)}
 		</>
 	);

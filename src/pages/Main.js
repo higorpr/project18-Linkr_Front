@@ -19,31 +19,34 @@ export default function Main() {
 	return (
 		<StyledPage>
 			<Header />
-			<StyledBody>
-				<PostsBox>
+			<Container>
+				<TitleBox>
 					<TitlePage>timeline</TitlePage>
-					<Post></Post>
-					<TimelineUpdate
-						posts={posts}
-						updatePosts={updatePosts}
-						post={post}
-						setPost={setPost}
-						setLastPost={setLastPost}
-					/>
-					<Posts
-						posts={posts}
-						post={post}
-						setPost={setPost}
-						updatePosts={updatePosts}
-						lastPost={lastPost}
-						setLastPost={setLastPost}
-						firstPost={firstPost}
-						setFirstPost={setFirstPost}
-					/>
-				</PostsBox>
-
-				<TrendingBox />
-			</StyledBody>
+				</TitleBox>
+				<StyledBody>
+					<PostsBox>
+						<Post setLastPost={setLastPost}></Post>
+						<TimelineUpdate
+							posts={posts}
+							updatePosts={updatePosts}
+							post={post}
+							setPost={setPost}
+							setLastPost={setLastPost}
+						/>
+						<Posts
+							posts={posts}
+							post={post}
+							setPost={setPost}
+							updatePosts={updatePosts}
+							lastPost={lastPost}
+							setLastPost={setLastPost}
+							firstPost={firstPost}
+							setFirstPost={setFirstPost}
+						/>
+					</PostsBox>
+					<TrendingBox />
+				</StyledBody>
+			</Container>
 		</StyledPage>
 	);
 }
@@ -56,9 +59,24 @@ const StyledPage = styled.div`
 const StyledBody = styled.div`
 	display: flex;
 	justify-content: center;
-	margin-top: 72px;
+`;
+
+const Container = styled.div`
+	width: 100%;
+	margin-top: 125px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	@media (max-width: 610px) {
-		margin-top: 30px;
+		margin-top: 47px;
+	}
+`;
+
+const TitleBox = styled.div`
+	width: 100%;
+	max-width: 952px;
+	@media (max-width: 952px) {
+		max-width: 610px;
 	}
 `;
 
@@ -72,11 +90,9 @@ const TitlePage = styled.p`
 	font-family: "Oswald";
 	font-size: 43px;
 	font-weight: 700;
-	margin-top: 53px;
 	margin-bottom: 43px;
 	@media (max-width: 610px) {
 		margin: 17px;
-		margin-top: 17px;
 		margin-bottom: 17px;
 		font-size: 33px;
 	}

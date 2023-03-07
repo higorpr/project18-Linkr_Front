@@ -19,6 +19,10 @@ export default function Header() {
 
 	function logout(event) {
 		event.preventDefault();
+		if (!user.token) {
+			nav("/");
+		}
+
 		const Url = `${process.env.REACT_APP_API_BASE_URL}/logout`;
 		const config = {
 			headers: {
@@ -33,6 +37,11 @@ export default function Header() {
 			})
 			.catch((err) => {
 				console.log(err.response);
+				if (err.response.status === 401) {
+					localStorage.removeItem("user");
+					setUser({ name: "", token: "", photo: "", id: 0 });
+					nav("/");
+				}
 			});
 	}
 
@@ -69,7 +78,9 @@ export default function Header() {
 					>
 						{!openedMenu ? <SlArrowUp /> : <SlArrowDown />}
 					</IconContext.Provider>
-					<img src={user.photo} alt="User" />
+					<Image>
+						<img src={user.photo} alt="User" />
+					</Image>
 					<StyledDropDown onClick={logout} menuDisplay={menuDisplay}>
 						Logout
 					</StyledDropDown>
@@ -107,14 +118,6 @@ const StyledTopMenu = styled.div`
 	justify-content: center;
 	align-items: center;
 	position: relative;
-
-	img {
-		border-radius: 50%;
-		border: none;
-		width: 53px;
-		height: 53px;
-		margin-left: 16.3px;
-	}
 `;
 
 const StyledDropDown = styled.div`
@@ -161,5 +164,20 @@ const SearchDiv2 = styled.div`
 		justify-content: center;
 		margin: 72px 0px 0px 0px;
 		padding: 12px 12px 0px 12px;
+	}
+`;
+
+const Image = styled.div`
+	border-radius: 50%;
+	border: none;
+	width: 53px;
+	height: 53px;
+	margin-left: 16.3px;
+	overflow: hidden;
+	background-color: white;
+	img {
+		height: 53px;
+		margin-left: 50%;
+		transform: translateX(-50%);
 	}
 `;

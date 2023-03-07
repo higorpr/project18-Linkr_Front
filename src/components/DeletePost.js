@@ -5,10 +5,10 @@ import ProjectContext from "../constants/Context";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 
-export default function DeletePost({ getPosts, item }) {
+export default function DeletePost({ render, setRender, item }) {
 	const [openConfirm, setOpenConfirm] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const { user } = useContext(ProjectContext);
+	const { user, setNumberReloads, numberReloads } = useContext(ProjectContext);
 
 	function deletePost() {
 		setLoading(true);
@@ -23,8 +23,8 @@ export default function DeletePost({ getPosts, item }) {
 			.then((answer) => {
 				setLoading(false);
 				setOpenConfirm(false);
-				getPosts();
-				console.log(answer.data);
+
+				setNumberReloads(numberReloads + 1);
 			})
 			.catch((err) => {
 				console.log(err);

@@ -9,31 +9,31 @@ export default function Comments(props) {
 	const { user } = useContext(ProjectContext);
 	const { openCommentBox, item, setCommetCount } = props;
 	const [value, setValue] = useState("");
-    const [commentsNow, setCommentsNow] = useState(item.comments);
+	const [commentsNow, setCommentsNow] = useState(item.comments);
 
-    function sendComment(){
-        const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/comment`;
-        const config = {
-            headers: {
-                authorization: `Bearer ${user.token}`,
-            },
-        };
-        const body = {
-            text: value,
-            post_id: item.id
-        }
-        axios
-            .post(Url, body, config)
-            .then((answer) => {
-                item.comments = answer.data;
-                setCommentsNow(answer.data);
-                setValue("");
-                setCommetCount(answer.data.length)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+	function sendComment() {
+		const Url = `${process.env.REACT_APP_API_BASE_URL}/posts/comment`;
+		const config = {
+			headers: {
+				authorization: `Bearer ${user.token}`,
+			},
+		};
+		const body = {
+			text: value,
+			post_id: item.id,
+		};
+		axios
+			.post(Url, body, config)
+			.then((answer) => {
+				item.comments = answer.data;
+				setCommentsNow(answer.data);
+				setValue("");
+				setCommetCount(answer.data.length);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
 
 	return (
 		<>
@@ -44,7 +44,9 @@ export default function Comments(props) {
 							<OneComment comment={item} />
 						))}
 						<PostComment>
-							<img src={user.photo} alt="" />
+							<Image>
+								<img src={user.photo} alt="" />
+							</Image>
 							<InputDiv>
 								<input
 									placeholder="write a comment..."
@@ -76,12 +78,23 @@ const PostComment = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	@media (max-width: 610px) {
+		height: 65px;
+	}
+`;
+
+const Image = styled.div`
+	height: 39px;
+	width: 39px;
+	border-radius: 50%;
+	margin-right: 22px;
+	margin-left: 8px;
+	overflow: hidden;
+	background-color: white;
 	img {
 		height: 39px;
-		width: 39px;
-		margin-right: 18px;
-		border-radius: 20px;
-		margin-left: 8px;
+		margin-left: 50%;
+		transform: translateX(-50%);
 	}
 `;
 

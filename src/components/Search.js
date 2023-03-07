@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { IoSearchSharp } from "react-icons/io5";
-import { IconContext } from "react-icons";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ProjectContext from "../constants/Context";
 import axios from "axios";
 import SearchResult from "./SearchResult";
@@ -34,7 +33,6 @@ export default function Search(props) {
 			.get(Url, config)
 			.then((answer) => {
 				setResult(answer.data);
-				console.log(answer.data)
 			})
 			.catch((err) => {
 				console.log(err);

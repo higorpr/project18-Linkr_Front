@@ -4,7 +4,6 @@ import { useContext, useState } from "react";
 import ProjectContext from "../constants/Context";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { loginUrl } from "../constants/urls";
 
 export default function LoginPage() {
 	const { setUser } = useContext(ProjectContext);
@@ -97,7 +96,7 @@ const StyledPage = styled.div`
 	width: 100vw;
 	height: 100vh;
 	display: flex;
-	@media (max-width: 375px) {
+	@media (max-width: 880px) {
 		flex-direction: column;
 	}
 `;
@@ -105,12 +104,17 @@ const StyledPage = styled.div`
 const StyledLeft = styled.div`
 	color: #ffffff;
 	background-color: #151515;
-	width: 62.8%;
+	width: calc(100vw - 545px);
 	height: 100%;
-	padding: 301px 0 0 144px;
 	box-sizing: border-box;
 	box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
-
+	@media (max-width: 880px) {
+		height: 300px;
+		width: 100vw;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 	@media (max-width: 375px) {
 		width: 375px;
 		max-height: 175px;
@@ -127,7 +131,16 @@ const StyledLeft = styled.div`
 		font-size: 106px;
 		line-height: 116px;
 		font-weight: 700;
-		@media (max-width: 375px) {
+		margin-left: 100px;
+		margin-top: calc(50vh - 150px);
+		@media (max-width: 1110px) {
+			margin-left: 70px;
+			font-size: 76px;
+			line-height: 76px;
+		}
+		@media (max-width: 880px) {
+			margin-left: 0px;
+			margin-top: 80px;
 			font-size: 76px;
 			line-height: 76px;
 			margin-top: 10px;
@@ -139,23 +152,36 @@ const StyledLeft = styled.div`
 		font-size: 43px;
 		font-weight: 700;
 		line-height: 63px;
+		margin-left: 100px;
 		width: 442px;
 		height: 128px;
-		@media (max-width: 375px) {
+		@media (max-width: 1110px) {
+			margin-left: 70px;
 			font-size: 23px;
 			line-height: 34px;
 			width: 237px;
+		}
+		@media (max-width: 880px) {
+			font-size: 23px;
+			line-height: 34px;
 			height: 68px;
+			margin-left: 0px;
 		}
 	}
 `;
 
 const StyledRight = styled.div`
-	width: 37.2%;
+	width: 545px;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
+	@media (max-width: 880px) {
+		width: 100vw;
+		justify-content: flex-start;
+		margin-top: 30px;
+	}
 	@media (max-width: 375px) {
 		width: 375px;
 	}
@@ -166,13 +192,17 @@ const StyledForm = styled.form`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	margin-top: 317px;
-	@media (max-width: 375px) {
-		margin-top: 40px;
+	width: 100%;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-top: 50px;
+	@media (max-width: 880px) {
+		margin-top: 0px;
 	}
 
 	input {
-		width: 429px;
+		width: 100%;
+		max-width: 429px;
 		height: 65px;
 		border-radius: 6px;
 		border: none;
@@ -186,8 +216,7 @@ const StyledForm = styled.form`
 			color: #9f9f9f;
 		}
 
-		@media (max-width: 375px) {
-			width: 330px;
+		@media (max-width: 550px) {
 			height: 55px;
 			margin-bottom: 11px;
 			font-size: 22px;
@@ -203,7 +232,8 @@ const StyledButton = styled.button`
 	line-height: 70px;
 	text-align: center;
 	background-color: #1877f2;
-	width: 429px;
+	width: 100%;
+	max-width: 429px;
 	height: 65px;
 	border-radius: 6px;
 	border: none;
@@ -217,8 +247,7 @@ const StyledButton = styled.button`
 		opacity: 0.7;
 	}
 
-	@media (max-width: 375px) {
-		width: 330px;
+	@media (max-width: 550px) {
 		height: 55px;
 		font-size: 22px;
 		line-height: 32.6px;
@@ -232,8 +261,9 @@ const StyledLink = styled(Link)`
 	font-weight: 400;
 	line-height: 24px;
 
-	@media (max-width: 375px) {
+	@media (max-width: 550px) {
 		font-size: 17px;
 		line-height: 20.4px;
+		margin-bottom: 30px;
 	}
 `;

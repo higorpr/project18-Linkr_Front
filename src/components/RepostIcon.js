@@ -33,7 +33,6 @@ export default function RepostIcon({ postId }) {
 				config
 			)
 			.then((res) => {
-				console.log(res);
 				setUpdateControl(updateControl + 1);
 				setRepostButtons(false);
 			})
@@ -68,9 +67,7 @@ export default function RepostIcon({ postId }) {
 							>
 								No, cancel
 							</StyledButtonNo>
-							<StyledButtonYes onClick={follow}>
-								Yes,share!
-							</StyledButtonYes>
+							<StyledButtonYes onClick={follow}>Yes,share!</StyledButtonYes>
 						</StyledButtons>
 					</StyledConfirm>
 				</Overlay>
